@@ -1,0 +1,12 @@
+.git
+.gitignore
+.vscode
+.idea
+node_modules
+dist
+dist-ssr
+src-tauri/target
+*.log
+*.local
+README.md
+docker-compose.yml
