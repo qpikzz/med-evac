@@ -1,10 +1,10 @@
 # SPEC: Earth link (delayed message to the flight surgeon)  ·  v1.0  ·  14 Nov 2026, 17:25 (Baku)
 
-## 0. Простыми словами (на русском)
+## 0. In simple terms 
 
-На пути к Марсу нельзя позвонить врачу: сигнал идёт до ~20 минут в одну сторону [BRIEF §4]. Поэтому связь с Землёй — это письмо с задержкой. Модуль собирает черновик сообщения из результата правил: что пожелтело или покраснело, какие правила сработали и с какими источниками, измерения за последние 7 дней и заметка астронавта. Отправляет только сам астронавт, после просмотра.
+On the way to Mars, you can’t call a doctor: the signal takes up to ~20 minutes to travel one way [BRIEF §4]. Therefore, communication with Earth is like sending a letter with a delay. The module compiles a draft message based on the results of the rules: what turned yellow or red, which rules were triggered and from which sources, measurements from the past 7 days, and the astronaut’s note. Only the astronaut sends it, after reviewing it.
 
-При красном статусе черновик готовится автоматически, но не отправляется. Во втором окне приложения, «Земля», видно, что письмо в пути и когда оно придёт. Содержимое появляется только после «прибытия». Затем Земля автоматически отвечает «Received, under review (simulated)», и этот ответ тоже идёт с задержкой. Чтобы демо уложилось в 30 секунд, время ускорено в 60 раз, и на экране это честно написано. Дневник и разговоры с ИИ в письмо не попадают вообще. Если красным стало настроение, письмо помечается как приватное.
+When the status is red, the draft is generated automatically but is not sent. In the app’s second window, “Earth,” you can see that the message is on its way and when it will arrive. The content appears only after it “arrives.” Earth then automatically replies with “Received, under review (simulated),” and this reply is also delayed. To keep the demo within 30 seconds, time has been sped up 60 times, and this is clearly stated on the screen. The diary and conversations with the AI are not included in the message at all. If the mood turns red, the message is marked as private.
 
 ## 1. Goal
 
