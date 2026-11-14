@@ -1,6 +1,6 @@
 # SPEC: SI helper (overall picture + free text)  ·  v1.0  ·  14 Nov 2026, 17:50 (Baku)
 
-## 0. 0. In Simple Terms 
+## 0. In Simple Terms 
 
 The assistant puts together the big picture when several indicators turn yellow at once. It’s structured in two layers.
 
