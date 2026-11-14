@@ -53,13 +53,13 @@ cd Desktop
 ```
 
 #### Step 3: Clone (download) the repository
-Copy and paste the command below and press `Enter` *(replace `<repository-url>` with your actual GitHub link)*:
+Copy and paste the command below and press `Enter`:
 ```bash
 git clone https://github.com/qpikzz/med-evac.git
 ```
 
 #### Step 4: Enter the project folder
-Move into the newly downloaded folder *(replace `<project-folder>` with the repository name)*:
+Move into the newly downloaded folder:
 ```bash
 cd med-evac
 ```
