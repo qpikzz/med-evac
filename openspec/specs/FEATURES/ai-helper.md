@@ -1,13 +1,13 @@
-# SPEC: AI helper (overall picture + free text)  ·  v1.0  ·  14 Nov 2026, 17:50 (Baku)
+# SPEC: SI helper (overall picture + free text)  ·  v1.0  ·  14 Nov 2026, 17:50 (Baku)
 
-## 0. Простыми словами (на русском)
+## 0. 0. In Simple Terms 
 
-Помощник собирает общую картину, когда пожелтели сразу несколько показателей. Он устроен в два слоя.
+The assistant puts together the big picture when several indicators turn yellow at once. It’s structured in two layers.
 
-1. **Проверенные сочетания (обычный код, без нейросети).** Ayesha составила список сочетаний симптомов с источниками (`combinations.json`). Код сверяет сегодняшние результаты правил с этим списком и показывает совпавшие сочетания: «возможные объяснения для обсуждения с медиком» и на что это опирается. Если пожелтело два показателя и больше, а сочетания в списке нет, появляется надпись «Unverified picture — discuss with your crew medical officer». Этот слой работает всегда.
-2. **Локальная модель Granite 3.3 через Ollama.** Она пересказывает найденное простыми словами и отвечает, если астронаут что-то пишет. Модель работает на ноутбуке, данные никуда не уходят. Модель не меняет цвет и срочность и не ставит диагноз. Если Ollama не запущена, остаётся первый слой и вежливая надпись.
-
-Если в тексте астронавта есть слова о самоповреждении, код сам, без модели, показывает карточку поддержки из красного правила настроения и не отправляет этот текст модели. Помощник в разделе «желательно», а не MVP [BRIEF §4]. Делаем после основной истории.
+1. **Verified combinations (standard code, without SI).** Ayesha has compiled a list of symptom combinations with their sources (`combinations.json`). The code compares today’s rule results with this list and displays matching combinations: “possible explanations to discuss with a medical professional” and the basis for them. If two or more indicators turn yellow and there’s no matching combination in the list, the message “Unverified picture — discuss with your crew medical officer” appears. This layer is always active.
+2. **The local Granite 3.3 model via Ollama.** It paraphrases the findings in simple terms and responds if an astronaut types something. The model runs on a laptop; the data stays on the device. The model does not change the color or urgency level, nor does it make a diagnosis. If Ollama is not running, only the first layer and a polite message remain.
+   
+If the astronaut’s text contains references to self-harm, the code itself—without the model—displays a support card from the “red mood rule” and does not send this text to the model.
 
 ## 1. Goal
 
