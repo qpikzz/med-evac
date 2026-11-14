@@ -28,40 +28,40 @@
       "indicator_id": "blood_pressure",
       "label": "Systolic blood pressure",
       "unit": "mmHg",
-      "plausible_min": null,
-      "plausible_max": null
+      "plausible_min": 40,
+      "plausible_max": 300
     },
     {
       "id": "bp_diastolic",
       "indicator_id": "blood_pressure",
       "label": "Diastolic blood pressure",
       "unit": "mmHg",
-      "plausible_min": null,
-      "plausible_max": null
+      "plausible_min": 20,
+      "plausible_max": 200
     },
     {
       "id": "heart_rate",
       "indicator_id": "heart_rate",
       "label": "Resting heart rate",
       "unit": "bpm",
-      "plausible_min": null,
-      "plausible_max": null
+      "plausible_min": 20,
+      "plausible_max": 250
     },
     {
       "id": "glucose",
       "indicator_id": "blood_sugar",
       "label": "Blood glucose",
       "unit": "mg/dL",
-      "plausible_min": null,
-      "plausible_max": null
+      "plausible_min": 0,
+      "plausible_max": 600
     },
     {
       "id": "body_temp",
       "indicator_id": "body_temperature",
       "label": "Body temperature",
       "unit": "°C",
-      "plausible_min": null,
-      "plausible_max": null
+      "plausible_min": 25,
+      "plausible_max": 45
     },
     {
       "id": "sleep_hours",
@@ -84,7 +84,7 @@
       "indicator_id": "body_mass",
       "label": "Body mass",
       "unit": "kg",
-      "plausible_min": null,
+      "plausible_min": 0,
       "plausible_max": null
     },
     {
@@ -109,7 +109,7 @@
       "label": "Accumulated dose",
       "unit": "mSv",
       "plausible_min": 0,
-      "plausible_max": null
+      "plausible_max": 100
     }
   ],
   "flags": [

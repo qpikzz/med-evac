@@ -1,0 +1,325 @@
+{
+  "schema_version": "1.0",
+  "indicators": [
+    {
+      "id": "blood_pressure",
+      "indicator": "Blood pressure",
+      "in_challenge": "Named in challenge",
+      "unit": "mmHg (millimeters of mercury)\nsystolic/diastolic pressure.",
+      "why_monitor": "Helps identify high blood pressure (hypertension) and low blood pressure (hypotension).\nMonitors cardiovascular adaptation to microgravity and long-duration spaceflight.\nHelps detect abnormal blood pressure changes that may increase the risk of dizziness, fainting, and cardiovascular complications.\nSupports early identification of changes in blood circulation and cardiovascular function.",
+      "spaceflight_hazards": "Microgravity: Causes body fluid redistribution toward the upper body and changes cardiovascular regulation.\nLong-duration spaceflight: Can reduce blood pressure through changes in vascular resistance and cardiovascular function.\nReturn to Earth's gravity: Fluid redistribution and cardiovascular readaptation may contribute to low blood pressure, orthostatic intolerance, dizziness, and fainting.\nProlonged exposure to spaceflight conditions: May contribute to changes in blood vessels and cardiovascular function.",
+      "measurement_in_space": "Blood pressure can be measured in space using an automated portable blood pressure monitor.\nAn upper-arm cuff device can measure systolic and diastolic blood pressure.\nAmbulatory blood pressure monitoring (ABPM) can record blood pressure at regular intervals over 24 hours.\nRepeated measurements help monitor changes and identify abnormal trends during the mission.\nMeasurements should be taken under consistent conditions, with the astronaut resting before measurement.",
+      "normal_range": "No universal astronaut-specific normal range has been established.\nFor initial app reference, normal adult blood pressure is below 120/80 mmHg.\nThe astronaut's individual preflight baseline and blood pressure trends should also be considered.\nThis adult reference range is not a validated spaceflight-specific threshold.",
+      "yellow_criteria_and_actions": "Repeated blood pressure readings are 130/80 mmHg or higher.\nBlood pressure is repeatedly below 90/60 mmHg, especially when accompanied by dizziness or weakness.\nA persistent deviation from the astronaut's individual baseline is observed.\nActions:\nRest for 5 minutes and repeat the measurement.\nCheck for symptoms such as dizziness, headache, or unusual weakness.\nRecord the result and compare it with previous measurements.\nInform the onboard medical officer if abnormal readings persist.",
+      "red_criteria_and_actions": "Blood pressure reaches 180 mmHg systolic and/or 120 mmHg diastolic, especially when accompanied by symptoms.\nSevere blood pressure elevation occurs with chest pain, shortness of breath, severe headache, visual disturbances, confusion, or neurological symptoms.\nVery low blood pressure is accompanied by fainting, severe dizziness, or signs of circulatory instability.\nActions:\nRepeat the measurement promptly if the astronaut's condition allows.\nInitiate the approved medical emergency protocol.\nContact the ground flight surgeon immediately.",
+      "prevention_and_actions": "Maintain regular aerobic and resistance exercise to support cardiovascular fitness.\nFollow a balanced diet and maintain adequate fluid intake according to the mission medical plan.\nMonitor blood pressure regularly and track individual trends.\nUse prescribed lower-body compression garments when indicated, especially before landing.\nFollow the prescribed cardiovascular countermeasures during long-duration missions.\nReport persistent abnormal readings and related symptoms to the onboard medical officer.",
+      "sources": [
+        "https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/",
+        "https://pubmed.ncbi.nlm.nih.gov/25774397/",
+        "https://pubmed.ncbi.nlm.nih.gov/41390616/"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    },
+    {
+      "id": "heart_rate",
+      "indicator": "Heart rate",
+      "in_challenge": "Named in challenge",
+      "unit": "bpm (beats per minute)",
+      "why_monitor": "Detects unusually high or low heart rates (tachycardia and bradycardia).\nHelps monitor cardiovascular adaptation and possible cardiovascular deconditioning.\nIdentifies unusual heart rate responses during rest, exercise, and recovery.\nECG-based monitoring can help identify irregular heart rhythms.\nSupports early detection of potentially concerning cardiovascular changes.",
+      "spaceflight_hazards": "Microgravity causes cardiovascular adaptations that may affect heart rate.\nHeart rate responses during spaceflight can differ depending on the reference body position used for comparison.\nAfter five months in space, one study observed an increased heart rate compared with the preflight supine baseline, but not compared with the sitting baseline.\nPhysical exercise and cardiovascular countermeasures are important for maintaining cardiovascular function during long-duration spaceflight.\nIndividual responses may vary between astronauts.",
+      "measurement_in_space": "Wearable heart rate monitors can measure heart rate continuously or periodically.\nBio-Monitor smart shirt: uses integrated sensors to monitor heart rate, blood pressure, breathing rate, and physical activity.\nElectrocardiography (ECG): records the heart's electrical activity and helps identify rhythm abnormalities.\nPortable wearable devices using ECG impedance cardiography (ICG), and seismocardiography (SCG) canprovide non-invasive cardiovascular monitoring.",
+      "normal_range": "Individual preflight baseline.\nNo universal astronaut-specific normal range established.\nHeart rate must be assessed according to body position, activity level, and mission phase.",
+      "yellow_criteria_and_actions": "Heart rate shows a persistent deviation from the astronaut's individual baseline.\nUnusual changes in heart rate occur during rest or physical activity.\nRepeated measurements confirm an abnormal heart rate pattern.\nThe crew should repeat the measurement, assess symptoms, and notify the onboard medical officer if the abnormality persists.",
+      "red_criteria_and_actions": "Marked or persistent abnormal heart rate is detected.\nSuspected cardiac arrhythmia or irregular heart rhythm occurs.\nAbnormal heart rate is accompanied by chest pain, fainting, severe dizziness, or shortness of breath.\nImmediate medical assessment and communication with the ground flight surgeon are required.",
+      "prevention_and_actions": "Follow regular aerobic and resistance exercise programmes to maintain cardiovascular fitness.\nMonitor heart rate during exercise and recovery.\nTrack individual heart rate trends throughout the mission.\nUse wearable monitoring devices for regular cardiovascular assessment.\nFollow prescribed cardiovascular countermeasures during long-duration spaceflight.\nReport persistent abnormal heart rate readings to the onboard medical officer.",
+      "sources": [
+        "https://www.nasa.gov/missions/station/iss-research/nasa-shares-station-research-today-supporting-moon-mars-tomorrow/",
+        "https://pubmed.ncbi.nlm.nih.gov/41027905/",
+        "https://www.jacc.org/doi/10.1016/j.jacc.2023.05.058"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    },
+    {
+      "id": "blood_sugar",
+      "indicator": "Blood sugar",
+      "in_challenge": "Named in challenge",
+      "unit": "mg/dL (milligrams per deciliter); mmol/L may also be used.",
+      "why_monitor": "Helps detect hypoglycemia (low blood glucose) and hyperglycemia (high blood glucose).\nHelps identify abnormal glucose regulation and possible insulin resistance.\nMonitors changes in glucose metabolism during long-duration spaceflight.\nDetects glucose fluctuations that may affect energy availability, concentration, and crew performance.",
+      "spaceflight_hazards": "May contribute to insulin resistance and altered glucose tolerance during prolonged spaceflight.\nMay decrease insulin sensitivity and affect glucose utilization.\nSympathetic nervous system activation during acceleration may cause temporary changes in blood glucose.\nMay contribute to fluctuations in blood glucose levels.",
+      "measurement_in_space": "Blood glucose can be measured using a portable finger-prick glucometer.\nContinuous glucose monitoring (CGM) uses a wearable sensor inserted under the skin to measure glucose in interstitial fluid.\nCGM provides continuous readings and helps identify glucose trends and fluctuations.\nUnexpected or critically low CGM readings should be confirmed with a finger-prick measurement when possible, because false low-glucose alarms have been reported.",
+      "normal_range": "No universal astronaut-specific normal range has been established.\nFor the app, use the astronaut's individual preflight baseline and consider meal timing and measurement method.\nThe 70–180 mg/dL range is a commonly used CGM target range in diabetes management, not a validated normal range for healthy astronauts.",
+      "yellow_criteria_and_actions": "Blood glucose is below 70 mg/dL (3.9 mmol/L) but at least 54 mg/dL (3.0 mmol/L).\nRepeated CGM readings remain above 180 mg/dL (10.0 mmol/L), rather than showing a brief post-meal rise.\nThe astronaut experiences symptoms such as sweating, shakiness, hunger, unusual fatigue, or dizziness.\nActions:\nStop strenuous activity and assess symptoms.\nIf conscious and able to swallow, take fast-acting glucose according to the approved medical protocol.\nRecheck blood glucose after 15 minutes if treating hypoglycemia.\nConfirm unexpected CGM readings with a finger-prick test when possible.\nInform the onboard medical officer if the abnormality persists.",
+      "red_criteria_and_actions": "Blood glucose is below 54 mg/dL (3.0 mmol/L), indicating clinically significant hypoglycemia.\nThe astronaut experiences confusion, altered mental status, seizures, loss of consciousness, or requires assistance due to suspected hypoglycemia, regardless of the measured glucose level.\nBlood glucose is persistently elevated above 200 mg/dL (11.1 mmol/L) together with symptoms or suspected ketones.\nSymptoms such as vomiting, dehydration, abdominal pain, excessive thirst, or altered mental status suggest a possible hyperglycemic crisis.\nActions:\nInitiate the approved emergency medical protocol.\nNotify the ground flight surgeon immediately.\nCheck blood or urine ketones when indicated and available.",
+      "prevention_and_actions": "Maintain regular, balanced meals with adequate carbohydrate intake.\nFollow a scheduled nutrition plan and avoid unnecessary prolonged fasting.\nPerform regular aerobic and resistance exercise to help maintain muscle mass and metabolic health.\nMonitor blood glucose trends, especially during changes in diet, activity, or mission conditions.\nUse CGM for continuous monitoring when available and confirm critical low readings with a glucometer.\nFollow the individualized medical plan for glucose management.\nDo not change insulin or other glucose-lowering medication doses without medical authorization.",
+      "sources": [
+        "https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf",
+        "https://pubmed.ncbi.nlm.nih.gov/36224737/",
+        "https://pubmed.ncbi.nlm.nih.gov/41358894/"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    },
+    {
+      "id": "body_temperature",
+      "indicator": "Body temperature",
+      "in_challenge": "Named in challenge",
+      "unit": "°C",
+      "why_monitor": "Detects fever from infection or inflammation, heat stress during exercise and spacewalks, and abnormally low temperature. Even a small rise in core temperature can impair physical and cognitive performance.",
+      "spaceflight_hazards": "Altered gravity: reduced gravity impairs convective heat transfer and the efficiency of evaporation. On the ISS, resting core temperature rose about 1 °C over roughly 2.5 months and plateaued after about 75 days. Maximum core temperature during exercise rose by about 1.4 °C and exceeded 40 °C in some astronauts. Possible contributors, not proven: low-grade inflammation, strenuous exercise, radiation and stress-induced hyperthermia.\nClosed environment: cabin airflow is uneven, and convection is one of the three main routes of heat loss. Distance from Earth: the crew makes the first assessment.",
+      "measurement_in_space": "On the ISS, a non-invasive forehead sensor that combines skin temperature and heat flux measured core temperature at rest and during exercise. Rectal, esophageal and ingestible sensors are considered too invasive and unsafe for long-term station use. NASA is still seeking validated practical methods for rest, exercise and landing. In our app: manual entry from a non-invasive thermometer, or data import from a wearable sensor.",
+      "normal_range": "Core temperature about 37 °C on Earth. In-flight resting core temperature may stabilise about 1 °C higher, near 38 °C, so the app compares each reading with the astronaut’s personal baseline and records the measurement method.",
+      "yellow_criteria_and_actions": "Resting temperature is 37.8 to 38.9 °C, or at least 1 °C above the astronaut’s own 7-day baseline, or below 36.0 °C. Also when core temperature after exercise is 39.0 °C or higher.",
+      "red_criteria_and_actions": "Resting temperature is 39.0 °C or higher, or at least 1 °C above baseline for more than 24 hours, or fever with chills, confusion, severe headache, rash or breathing difficulty. During exercise or spacewalks: 40.0 °C or higher, or dizziness, confusion or sweating that stops. Or below 35.0 °C.",
+      "prevention_and_actions": "Take one resting measurement daily at the same time and an extra one after hard exercise. Reduce exercise intensity or duration, allow cooling breaks, and increase airflow where possible. Stay hydrated, rest, and measure again after 30 minutes. Log symptoms and send the trend to ground if yellow persists. Any fever medicine only follows flight surgeon guidance.",
+      "sources": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/",
+        "https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/",
+        "https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    },
+    {
+      "id": "sleep_hours",
+      "indicator": "Sleep hours",
+      "in_challenge": "Named in challenge",
+      "unit": "hours per night (h)",
+      "why_monitor": "Sleep deficiency leads to fatigue, errors and impaired performance.\nSleep loss can lead to depressive symptoms, anxiety and lower mood and morale.\nLess than 7 hours of sleep is linked to impaired immune function, increased errors and greater risk of accidents.\nShows the effect of workload, schedule and environment on the crew.",
+      "spaceflight_hazards": "Altered gravity: microgravity is listed among the environmental factors that reduce sleep.\nHostile closed environment: noise, temperature, humidity, elevated CO2 and lighting reduce sleep.\nIsolation and confinement: confinement, lack of privacy, workload and work schedule reduce sleep.\nCircadian misalignment is common because there is no 24-hour day-night cycle in space.\nDistance from Earth: limited outside help is available, so performance impaired by sleep loss is riskier.\nSleep deficiency was also prevalent during the 3-month preflight training interval.",
+      "measurement_in_space": "Actigraphy (a wrist-worn activity tracker) was used to measure sleep in 64 astronauts on 80 shuttle missions (1,063 in-flight days) and 21 astronauts on 13 ISS missions (3,248 in-flight days).\nIn the app, the astronaut enters sleep hours manually and rates sleep quality.\nWearable data can be imported when available.",
+      "normal_range": "Adults should sleep 7 or more hours per night regularly (AASM and SRS, ages 18 to 60).\nNASA brief: an average adult needs 7 to 9 hours of sleep.\nIn flight, astronauts sleep about 6 hours; actigraphy averages are 6 to 6.5 hours on shuttle and ISS.\nApp target: 7 hours or more.",
+      "yellow_criteria_and_actions": "7-day average sleep is below 7 hours.\nAny use of sleep aids.\nActions:\nReview the schedule and protect the sleep window.\nReduce noise and keep the sleep area dark and cool.\nLog sleep every day.",
+      "red_criteria_and_actions": "6 hours or less per night for 7 nights in a row.\nErrors during tasks caused by fatigue.\nActions:\nNotify the ground flight surgeon.\nReduce critical tasks until rested, if possible.\nUse sleep medicine only with flight surgeon guidance.",
+      "prevention_and_actions": "Plan a reasonable rest-work schedule that leaves enough time for sleep.\nKeep the sleep area ventilated, cool, quiet and with dimmable light.\nAvoid short-wavelength (blue) light before sleep.\nLog sleep every day and watch the 7-day trend.",
+      "sources": [
+        "https://doi.org/10.1016/S1474-4422(14)70122-X",
+        "https://www.nasa.gov/wp-content/uploads/2023/03/sleep-accomodations-technical-brief-ochmo.pdf",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC4434546/"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    },
+    {
+      "id": "mood",
+      "indicator": "Mood",
+      "in_challenge": "Named in challenge",
+      "unit": "Self-reported mood score (0–10).",
+      "why_monitor": "Changes in mood may indicate psychological stress, emotional distress, anxiety or depressive symptoms. Persistent negative mood can affect concentration, motivation, decision-making, teamwork and overall mission performance. Early monitoring helps identify behavioral health changes before they become more serious.",
+      "spaceflight_hazards": "Isolation and confinement: Separation from family, limited social interaction, lack of privacy and interpersonal conflicts can negatively affect mood.\nDistance from Earth: Communication delays and limited access to psychological support may increase emotional stress.\nSpace radiation: Radiation-related effects on the central nervous system are an area of ongoing research; potential behavioral effects are not fully established in humans.\nAltered gravity: Microgravity and adaptation to different gravity environments may contribute to physiological and psychological stress.\nHostile closed environment: Limited living space, environmental discomfort, workload and disrupted sleep can negatively affect emotional well-being.",
+      "measurement_in_space": "Yes. Through daily self-report questionnaires and mood diaries. Astronauts can rate their current mood on a 0–10 scale (0 = very negative, 5 = neutral, 10 = very positive). NASA has used the Alertness and Mood Survey (AMS), which includes ratings of happiness, stress, boredom, loneliness and other behavioral states. Periodic psychological assessments can provide additional information.",
+      "normal_range": "No universal clinical normal range exists for mood scores. Mood varies between individuals and days. A stable mood close to the astronaut's personal preflight baseline, without persistent negative changes, is generally desirable. On the app's 0–10 scale, 5 represents neutral mood.",
+      "yellow_criteria_and_actions": "Mood scores show a persistent decline (e.g. a decrease of 2 or more points from personal baseline for 3 consecutive days), or the astronaut repeatedly reports increased stress, sadness, loneliness or irritability.\nActions:\nComplete a mood self-assessment and review recent changes.\nMaintain social interaction with crew members and family.\nUse relaxation techniques and maintain regular sleep and exercise routines.\nContact the onboard medical officer or behavioral health support if symptoms persist.",
+      "red_criteria_and_actions": "Severe or rapidly worsening emotional distress, suicidal thoughts, thoughts of self-harm, severe anxiety or panic, significant behavioral changes, or psychological symptoms that prevent safe performance of mission duties.\nActions:\nImmediately notify the ground flight surgeon and behavioral health support.\nRequest a confidential psychological assessment.\nFollow the medical team's instructions and ensure immediate safety.\nDo not rely on the mood score alone to assess an emergency.",
+      "prevention_and_actions": "Maintain regular communication with family and friends.\nEncourage positive social interaction and teamwork among crew members.\nMaintain regular sleep, exercise and leisure activities.\nProvide opportunities for privacy and personal time.\nPractice stress-management and relaxation techniques.\nComplete daily mood assessments and monitor changes over time.\nProvide access to confidential psychological support throughout the mission.",
+      "sources": [
+        "https://www.nasa.gov/reference/6-0-medical-operations/",
+        "https://ntrs.nasa.gov/citations/20250001454",
+        "https://www.nature.com/articles/s41586-024-07648-x"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    },
+    {
+      "id": "body_mass",
+      "indicator": "Body mass",
+      "in_challenge": "Candidate",
+      "unit": "kg (kilograms)",
+      "why_monitor": "Monitoring body mass helps identify inadequate energy intake and possible nutritional problems during spaceflight. Sustained body-mass loss may be associated with loss of muscle and bone tissue and reduced physical performance.",
+      "spaceflight_hazards": "Altered gravity: Microgravity causes fluid redistribution and reduced mechanical loading on muscles and bones, contributing to changes in body composition.\nIsolation and confinement: Stress, changes in routine and food preferences may affect appetite and food intake.\nDistance from Earth: Limited resupply and delayed medical support make nutritional monitoring important during long missions.\nHostile closed environment: Limited food variety, food acceptability and storage constraints may affect energy intake.\nRadiation: Its direct contribution to body-mass changes is not clearly established.",
+      "measurement_in_space": "Yes. Body mass can be measured in microgravity using specialized devices. NASA’s Space Linear Acceleration Mass Measurement Device (SLAMMD) applies a known force using springs and measures the resulting acceleration to calculate body mass using Newton’s second law (F = ma). The Russian Body Mass Measurement Device (BMMD) uses spring oscillations. Measurements are recorded in kilograms (kg) and compared with the astronaut’s preflight baseline.",
+      "normal_range": "No universal normal body-mass range applies to all astronauts. The main reference is the individual’s preflight body mass and the trend during the mission. The goal is to avoid sustained or unexplained mass loss.",
+      "yellow_criteria_and_actions": "A sustained decrease of approximately 2% or more from preflight baseline, or a consistent downward trend. Recheck the measurement; review food and fluid intake, appetite and exercise; inform the crew medical officer if the decrease persists.",
+      "red_criteria_and_actions": "Body-mass loss of approximately 5% or more accompanied by continued decline, weakness, dizziness or other concerning symptoms. Contact the ground flight surgeon for assessment. A percentage change alone should not be treated as a diagnosis or an automatic emergency.",
+      "prevention_and_actions": "Maintain adequate energy, protein and fluid intake; follow the prescribed exercise programme, including resistance exercise; monitor food intake and body mass regularly; report persistent appetite changes or unexplained mass loss to the medical officer.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/25197887/",
+        "https://www.nasa.gov/directorates/esdmd/hhp/food-and-nutrition-risk/",
+        "https://www.nasa.gov/wp-content/uploads/2024/08/human-adaptation-2021-final-b.pdf"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    },
+    {
+      "id": "blood_oxygen_spo2",
+      "indicator": "Blood oxygen (SpO2)",
+      "in_challenge": "Candidate",
+      "unit": "Percentage (%)",
+      "why_monitor": "Monitoring SpO₂ helps detect low blood oxygen saturation (hypoxemia), which may indicate impaired oxygenation or respiratory problems. Low oxygen levels can affect brain and cardiovascular function. SpO₂ should be interpreted together with symptoms and other clinical measurements.",
+      "spaceflight_hazards": "Altered gravity: Microgravity changes pulmonary blood-flow distribution and respiratory physiology; however, a small astronaut study found no significant change in SpO₂ during mild hypoxic exposure in microgravity. Hostile/closed environment: Changes in cabin or spacesuit oxygen partial pressure, pressure, or ventilation can create a risk of hypoxia.\nDistance from Earth: Delayed access to ground medical support makes onboard monitoring important. Isolation/confinement: No established direct effect on SpO₂; indirect effects may occur through health or operational stressors.\nSpace radiation: No established direct short-term effect on SpO₂ as a routine indicator.",
+      "measurement_in_space": "SpO₂ can be measured non-invasively using a portable pulse oximeter, usually placed on a fingertip. It uses red and infrared light to estimate the percentage of haemoglobin saturated with oxygen. The astronaut should remain still and wait for a stable reading. Measurements can be recorded over time to identify changes from the individual baseline.",
+      "normal_range": "Typically 95–100% in healthy adults at sea level. In-flight readings should also be compared with the astronaut’s individual baseline and interpreted in relation to cabin pressure and oxygen partial pressure.",
+      "yellow_criteria_and_actions": "A repeated reading of 93–94%, or a persistent decrease of 3 or more percentage points from the astronaut’s usual baseline. Repeat the measurement after resting; check device positioning, hand temperature and signal quality; assess symptoms such as shortness of breath or dizziness; inform the onboard medical officer.",
+      "red_criteria_and_actions": "A confirmed reading of 92% or lower, a rapidly decreasing SpO₂ trend, or any low reading accompanied by severe shortness of breath, chest pain, confusion, or bluish lips. Immediately notify the flight surgeon and follow the mission’s medical and emergency procedures. Severe symptoms require urgent action regardless of the displayed value.",
+      "prevention_and_actions": "Monitor cabin and spacesuit oxygen and pressure systems; follow prescribed medical and respiratory-health procedures; maintain physical fitness; repeat unexpected readings and check sensor accuracy; report breathing difficulties immediately. Do not start supplemental oxygen or change treatment without following medical protocols.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/28539140/",
+        "https://www.fda.gov/consumers/consumer-updates/pulse-oximeter-basics",
+        "https://standards.nasa.gov/sites/default/files/standards/NASA/C/2022-04-08-NASA-STD-3001-Vol-2-Rev-C-Final_0.pdf"
+      ],
+      "confidence": "needs check",
+      "priority": "maybe"
+    },
+    {
+      "id": "bone_health",
+      "indicator": "Bone health",
+      "in_challenge": "Candidate",
+      "unit": "Bone mineral density (BMD): g/cm². Bone-turnover markers: analyte-specific units.",
+      "why_monitor": "Monitoring bone health helps detect spaceflight-related bone mineral density loss and changes in bone remodeling. Progressive bone loss can weaken the skeleton, increase fracture risk during spaceflight or after returning to gravity, and contribute to increased calcium release into the blood and urine, which may increase kidney stone risk.",
+      "spaceflight_hazards": "Altered gravity: Microgravity reduces mechanical loading on weight-bearing bones. Bone resorption can exceed bone formation, leading to decreased bone mineral density and strength.\nSpace radiation: Ionizing radiation may affect bone cells and bone remodeling; its specific contribution to bone loss in astronauts is not yet fully established.\nIsolation and confinement: Changes in routine and motivation may affect adherence to prescribed exercise and nutrition.\nDistance from Earth: Delayed access to specialist assessment may complicate the management of skeletal injuries or progressive bone loss.\nHostile/closed environment: Limited food variety or inadequate nutrient intake may make it harder to maintain adequate calcium, vitamin D and overall nutritional intake.",
+      "measurement_in_space": "Bone mineral density is not routinely measured onboard the ISS using DXA. Astronauts undergo DXA scans before and after spaceflight to assess changes in bone mineral density. During missions, blood and urine samples can be used to monitor biochemical indicators of bone metabolism, such as calcium and bone-turnover markers, according to the mission’s medical protocol. Exercise and nutritional intake should also be tracked. These indirect measurements do not replace a DXA scan.",
+      "normal_range": "There is no single universal BMD reference value for all astronauts. Results depend on the measurement site, age and sex, and should be compared with the individual’s preflight baseline and appropriate reference data. For premenopausal women and men younger than 50, a Z-score above −2.0 is within the expected range for age; a Z-score of −2.0 or lower is below the expected range for age.",
+      "yellow_criteria_and_actions": "A persistent adverse change in bone-turnover markers or urinary calcium compared with the individual’s baseline, inadequate calcium or vitamin D intake, or repeated failure to complete prescribed resistance exercise. Review exercise adherence and nutritional intake, and report persistent concerns to the onboard medical officer.",
+      "red_criteria_and_actions": "Suspected bone fracture, especially after trauma, with severe localized pain, swelling, deformity, or inability to use the affected limb. Immediately inform the onboard medical officer and contact the ground flight surgeon according to emergency procedures. Progressive bone-density changes or abnormal biochemical markers also require medical assessment, but do not automatically represent an acute emergency.",
+      "prevention_and_actions": "Follow the prescribed resistance and aerobic exercise programme, including use of the onboard resistive exercise equipment. Maintain adequate calcium, vitamin D, protein and overall energy intake. Monitor exercise adherence and nutritional intake. Follow medical advice regarding bone-health assessments and any prescribed medication.",
+      "sources": [
+        "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+        "https://www.nasa.gov/directorates/esdmd/hhp/bone-and-mineral-evaluation-and-analysis",
+        "https://iscd.org/official-positions-2023/"
+      ],
+      "confidence": "needs check",
+      "priority": "maybe"
+    },
+    {
+      "id": "immune_signs",
+      "indicator": "Immune signs / symptoms",
+      "in_challenge": "Candidate",
+      "unit": "Symptom checklist (present/absent), body temperature (°C), symptom severity and duration.",
+      "why_monitor": "Helps detect possible infections, viral reactivation, allergic reactions and skin inflammation associated with altered immune responses. Early recognition allows astronauts to report health changes before they become more serious.",
+      "spaceflight_hazards": "Space radiation: May contribute to immune cell damage and altered immune regulation.\nIsolation and confinement: Psychological stress and disrupted sleep can affect immune function.\nDistance from Earth: Delayed access to medical specialists makes early symptom recognition essential.\nGravity fields (microgravity): Can alter immune cell activity, particularly T-cell and natural killer (NK) cell function.\nHostile/closed environment: Close contact, microbial exposure and changes in the spacecraft microbiome may increase infection and allergy risks.",
+      "measurement_in_space": "Yes. Daily self-reporting through a symptom checklist, body temperature measurement using a digital thermometer, and visual checks for skin rashes, cold sores, oral lesions and other abnormalities. Blood and saliva samples can also be collected for laboratory assessment of immune markers and viral reactivation when equipment and protocols are available.",
+      "normal_range": "No new or unusual immune-related symptoms. No unexplained skin rashes, no fever, cold sores, persistent allergic reactions or signs of infection. Individual baseline and symptom history should be considered.",
+      "yellow_criteria_and_actions": "New mild symptoms appear, such as sore throat, cough, unusual fatigue, skin rash, cold sores, oral lesions or mild allergic reactions. Crew should record symptoms, measure temperature, monitor changes, follow hygiene precautions and inform the crew medical officer.",
+      "red_criteria_and_actions": "Temperature reaches higher, particularly with other infection symptoms; difficulty breathing, chest pain, rapidly spreading rash, facial or throat swelling, severe weakness, confusion or signs of dehydration occur. Contact the ground flight surgeon immediately according to mission medical protocols.",
+      "prevention_and_actions": "Maintain good personal hygiene and regular handwashing. Follow spacecraft cleaning and infection-control procedures. Maintain adequate sleep, balanced nutrition and regular exercise. Avoid unnecessary close contact with symptomatic crew members. Monitor symptoms daily and follow vaccination and medical protocols.",
+      "sources": [
+        "https://www.nasa.gov/directorates/esdmd/hhp/immune-risk/",
+        "https://www.nasa.gov/humans-in-space/nasa-investigates-how-dormant-viruses-behave-during-spaceflight/"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    },
+    {
+      "id": "nutrition_hydration",
+      "indicator": "Nutrition & hydration",
+      "in_challenge": "Candidate",
+      "unit": "Daily energy intake (kcal/day), nutrient intake (g/day, mg/day, µg/day), fluid intake (mL/day), body mass (kg).",
+      "why_monitor": "Detects inadequate calorie, protein, vitamin, mineral and fluid intake, which can lead to malnutrition, dehydration, muscle loss, bone density reduction, impaired immune function and electrolyte imbalance.",
+      "spaceflight_hazards": "Altered gravity: Fluid shifts toward the upper body and changes in fluid balance can affect hydration. Microgravity also contributes to bone and muscle loss, increasing the importance of adequate nutrient intake.\nSpace radiation: Increases oxidative stress and may contribute to cellular damage, making adequate nutritional support important.\nIsolation and confinement: Stress, appetite changes and limited food variety may reduce food intake.\nDistance from Earth: Limited resupply and delayed medical support make independent monitoring of food and water consumption essential.\nHostile closed environment: Limited food storage, shelf life and menu variety may affect nutrient availability and dietary balance.",
+      "measurement_in_space": "Yes. Using: Food intake tracking software to record daily calories, proteins, fats, carbohydrates, vitamins and minerals.\nDaily water intake logs (mL/day).\nA body mass scale to monitor weight changes.\nUrine color chart and urine specific gravity testing to assess hydration status.\nBlood and urine biochemical tests, when onboard equipment is available, to assess nutritional status and electrolyte balance.",
+      "normal_range": "No single universal normal range exists. Daily energy, nutrient and fluid requirements depend on individual characteristics, activity level and mission conditions.The astronaut should meet their individually prescribed daily nutritional and hydration targets while maintaining a stable body mass and appropriate hydration status.",
+      "yellow_criteria_and_actions": "Daily food or fluid intake repeatedly falls below the prescribed target.\nMeals are regularly skipped or appetite decreases.\nBody mass shows a consistent downward trend.\nUrine becomes persistently dark or urine output decreases.\nSymptoms such as thirst, fatigue, headache or dizziness appear.\nActions: Reassess food and fluid intake, increase consumption according to individual requirements, monitor body mass and hydration, and inform the crew medical officer.",
+      "red_criteria_and_actions": "Persistent inability to eat or retain fluids.\nSevere or persistent vomiting or diarrhea.\nVery low urine output or signs of severe dehydration.\nFainting, confusion or severe dizziness.\nRapid or significant unexplained body mass loss.\nSuspected severe electrolyte imbalance or clinical deterioration.\nContact the ground flight surgeon immediately for medical assessment and further instructions.",
+      "prevention_and_actions": "Follow an individualized balanced diet with adequate calories, protein, carbohydrates, fats, vitamins and minerals.\nMaintain daily fluid intake according to mission-specific requirements.\nMonitor food consumption, fluid intake and body mass regularly.\nInclude calcium and vitamin D according to medical recommendations to support bone health.\nMaintain regular physical exercise.\nUse available food variety and appropriate nutritional supplements when prescribed.\nReport persistent appetite changes, gastrointestinal symptoms or signs of dehydration.",
+      "sources": [
+        "https://www.nasa.gov/directorates/esdmd/hhp/nutritional-biochemistry/",
+        "https://pubmed.ncbi.nlm.nih.gov/38144801/",
+        "https://pubmed.ncbi.nlm.nih.gov/11435529/"
+      ],
+      "confidence": "needs check",
+      "priority": "maybe"
+    },
+    {
+      "id": "exercise",
+      "indicator": "Exercise",
+      "in_challenge": "Candidate",
+      "unit": "Minutes per day (min/day), sessions per week (sessions/week), exercise intensity and workload.",
+      "why_monitor": "Monitors physical activity and adherence to the prescribed exercise programme. Helps identify insufficient exercise and increased risk of muscle atrophy, bone mineral density loss, reduced cardiovascular fitness and physical deconditioning.",
+      "spaceflight_hazards": "Altered gravity: Microgravity reduces the mechanical loading on bones and muscles, contributing to muscle atrophy, bone loss and reduced cardiovascular fitness. Regular aerobic and resistance exercise helps counteract these effects.\nIsolation and confinement: Limited space, repetitive routines and psychological stress may reduce motivation and exercise adherence.\nDistance from Earth: Limited access to medical support and replacement equipment makes maintaining physical fitness essential for mission safety and independence.\nHostile closed environment: Limited exercise space, equipment availability, heat and moisture removal, and equipment maintenance can affect exercise opportunities.\nSpace radiation: May contribute to physiological damage and fatigue; however, its direct effect on daily exercise performance is not established sufficiently to define a specific exercise threshold.",
+      "measurement_in_space": "Yes. Exercise can be monitored using onboard exercise equipment and wearable sensors:\nTreadmill - exercise duration, speed and heart rate.\nCycle ergometer - duration, workload (watts) and heart rate.\nResistance exercise device (ARED) - resistance load, repetitions and completed sets.\nWearable heart-rate monitors - heart rate during exercise and recovery.\nThe software can record daily exercise duration, exercise type, intensity and completion of the prescribed training programme.",
+      "normal_range": "There is no universal normal exercise duration for every astronaut. Exercise should follow an individualized flight medical and fitness prescription.\nOn the ISS, astronauts typically perform approximately 1.5–2 hours of actual aerobic and resistance exercise per day, around 6 days per week. NASA reports an average of approximately 2 hours daily.",
+      "yellow_criteria_and_actions": "Exercise duration or intensity is consistently below the astronaut’s prescribed programme, or planned sessions are repeatedly missed.\nCrew should review the exercise log, check equipment availability, assess fatigue and recovery, and inform the crew medical officer if the pattern continues.",
+      "red_criteria_and_actions": "Exercise causes chest pain, fainting, severe or unusual shortness of breath, or significant palpitations.\nStop exercising immediately and contact the ground flight surgeon for medical assessment. Severe or persistent symptoms require urgent medical evaluation.",
+      "prevention_and_actions": "Follow an individualized exercise programme combining aerobic and resistance training.\nPerform regular treadmill, cycling and resistance exercises as prescribed.\nMonitor exercise duration, intensity, workload and heart rate.\nMaintain adequate nutrition, hydration and recovery.\nTrack exercise adherence and adjust the programme under medical supervision.\nReport unusual fatigue, pain or exercise intolerance.",
+      "sources": [
+        "https://www.nasa.gov/ochmo-tb-031-exercise-overview-2/",
+        "https://www.nature.com/articles/s41526-020-00111-x",
+        "https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/"
+      ],
+      "confidence": "needs check",
+      "priority": "maybe"
+    },
+    {
+      "id": "vision_changes",
+      "indicator": "Vision changes",
+      "in_challenge": "Candidate",
+      "unit": "Visual acuity (Snellen fraction or logMAR), visual field (degrees), refractive error (diopters, D), and symptom assessment.",
+      "why_monitor": "Detects changes in visual acuity, blurred vision, visual distortion, blind spots and visual field abnormalities. Helps identify possible Spaceflight-Associated Neuro-Ocular Syndrome (SANS), optic disc swelling and other ocular abnormalities that may affect vision and mission performance.",
+      "spaceflight_hazards": "Altered gravity: Microgravity causes body fluids to shift towards the head. Changes in fluid distribution and cerebrospinal fluid dynamics may contribute to optic disc swelling, flattening of the posterior eye and retinal folds associated with SANS.\nSpace radiation: Exposure to ionizing radiation may damage ocular tissues and increase the long-term risk of cataracts. However, its direct contribution to SANS is not established.\nDistance from Earth: Delayed access to ophthalmologists and advanced diagnostic equipment makes early detection and onboard monitoring important.\nIsolation and confinement: Limited access to medical support and prolonged mission conditions may delay the assessment of new visual symptoms.\nHostile closed environment: Limited access to specialized eye-care equipment and medical resources can make diagnosis and follow-up more difficult.",
+      "measurement_in_space": "Yes. Astronauts can assess vision using:\nVisual acuity chart: Laptop-based or handheld eye charts to assess near and distance vision.\nAmsler grid: Detects visual distortion, missing areas and changes in central vision.\nVisual field testing: Identifies blind spots and peripheral vision abnormalities.\nFundoscopy: Examines the optic disc and retina for swelling and other abnormalities.\nOptical Coherence Tomography (OCT): Provides detailed retinal and optic nerve images to detect structural changes.\nOcular ultrasound: Helps assess eye structure and changes in the posterior part of the eye.\nThe software can record visual symptoms and test results, compare them with pre-flight and previous in-flight measurements, and identify changes over time.",
+      "normal_range": "Distance visual acuity: typically 20/20 (6/6) in individuals with normal visual acuity.\nNear visual acuity: within the individual’s established baseline.\nVisual field: no new blind spots or significant loss of peripheral vision.\nRefractive error: stable compared with pre-flight measurements.\nThere is no single universal normal range for all ocular measurements. Individual pre-flight values and changes over time are more important.",
+      "yellow_criteria_and_actions": "New or persistent blurred vision, difficulty focusing, visual distortion, changes in near or distance vision, or newly noticed blind spots occur.\nThe astronaut should repeat the visual acuity test, complete an Amsler grid assessment, record symptoms and compare results with previous measurements. Notify the crew medical officer and arrange further ocular assessment.",
+      "red_criteria_and_actions": "Sudden or significant loss of vision, a sudden new visual field defect, double vision, or severe eye pain occurs.\nStop activities requiring accurate vision and contact the ground flight surgeon immediately for urgent medical assessment. Sudden vision loss requires emergency evaluation.",
+      "prevention_and_actions": "Complete scheduled pre-flight and in-flight ocular examinations.\nMonitor visual acuity and report new visual symptoms immediately.\nUse prescribed corrective lenses when necessary.\nPerform regular OCT and retinal examinations according to the medical monitoring schedule.\nMonitor cumulative radiation exposure and follow radiation-protection procedures.\nMaintain adequate nutritional intake and follow the prescribed medical plan.\nCompare current ocular measurements with individual pre-flight baseline values.\nThere is currently no established countermeasure that reliably prevents SANS. Regular monitoring and early detection remain essential.",
+      "sources": [
+        "https://www.nasa.gov/wp-content/uploads/2024/02/ochmo-mtb-001-sans.pdf",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13462731/",
+        "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-spaceflight-associated-neuro-ocular-syndrome/",
+        "https://www.nasa.gov/wp-content/uploads/2024/08/human-adaptation-2021-final-b.pdf"
+      ],
+      "confidence": "needs check",
+      "priority": "maybe"
+    },
+    {
+      "id": "radiation_dose",
+      "indicator": "Radiation dose (exposure context)",
+      "in_challenge": "Candidate",
+      "unit": "Millisievert (mSv).\nMilligray (mGy).\nMicrosievert per hour (µSv/h).",
+      "why_monitor": "Monitors astronauts’ exposure to ionizing radiation and helps assess the risk of acute radiation effects, cancer, cataracts, cardiovascular disease and other long-term radiation-related health problems. Helps ensure that individual exposure remains within established mission and career radiation limits.",
+      "spaceflight_hazards": "Space radiation: The main source of exposure. Galactic cosmic rays (GCR), solar particle events (SPE) and trapped radiation contribute to the radiation dose received by astronauts.\nDistance from Earth: Beyond Earth’s protective magnetosphere, astronauts lose much of Earth’s natural shielding and may experience greater exposure to galactic cosmic rays and solar particle events.\nAltered gravity: Does not directly increase radiation exposure, but mission location and spacecraft trajectory associated with different gravitational environments can change the radiation environment encountered.\nIsolation and confinement: Limited access to external medical support makes onboard radiation monitoring and timely protective action important.\nHostile closed environment: Spacecraft shielding and the location of astronauts inside the spacecraft influence their radiation exposure. Shielding can reduce some radiation exposure but cannot eliminate it.",
+      "measurement_in_space": "Yes. Radiation exposure can be monitored using:\nPersonal dosimeters: Worn by astronauts to measure individual radiation exposure.\nActive radiation detectors: Provide real-time or near-real-time measurements of radiation dose and dose rate.\nPassive dosimeters: Such as thermoluminescent dosimeters (TLDs), record accumulated exposure and are analysed using specialized equipment.\nArea radiation monitors: Measure radiation levels inside the spacecraft.\nThe software can combine individual dosimeter readings, radiation dose rate, accumulated dose, mission duration and solar radiation alerts to display each astronaut’s exposure history.",
+      "normal_range": "There is no universal normal radiation dose for astronauts. Radiation exposure must remain within NASA’s established permissible exposure limits (PEL), which depend on mission requirements and radiation-risk assessment.\nIndividual accumulated effective dose: must remain below the applicable career exposure limit.\nDose rate: should remain within mission-specific operational limits.\nSudden increases in radiation dose rate should be assessed immediately.\nNASA’s current career effective dose limit is 600 mSv. This is a career exposure limit, not a daily or single-mission normal range.",
+      "yellow_criteria_and_actions": "Radiation dose rate rises above the expected mission baseline, a solar particle event warning is issued, or accumulated exposure approaches the mission-specific action level.\nCrew should:\nCheck personal dosimeter readings.\nFollow radiation-monitoring alerts.\nMove to a designated shielded area when instructed.\nReduce unnecessary exposure and await further instructions from mission control.",
+      "red_criteria_and_actions": "A dosimeter indicates an unexpectedly high exposure, an acute radiation event occurs, or the individual exposure reaches or exceeds a predefined mission-specific emergency threshold.\nImmediately notify mission control and the ground flight surgeon. Follow radiation protection instructions, assess possible exposure-related symptoms and arrange medical evaluation.",
+      "prevention_and_actions": "Wear personal radiation dosimeters throughout the mission.\nMonitor accumulated dose and dose rate continuously where equipment permits.\nUse designated radiation shelter areas during solar particle events.\nFollow spacecraft shielding and radiation-protection procedures.\nMonitor solar activity and receive radiation alerts.\nMinimize unnecessary exposure during extravehicular activities (EVAs).\nMaintain individual radiation exposure records throughout the mission.",
+      "sources": [
+        "https://www.nasa.gov/hrp/hazard-space-radiation/",
+        "https://www.nasa.gov/reference/4-0-human-performance/",
+        "https://srag.jsc.nasa.gov/spaceradiation/faq/faq.cfm"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    },
+    {
+      "id": "pulmonary_function",
+      "indicator": "Pulmonary function",
+      "in_challenge": "Candidate",
+      "unit": "FEV₁ and FVC: litres (L);\nFEV₁/FVC: percentage (%);\nPEF: L/min (if measured).",
+      "why_monitor": "Evaluates respiratory function and helps detect airflow obstruction, possible restrictive ventilatory impairment and deterioration in lung function. It can support early identification of respiratory problems, including airway inflammation and impaired breathing.",
+      "spaceflight_hazards": "Altered gravity: Microgravity changes diaphragm position, chest-wall mechanics, lung volumes and ventilation–perfusion distribution. Some changes are temporary, and long-duration studies generally show preserved lung function.\nHostile/closed environment: Airborne particles, dust and cabin contaminants may irritate the respiratory tract and affect airway function.\nSpace radiation: May contribute to tissue damage, but direct effects on pulmonary function during human spaceflight remain insufficiently established.\nIsolation and confinement: May influence breathing patterns through stress and may delay reporting of respiratory symptoms.\nDistance from Earth: Delays specialist consultation and access to advanced pulmonary investigations.",
+      "measurement_in_space": "A portable spirometer can measure FEV₁ (forced expiratory volume in one second), FVC (forced vital capacity), FEV₁/FVC ratio and PEF (peak expiratory flow). The astronaut performs a maximal inhalation followed by a forceful, complete exhalation into the device. Repeated technically acceptable measurements should be compared with pre-flight baseline values. Pulse oximetry can provide additional information about oxygen saturation but does not replace spirometry.",
+      "normal_range": "FEV₁, FVC and FEV₁/FVC should be within their predicted reference ranges. The preferred interpretation is based on age-, sex- and height-adjusted reference equations and the lower limit of normal (LLN; z-score ≥ −1.645). FEV₁/FVC below LLN suggests airflow obstruction. Reduced FVC alone does not confirm restrictive disease; total lung capacity (TLC) measurement is required for confirmation. Individual pre-flight baseline should also be considered.",
+      "yellow_criteria_and_actions": "Spirometry results fall below the individual baseline or the lower limit of normal, particularly if the change is reproducible. Repeat the test using correct technique, check for coughing or poor effort, record respiratory symptoms and inform the crew medical officer.",
+      "red_criteria_and_actions": "Severe or rapidly worsening breathing difficulty, breathlessness at rest, chest pain, blue discoloration of lips, fainting or confusion occurs. Also contact the ground flight surgeon when repeated measurements show a substantial deterioration in lung function, especially when accompanied by respiratory symptoms. Urgent assessment should not be delayed for repeat spirometry.",
+      "prevention_and_actions": "Maintain cabin air filtration and ventilation; monitor cabin air quality and carbon dioxide levels;\nminimize exposure to dust and airborne contaminants;\nuse appropriate respiratory protection during surface activities;\nmaintain regular physical exercise;\nreport respiratory symptoms early;\nperform scheduled pulmonary function assessments and compare results with individual baseline values.",
+      "sources": [
+        "https://www.nasa.gov/humans-in-space/hhc-spaceflight-risks/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9818606/",
+        "https://publications.ersnet.org/content/erj/60/1/2101499"
+      ],
+      "confidence": "needs check",
+      "priority": "maybe"
+    },
+    {
+      "id": "skin_health",
+      "indicator": "Skin health",
+      "in_challenge": "Candidate",
+      "unit": "Symptom severity: 0–10 numerical rating scale; lesion/wound count: number; wound dimensions: cm; skin temperature: °C (if available).",
+      "why_monitor": "Detects skin barrier dysfunction, dermatitis, skin infections, delayed wound healing and unusual skin lesions. Monitoring helps identify early skin damage and changes in skin integrity that may affect astronaut health during long-duration missions.",
+      "spaceflight_hazards": "Space radiation: Ionizing radiation may damage skin-cell DNA and contribute to long-term skin damage and cancer risk.\nAltered gravity: Microgravity may affect skin structure, tissue repair and wound healing.\nHostile/closed environment: Low humidity, limited hygiene facilities, cabin contaminants and contact with equipment or adhesive patches may cause dryness, irritation and dermatitis. Changes in the skin microbiome may increase susceptibility to skin problems.\nIsolation and confinement: Psychological stress may aggravate some inflammatory skin conditions and complicate symptom management.\nDistance from Earth: Limited access to dermatologists and advanced diagnostic equipment makes early self-monitoring and remote assessment important.",
+      "measurement_in_space": "Astronauts can perform regular visual skin inspections using a mirror or camera. A symptom checklist can record itching, dryness, redness, pain and swelling, including severity (0–10) and duration. Standardized photographs can document new lesions and changes over time. Wound length and width can be measured in cm using a ruler. A portable skin thermometer or skin hydration device may provide additional measurements if available.",
+      "normal_range": "Healthy skin without new unexplained rashes, wounds, swelling, abnormal redness or signs of infection. Itching and pain scores: 0/10. No new or worsening skin lesions. Minor existing skin marks should be compared with the astronaut’s pre-flight baseline.",
+      "yellow_criteria_and_actions": "New or persistent itching, dryness, redness, rash or mild swelling develops; symptom severity reaches 4/10 or higher; or a minor wound shows no improvement over 48 hours. Record the affected skin area, photograph the change, monitor its progression and inform the crew medical officer. New or changing pigmented lesions should also be reported for assessment.",
+      "red_criteria_and_actions": "Rapidly spreading redness, increasing warmth or swelling, pus, red streaks around a wound, fever or severe skin pain occurs, suggesting a potentially serious infection. Also seek urgent assessment for rapidly progressing blistering, extensive skin peeling or serious allergic reactions, especially with facial swelling or breathing difficulty.",
+      "prevention_and_actions": "Maintain regular skin hygiene and use suitable moisturizers to protect the skin barrier. Minimize exposure to irritating substances and contaminated surfaces. Maintain cabin humidity and air quality within recommended limits. Clean and protect minor wounds promptly using approved medical supplies. Avoid scratching affected areas. Perform regular skin inspections, document changes and seek medical advice when warning signs appear.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/34058745/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9604750/",
+        "https://www.sciencedirect.com/science/article/pii/S0738081X25002858"
+      ],
+      "confidence": "verified",
+      "priority": "MVP"
+    }
+  ]
+}
