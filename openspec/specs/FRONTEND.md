@@ -25,7 +25,7 @@ Clicking the circular profile avatar in the top-right header opens a clean dropd
 2. **`Ground Operator`:** Restricted view — navigation tabs (`Main`) are hidden/locked; the user sees **only** the `Comms` chat interface representing the Flight Surgeon / Mission Control console communicating with the astronaut.
 
 ### 2.2 Top Navigation Bar (`Header`)
-- **Left:** Mission Day counter (`Day 40`), mission date (`YYYY-MM-DD`), and compact offline autonomy badge (`OFFLINE · AUTONOMOUS`).
+- **Left:** MED-EVAC logo/title, Mission Day counter (`Day 40`), and mission date (`2026-11-14` / `YYYY-MM-DD`). Do not display the `Synthetic data` or `OFFLINE · AUTONOMOUS` badges in the header.
 - **Center (Astronaut role only):** Segmented pill navigation switching between:
   - `Main` (Dashboard)
   - `Comms` (Chat & Ground Link)
