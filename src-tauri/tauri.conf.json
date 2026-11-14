@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "space-health-monitor",
+  "productName": "MED-EVAC",
   "version": "0.1.0",
-  "identifier": "com.spacehealth.monitor",
+  "identifier": "org.cyberastro.medevac",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "space-health-monitor",
+        "title": "MED-EVAC",
         "width": 800,
         "height": 600
       }

@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    space_health_monitor_lib::run()
+    med_evac_lib::run()
 }

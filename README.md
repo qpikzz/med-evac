@@ -6,7 +6,7 @@
   *A project by **Team CyberAstro** for the **NASA Space Apps Challenge***
 
   <p>
-    <img src="https://img.shields.io/badge/NASA-Space_Apps_Challenge-0B3D91?style=for-the-badge&logo=nasa&logoColor=white" alt="NASA Space Apps Challenge" />
+    <img src="https://img.shields.io/badge/NASA-Space_Apps_Challenge-0B3D91?style=for-the-badge" alt="NASA Space Apps Challenge" />
     <img src="https://img.shields.io/badge/Team-CyberAstro-1E293B?style=for-the-badge" alt="Team CyberAstro" />
     <img src="https://img.shields.io/badge/Tauri-24C8DB?style=for-the-badge&logo=tauri&logoColor=white" alt="Tauri" />
     <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
@@ -20,9 +20,25 @@
 
 ### 📖 About the Project
 
-**MED-EVAC** is an interactive desktop application designed for astronauts to monitor vital signs, assess physical and mental health risks, and receive autonomous medical guidance during long-duration space missions.
+**MED-EVAC** is an interactive desktop application intended to help astronauts monitor vital signs, assess physical and mental health risks, and receive autonomous medical guidance during long-duration space missions.
 
-Its key advantage is **100% offline autonomy** powered by local AI analytics and an interactive SVG body map, ensuring reliable self-diagnosis and treatment protocols even during deep-space communication blackouts with Earth.
+The design goal is **100% offline autonomy** powered by local AI analytics and an interactive SVG body map, so self-diagnosis and treatment protocols remain available during deep-space communication blackouts with Earth.
+
+> [!NOTE]
+> This repository is under active development. The desktop shell and offline-first architecture are in place; the medical monitoring features described below are planned and not yet implemented.
+
+---
+
+### 🚧 Project Status
+
+| Area | Status |
+| :--- | :--- |
+| Desktop shell (Tauri + React + TypeScript) | ✅ Implemented |
+| Offline-first architecture & project scaffolding | ✅ Implemented |
+| Vitals monitoring dashboard | 🚧 Planned |
+| Interactive SVG body map | 🚧 Planned |
+| Local AI risk assessment | 🚧 Planned |
+| Autonomous treatment protocols | 🚧 Planned |
 
 ---
 

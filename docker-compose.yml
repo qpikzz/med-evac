@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: space-health-monitor:latest
-    container_name: space-health-monitor
+    image: med-evac:latest
+    container_name: med-evac
     ports:
       - "8080:80"
     restart: unless-stopped
