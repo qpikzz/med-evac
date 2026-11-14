@@ -1,12 +1,12 @@
 # SPEC: Personal baseline & deviation  ·  v1.0  ·  14 Nov 2026, 16:45 (Baku)
 
-## 0. Простыми словами (на русском)
+## 0. In simple terms
 
-Модуль считает личную норму астронавта: какой у него обычно пульс, давление, настроение и так далее. Норм две.
-- **Предполётная.** Среднее за 7 дней измерений на Земле до старта. По ней сравниваются пульс, давление, настроение и масса тела.
-- **Скользящая.** Среднее за 7 предыдущих дней полёта, без сегодняшнего. По ней сравнивается температура.
+The module calculates the astronaut's personal baseline: their typical heart rate, blood pressure, mood, and so on. There are two baselines.
+- **Pre-flight.** The 7-day average of measurements taken on Earth prior to launch. This data is used to compare heart rate, blood pressure, mood, and body weight.
+- **Moving average.** The average of the previous 7 days of flight, excluding today. This is used to compare temperatures.
 
-Модуль только считает средние и разброс и отдаёт их движку правил. Цвет он не ставит. Вторая его работа — подготовить для графика линию «твоя норма» и линии порогов, взятые из `rules.json`. Например, для пульса это линия 62 и границы 50 и 74 (62 ± 12). Своих чисел модуль не придумывает. В истории 40-го дня это шаг 3: обычный пульс этого астронавта 62, а сегодня 80.
+The module only calculates the average and range and passes them to the rules engine. It does not assign a color. Its second task is to prepare the “your normal” line and the threshold lines—taken from `rules.json`—for the graph. For example, for heart rate, this is the 62 line and the thresholds of 50 and 74 (62 ± 12). The module does not generate its own numbers. In the 40th-day log, this is step 3: this astronaut’s normal heart rate is 62, and today it is 80.
 
 ## 1. Goal
 
