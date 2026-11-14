@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
+import rulesJson from "../../data/rules.json";
 import syntheticJson from "../../data/synthetic_history.json";
+import { evaluate } from "../../rules/engine";
+import { loadRules } from "../../rules/loadRules";
+import { checkEntry } from "../input-check/inputCheck";
+import { computeBaselines } from "../personal-baseline/baseline";
 import {
   SyntheticDataError,
   createHistoryStore,
@@ -23,6 +28,15 @@ async function loadGenerator(): Promise<GeneratorModule> {
 }
 
 const dataset = loadSyntheticDataset(syntheticJson);
+const rules = loadRules(rulesJson);
+
+function indicator(result: ReturnType<typeof evaluate>, id: string) {
+  const found = result.indicators.find((item) => item.indicator_id === id);
+  if (!found) {
+    throw new Error(`Missing indicator ${id}`);
+  }
+  return found;
+}
 
 function historyValue(date: string, metric: string): number {
   const reading = dataset.history.readings.find(
@@ -104,8 +118,85 @@ describe("synthetic dataset", () => {
     ).toBe(69.1);
   });
 
-  it.todo("criterion 6: Day-40 evaluation (deferred to Block 2 rules engine + baseline)");
-  it.todo("criterion 7: no hidden alarms on days 8-39 (deferred to Block 2)");
+  it("criterion 6: evaluates the Day-40 story with baseline and rules", () => {
+    const today = "2026-11-14";
+    const store = createHistoryStore(dataset, { includeDay40: true });
+    const baselines = computeBaselines({
+      today,
+      preflight: store.getPreflight(),
+      history: store.getReadings(),
+      rules,
+    });
+    const result = evaluate({
+      today,
+      readings: store.getReadings(),
+      flags: [],
+      baselines,
+      rules,
+    });
+
+    const heart = indicator(result, "heart_rate");
+    expect(heart.status).toBe("yellow");
+    const heartRule = heart.triggered.find((rule) => rule.rule_id === "hr_y_baseline");
+    expect(heartRule).toBeDefined();
+    expect(heartRule?.observed?.delta).toBeCloseTo(18, 6);
+
+    const sleep = indicator(result, "sleep_hours");
+    expect(sleep.status).toBe("yellow");
+    expect(sleep.triggered.some((rule) => rule.rule_id === "sleep_y_avg7")).toBe(true);
+
+    for (const id of [
+      "blood_pressure",
+      "blood_sugar",
+      "body_temperature",
+      "mood",
+      "body_mass",
+      "skin_health",
+      "immune_signs",
+    ]) {
+      expect(indicator(result, id).status).toBe("green");
+    }
+    expect(indicator(result, "radiation_dose").status).toBe("no_data");
+    expect(result.overall_status).toBe("yellow");
+    expect(result.overall_escalation).toBe("crew_medical_officer");
+  });
+
+  it("criterion 7: has no hidden alarms on days 8-39", () => {
+    const violations: string[] = [];
+    const yellowDays: Record<string, number[]> = {};
+
+    for (let missionDay = 8; missionDay <= 39; missionDay += 1) {
+      const today = missionDateForDay(missionDay);
+      const readings = dataset.history.readings.filter((reading) => reading.date <= today);
+      const baselines = computeBaselines({
+        today,
+        preflight: dataset.preflight.readings,
+        history: readings,
+        rules,
+      });
+      const result = evaluate({ today, readings, flags: [], baselines, rules });
+
+      for (const item of result.indicators) {
+        if (item.status === "red") {
+          violations.push(`day ${missionDay}: ${item.indicator_id} red`);
+        }
+        if (item.indicator_id === "heart_rate" && item.status === "yellow") {
+          violations.push(`day ${missionDay}: heart_rate yellow`);
+        }
+        if (item.indicator_id !== "sleep_hours" && item.status === "yellow") {
+          violations.push(`day ${missionDay}: ${item.indicator_id} yellow`);
+        }
+        if (item.status === "yellow") {
+          const days = yellowDays[item.indicator_id] ?? [];
+          days.push(missionDay);
+          yellowDays[item.indicator_id] = days;
+        }
+      }
+    }
+
+    expect(violations).toEqual([]);
+    expect(yellowDays).toEqual({ sleep_hours: [38, 39] });
+  });
 
   it("criterion 8: store rules", () => {
     const store = createHistoryStore(dataset);
@@ -154,5 +245,12 @@ describe("synthetic dataset", () => {
     });
   });
 
-  it.todo("criterion 10b: input check rejects 920 (deferred to Block 2 Task 2.3)");
+  it("criterion 10b: input check rejects the scripted invalid entry", () => {
+    const result = checkEntry(dataset.day40_checkup.demo_invalid_entry, "2026-11-14", rules);
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.code).toBe("out_of_range");
+    }
+  });
 });
