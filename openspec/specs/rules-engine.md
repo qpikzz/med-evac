@@ -1,6 +1,6 @@
 # **SPEC: Rules file & Rules engine · v1.0 · 14 Nov 2026, 13:45 (Baku)**
 
-## **0\. In simple terms **
+## **0\. In simple terms**
 
 The module determines the indicator’s color (green, yellow, or red) and what the astronaut should do next. It works like a “doctor following instructions”: it reads the `rules.json` file and assigns a color strictly according to it. It doesn’t come up with anything on its own, and there are no AI inside it. The rules file was compiled manually from the Ayesha table. Each rule consists of a single sentence from the YELLOW or RED columns, converted into numbers, with its source indicated next to it. The module receives as input measurements from the past few days, checked-off symptoms, and the astronaut’s personal baseline (calculated by the adjacent “Personal Baseline” module). The output for each metric includes: a color, which rules were triggered, a brief explanation, recommended actions, and who to contact (the astronaut themselves → the crew medic → a doctor on Earth). In the Day 40 story, it is this module that turns heart rate and sleep yellow and suggests what to do. A separate file, `knowledge_base.json` (all 16 rows of the table as text), serves only as a reference for the AI assistant and the “Learn more” screen; it never determines the color.
 
