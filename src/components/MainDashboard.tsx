@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppState } from "../features/app-state/AppStateContext";
 import type { TriggeredRule } from "../rules/types";
 import CheckupFormCard from "./CheckupFormCard";
@@ -9,6 +9,7 @@ import "../Dashboard.css";
 interface MainDashboardProps {
   onContactEarth: () => void;
   onAskLocalAI: (indicatorLabel: string, rule?: TriggeredRule) => void;
+  openCheckupToken: number;
 }
 
 function displayStatus(status: string): string {
@@ -37,12 +38,22 @@ function displayEscalation(escalation: string | null): string {
   }
 }
 
-function MainDashboard({ onContactEarth, onAskLocalAI }: MainDashboardProps) {
+function MainDashboard({
+  onContactEarth,
+  onAskLocalAI,
+  openCheckupToken,
+}: MainDashboardProps) {
   const { evaluation, hasCheckup } = useAppState();
   const [editing, setEditing] = useState(false);
   const [selectedIndicator, setSelectedIndicator] = useState<string | null>(null);
   const [activeLayer, setActiveLayer] = useState<"Skin" | "Muscles" | "Organs">("Organs");
   const showForm = !hasCheckup || editing;
+
+  useEffect(() => {
+    if (openCheckupToken > 0) {
+      setEditing(true);
+    }
+  }, [openCheckupToken]);
 
   return (
     <main className="main-dashboard">
@@ -57,9 +68,14 @@ function MainDashboard({ onContactEarth, onAskLocalAI }: MainDashboardProps) {
             <span className="complete-check" aria-hidden="true">✓</span>
             <p>Thank you for taking care of yourself!</p>
           </div>
-          <button className="button button-secondary" type="button" onClick={() => setEditing(true)}>
-            Edit Check-up
-          </button>
+          <div className="complete-actions">
+            <button className="button button-secondary" type="button" onClick={onContactEarth}>
+              Contact Earth
+            </button>
+            <button className="button button-secondary" type="button" onClick={() => setEditing(true)}>
+              Edit Check-up
+            </button>
+          </div>
         </section>
       )}
 

@@ -226,6 +226,16 @@ describe("synthetic dataset", () => {
       { date: "2026-11-14", metric: "heart_rate", value: 80, context: "rest", valid: true },
     ]);
     expect(listener).toHaveBeenCalledTimes(1);
+    store.addReadings([
+      { date: "2026-11-14", metric: "heart_rate", value: 75, context: "rest", valid: true },
+    ]);
+    const todayHeartReadings = store
+      .getReadings()
+      .filter((reading) => reading.date === "2026-11-14" && reading.metric === "heart_rate");
+    expect(todayHeartReadings).toEqual([
+      { date: "2026-11-14", metric: "heart_rate", value: 75, context: "rest", valid: true },
+    ]);
+    expect(listener).toHaveBeenCalledTimes(2);
     unsubscribe();
   });
 

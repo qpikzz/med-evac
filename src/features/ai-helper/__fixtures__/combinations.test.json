@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "combinations": [
+    {
+      "id": "combo_test_hr_sleep",
+      "title": "TEST FIXTURE: resting heart rate and sleep changed together",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "heart_rate",
+          "min_level": "yellow"
+        },
+        {
+          "type": "indicator",
+          "indicator_id": "sleep_hours",
+          "min_level": "yellow"
+        }
+      ],
+      "possible_explanations": [
+        "TEST FIXTURE ONLY - not medical: short sleep may be related to a higher resting heart rate."
+      ],
+      "actions": [
+        "TEST FIXTURE ONLY: rest and re-measure tomorrow."
+      ],
+      "discuss_with": "crew_medical_officer",
+      "source": "TEST FIXTURE - not medical.",
+      "confidence": "needs check"
+    },
+    {
+      "id": "combo_test_flag",
+      "title": "TEST FIXTURE: raised heart-rate rule with a cough flag",
+      "all_of": [
+        {
+          "type": "rule",
+          "rule_id": "hr_y_baseline"
+        },
+        {
+          "type": "flag",
+          "flag_id": "cough"
+        }
+      ],
+      "possible_explanations": [
+        "TEST FIXTURE ONLY - not medical: a cough may be related to a temporary heart-rate change."
+      ],
+      "actions": [],
+      "discuss_with": "crew_medical_officer",
+      "source": "TEST FIXTURE - not medical.",
+      "confidence": "needs check"
+    }
+  ]
+}

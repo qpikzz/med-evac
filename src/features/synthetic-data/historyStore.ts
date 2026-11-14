@@ -153,6 +153,12 @@ export function createHistoryStore(
       if (newReadings.some((reading) => reading.valid !== true)) {
         throw new Error("Cannot add readings with valid !== true");
       }
+      const replacedKeys = new Set(
+        newReadings.map((reading) => `${reading.date}\u0000${reading.metric}`),
+      );
+      readings = readings.filter(
+        (reading) => !replacedKeys.has(`${reading.date}\u0000${reading.metric}`),
+      );
       readings.push(...newReadings.map(cloneReading));
       notify();
     },

@@ -41,10 +41,10 @@
 
 | Model / Tool | Developer / Provider | Source URL | License | Role |
 | :--- | :--- | :--- | :--- | :--- |
-<!-- Uncomment or add rows as models and backend packages are integrated:
-| **IBM Granite 3.3 8B Instruct** | IBM | `https://huggingface.co/ibm-granite/granite-3.3-8b-instruct` | **Apache-2.0** | Local reasoning LLM for medical telemetry analysis |
+| **IBM Granite 3.3 8B Instruct** (`granite3.3:8b`) | IBM | `https://huggingface.co/ibm-granite/granite-3.3-8b-instruct` | **Apache-2.0** | Local reasoning LLM invoked through Ollama; explain-only, never sets colours, urgency or escalation |
+| **Ollama** (client/runtime `0.40.1`, observed locally; not bundled) | Ollama | `https://github.com/ollama/ollama` | **MIT** | Local offline model runtime serving `http://127.0.0.1:11434` |
+<!-- Uncomment or add rows as backend packages are integrated:
 | **Nomic Embed Text v2 MoE** | Nomic AI | `https://huggingface.co/nomic-ai/nomic-embed-text-v2-moe` | **Apache-2.0** | Local multilingual embeddings for RAG protocol retrieval |
-| **Ollama** | Ollama | `https://github.com/ollama/ollama` | **MIT** | Local offline model runtime |
 | **FastAPI / Uvicorn / NumPy** | Tiangolo / Encode / NumPy | `https://github.com/fastapi/fastapi` | **MIT / BSD-3-Clause** | Local REST API and vector similarity search |
 -->
 
