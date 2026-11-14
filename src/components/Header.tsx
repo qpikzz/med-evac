@@ -5,6 +5,7 @@ import { HEADER_COPY } from "../features/auth/copy";
 import { initials } from "../features/auth/identity";
 import type { AuthProfile } from "../features/auth/types";
 import OrbitaLogo from "./OrbitaLogo";
+import { getToday, missionDayForDate } from "../features/synthetic-data";
 
 export type { UserRole } from "../features/auth/types";
 export type AppView = "main" | "comms";
@@ -31,6 +32,8 @@ function Header({
   const [profileOpen, setProfileOpen] = useState(false);
   const switcherRef = useRef<HTMLDivElement | null>(null);
   const role = activeProfile.role;
+  const today = getToday();
+  const missionDay = missionDayForDate(today);
 
   useEffect(() => {
     if (!profileOpen) {
@@ -82,8 +85,11 @@ function Header({
           </span>
         </div>
         <div className="mission-context">
-          <span className="mission-day">Day 40</span>
-          <time className="mission-date" dateTime="2026-11-14">2026-11-14</time>
+          <span className="mission-day">
+            Day {missionDay} <span className="mission-transit">· Mars transit</span>
+          </span>
+          <time className="mission-date" dateTime={today}>{today}</time>
+          <span className="synthetic-badge">Synthetic data</span>
         </div>
       </div>
 

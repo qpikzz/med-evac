@@ -1,0 +1,340 @@
+/* Body map — uses tokens from src/styles/theme.css. Three text sizes: --fs-lg / --fs-md / --fs-sm. */
+
+.body-map {
+  --bm-color: var(--status-none);
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--fs-md);
+  min-width: 0;
+}
+
+.bm-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-1);
+}
+
+.bm-eyebrow {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bm-caption {
+  margin: 4px 0 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+/* ---- Layer tabs ---- */
+.bm-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.bm-tab {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 76px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.bm-tab:hover {
+  color: var(--text);
+}
+
+.bm-tab.is-active {
+  border-color: var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.bm-tab:focus-visible,
+.bm-zone-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---- Status tag (icon + word, never colour only) ---- */
+.bm-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--bm-color);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bm-style-green { --bm-color: var(--status-green); }
+.bm-style-yellow { --bm-color: var(--status-yellow); }
+.bm-style-red { --bm-color: var(--status-red); }
+.bm-style-no_data { --bm-color: var(--status-none); }
+.bm-style-monitoring { --bm-color: var(--text-muted); }
+
+/* ---- Stage ---- */
+.bm-stage {
+  position: relative;
+  width: min(100%, 300px);
+  aspect-ratio: 1 / 2;
+  justify-self: center;
+}
+
+.bm-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.bm-layer {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 200ms ease, visibility 0s linear 200ms;
+}
+
+.bm-layer.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 200ms ease, visibility 0s;
+}
+
+/* Placeholder line art */
+.bm-outline circle,
+.bm-outline path,
+.bm-detail circle,
+.bm-detail ellipse,
+.bm-detail path {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bm-skin-fill circle,
+.bm-skin-fill path {
+  fill: var(--surface-2);
+  stroke: none;
+}
+
+.bm-dim {
+  opacity: 0.35;
+}
+
+.bm-detail circle,
+.bm-detail ellipse,
+.bm-detail path {
+  stroke: var(--text);
+  stroke-opacity: 0.55;
+}
+
+/* ---- Hotspots ---- */
+.bm-hotspot {
+  cursor: pointer;
+  outline: none;
+}
+
+.bm-hotspot .bm-glow {
+  fill: var(--bm-color);
+  fill-opacity: 0.16;
+  stroke: var(--bm-color);
+  stroke-width: 1.5;
+  stroke-opacity: 0.7;
+}
+
+.bm-hotspot .bm-core {
+  fill: var(--bm-color);
+  fill-opacity: 0.85;
+}
+
+.bm-icon {
+  fill: var(--bg);
+  font-size: 18px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.bm-aura .bm-glow {
+  fill: none;
+  stroke-width: 10;
+  stroke-opacity: 0.35;
+}
+
+.bm-aura .bm-aura-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 24;
+  pointer-events: stroke;
+}
+
+.bm-hotspot.bm-style-no_data .bm-glow,
+.bm-hotspot.bm-style-no_data .bm-core {
+  opacity: 0.55;
+}
+
+/* Monitoring only: neutral, dashed outline, no fill colour */
+.bm-hotspot.bm-style-monitoring .bm-glow {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-dasharray: 10 8;
+  stroke-width: 2;
+  stroke-opacity: 0.8;
+}
+
+.bm-hotspot.bm-style-monitoring .bm-core {
+  fill: var(--surface-2);
+  stroke: var(--text-muted);
+  stroke-dasharray: 4 4;
+}
+
+.bm-hotspot.bm-style-monitoring .bm-icon {
+  fill: var(--text-muted);
+}
+
+.bm-focus-ring,
+.bm-selected-ring {
+  fill: none;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.bm-focus-ring {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+}
+
+.bm-hotspot:focus-visible .bm-focus-ring {
+  opacity: 1;
+}
+
+.bm-selected-ring {
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.bm-hotspot.is-selected .bm-selected-ring {
+  opacity: 1;
+}
+
+/* Glow: yellow slow pulse, red faster, green static, no_data dim */
+@keyframes bm-pulse {
+  0%, 100% { fill-opacity: 0.12; stroke-opacity: 0.5; }
+  50% { fill-opacity: 0.32; stroke-opacity: 1; }
+}
+
+.bm-hotspot.bm-style-yellow .bm-glow {
+  animation: bm-pulse 2.5s ease-in-out infinite;
+}
+
+.bm-hotspot.bm-style-red .bm-glow {
+  animation: bm-pulse 1.2s ease-in-out infinite;
+}
+
+/* ---- Tooltip ---- */
+.bm-tooltip {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  gap: 4px;
+  width: max-content;
+  max-width: 220px;
+  padding: var(--space-1) 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+}
+
+.bm-tooltip p {
+  margin: 0;
+}
+
+.bm-tooltip-title {
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.bm-tooltip-hazard,
+.bm-tooltip-note {
+  color: var(--text-muted);
+}
+
+/* ---- Zone list (all zones, every layer) ---- */
+.bm-zone-list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bm-zone-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--fs-md);
+  text-align: left;
+  cursor: pointer;
+}
+
+.bm-zone-item:hover {
+  background: var(--surface-2);
+}
+
+.bm-zone-item.is-selected {
+  border-color: #fff;
+}
+
+.bm-zone-note {
+  margin: 2px 10px 4px;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bm-layer,
+  .bm-layer.is-active {
+    transition: none;
+  }
+
+  .bm-hotspot .bm-glow {
+    animation: none !important;
+  }
+}

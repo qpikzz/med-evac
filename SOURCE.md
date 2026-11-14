@@ -89,7 +89,9 @@ Cite every NASA, ESA, JAXA, or open scientific standard used in the RAG knowledg
 
 ## 5. Media, Fonts & Branding
 * **Application Icons & UI Graphics:** Original artwork created by the ORBITA project contributors (**Apache-2.0**). Default starter template icons/logos (`tauri.svg`, `vite.svg`, default `src-tauri/icons/`) are replaced before submission to comply with third-party trademark and CC-BY-NC-ND restrictions.
-* **Typography:** System sans-serif fallback stack (`Inter, Avenir, Helvetica, Arial, sans-serif`) referenced via CSS without bundling proprietary font binaries.
+* **Body map figure (`src/components/BodyMap/BodyMap.tsx`):** Placeholder line-art silhouettes (skin, organs, skeleton) drawn as inline SVG by the ORBITA project contributors (**Apache-2.0**). Optional layer art from Rəna goes in `src/assets/body/` and must be listed here with its licence; AI-generated art also needs an "AI-generated illustration" note in About/Credits.
+* **Dark space theme (`src/styles/theme.css`):** Original; starfield is pure CSS radial-gradients, no image files.
+* **Typography:** System sans-serif stack (`system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif`) referenced via CSS without bundling proprietary font binaries.
 * **Demo Video & Screenshots:** Original screen recordings and narration produced by the ORBITA project team with full written consent of all adult participants and zero third-party copyrighted audio/video.
 
 ---
