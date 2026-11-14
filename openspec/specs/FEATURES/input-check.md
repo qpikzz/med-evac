@@ -1,8 +1,8 @@
 # SPEC: Input check (plausibility)  ·  v1.0  ·  14 Nov 2026, 16:30 (Baku)
 
-## 0\. Простыми словами (на русском)
+## 0\. In simple terms 
 
-Модуль ловит невозможные значения до того, как они попадут в историю. Астронавт вводит «920» в поле пульса, а модуль отвечает: «Looks like a measurement error. Please measure again.» Сохранить чек-ап нельзя, пока ошибка не исправлена или поле не очищено. Модуль не ставит цвет и не решает ничего медицинского. Он проверяет только три вещи: это число, оно в физически возможных границах, верхнее давление больше нижнего. Границы хранятся в `rules.json` (поля `plausible_min` / `plausible_max`), их назвала Лана 14 ноября. Источники к ним добавляет Ayesha. Без этого модуля шаг 2 истории 40-го дня («пульс 920 → перемерьте») не работает.
+The module catches invalid values before they are saved to the history. An astronaut enters “920” in the heart rate field, and the module responds: “Looks like a measurement error. Please measure again.” The checkup cannot be saved until the error is corrected or the field is cleared. The module does not assign a color or make any medical determinations. It checks only three things: whether the number is within physically possible limits, and whether the systolic pressure is higher than the diastolic pressure.The boundaries are stored in `rules.json` (the `plausible_min` and `plausible_max` fields); Lana named them on November 14. Ayesha adds the sources for them. Without this module, step 2 of the Day 40 story (“pulse 920 → check again”) does not work.
 
 ## 1\. Goal
 
