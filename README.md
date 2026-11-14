@@ -55,13 +55,13 @@ cd Desktop
 #### Step 3: Clone (download) the repository
 Copy and paste the command below and press `Enter` *(replace `<repository-url>` with your actual GitHub link)*:
 ```bash
-git clone <repository-url>
+git clone https://github.com/qpikzz/med-evac.git
 ```
 
 #### Step 4: Enter the project folder
 Move into the newly downloaded folder *(replace `<project-folder>` with the repository name)*:
 ```bash
-cd <project-folder>
+cd med-evac
 ```
 
 #### Step 5: Install dependencies
