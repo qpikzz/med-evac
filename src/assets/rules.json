@@ -1,0 +1,1720 @@
+{
+  "schema_version": "1.0",
+  "generated_from": "Health_Indicators_Research.xlsx, sheet 'Indicators' (Ayesha). Rules transcribed by hand from columns G, H, I; every rule has a 'source'.",
+  "last_updated": "2026-11-14T13:50+04:00",
+  "settings": {
+    "rolling_baseline_days": 7,
+    "min_rolling_baseline_readings": 7,
+    "source": "TABLE: Body temperature, YELLOW ('7-day baseline'). Applied to all rolling baselines = ASSUMPTION A3 in specs/rules-engine.md"
+  },
+  "escalation": {
+    "green": "self",
+    "yellow": "crew_medical_officer",
+    "red": "ground_flight_surgeon",
+    "source": "TABLE: column headers H ('YELLOW - crew should act') and I ('RED - ground flight surgeon needed'); BRIEF §4"
+  },
+  "ui_text": {
+    "green": "Within your normal range.",
+    "no_data": "No measurement today.",
+    "baseline_forming": "Your personal baseline is still forming. Only general limits are checked for now.",
+    "escalation_self": "No action needed. Keep your routine.",
+    "escalation_crew_medical_officer": "Tell your crew medical officer.",
+    "escalation_ground_flight_surgeon": "Contact the flight surgeon on Earth. Tell your crew medical officer now.",
+    "rules_error": "Health rules could not be loaded. Use your standard medical procedures and contact the crew medical officer."
+  },
+  "metrics": [
+    {
+      "id": "bp_systolic",
+      "indicator_id": "blood_pressure",
+      "label": "Systolic blood pressure",
+      "unit": "mmHg",
+      "plausible_min": null,
+      "plausible_max": null
+    },
+    {
+      "id": "bp_diastolic",
+      "indicator_id": "blood_pressure",
+      "label": "Diastolic blood pressure",
+      "unit": "mmHg",
+      "plausible_min": null,
+      "plausible_max": null
+    },
+    {
+      "id": "heart_rate",
+      "indicator_id": "heart_rate",
+      "label": "Resting heart rate",
+      "unit": "bpm",
+      "plausible_min": null,
+      "plausible_max": null
+    },
+    {
+      "id": "glucose",
+      "indicator_id": "blood_sugar",
+      "label": "Blood glucose",
+      "unit": "mg/dL",
+      "plausible_min": null,
+      "plausible_max": null
+    },
+    {
+      "id": "body_temp",
+      "indicator_id": "body_temperature",
+      "label": "Body temperature",
+      "unit": "°C",
+      "plausible_min": null,
+      "plausible_max": null
+    },
+    {
+      "id": "sleep_hours",
+      "indicator_id": "sleep_hours",
+      "label": "Sleep last night",
+      "unit": "h",
+      "plausible_min": 0,
+      "plausible_max": 24
+    },
+    {
+      "id": "mood",
+      "indicator_id": "mood",
+      "label": "Mood score",
+      "unit": "0-10",
+      "plausible_min": 0,
+      "plausible_max": 10
+    },
+    {
+      "id": "body_mass",
+      "indicator_id": "body_mass",
+      "label": "Body mass",
+      "unit": "kg",
+      "plausible_min": null,
+      "plausible_max": null
+    },
+    {
+      "id": "skin_symptom_score",
+      "indicator_id": "skin_health",
+      "label": "Skin symptom severity",
+      "unit": "0-10",
+      "plausible_min": 0,
+      "plausible_max": 10
+    },
+    {
+      "id": "radiation_dose_rate",
+      "indicator_id": "radiation_dose",
+      "label": "Radiation dose rate",
+      "unit": "µSv/h",
+      "plausible_min": 0,
+      "plausible_max": null
+    },
+    {
+      "id": "radiation_accumulated",
+      "indicator_id": "radiation_dose",
+      "label": "Accumulated dose",
+      "unit": "mSv",
+      "plausible_min": 0,
+      "plausible_max": null
+    }
+  ],
+  "flags": [
+    {
+      "id": "chest_pain",
+      "kind": "symptom",
+      "indicator_ids": [
+        "heart_rate",
+        "immune_signs"
+      ],
+      "label": "Chest pain"
+    },
+    {
+      "id": "breathing_difficulty",
+      "kind": "symptom",
+      "indicator_ids": [
+        "heart_rate",
+        "immune_signs",
+        "body_temperature",
+        "skin_health"
+      ],
+      "label": "Shortness of breath or difficulty breathing"
+    },
+    {
+      "id": "fainting",
+      "kind": "symptom",
+      "indicator_ids": [
+        "blood_pressure",
+        "heart_rate"
+      ],
+      "label": "Fainting or near-fainting"
+    },
+    {
+      "id": "severe_dizziness",
+      "kind": "symptom",
+      "indicator_ids": [
+        "blood_pressure",
+        "heart_rate"
+      ],
+      "label": "Severe dizziness"
+    },
+    {
+      "id": "dizziness",
+      "kind": "symptom",
+      "indicator_ids": [
+        "body_mass"
+      ],
+      "label": "Dizziness"
+    },
+    {
+      "id": "irregular_heartbeat",
+      "kind": "symptom",
+      "indicator_ids": [
+        "heart_rate"
+      ],
+      "label": "Irregular or skipping heartbeat"
+    },
+    {
+      "id": "low_sugar_symptoms",
+      "kind": "symptom",
+      "indicator_ids": [
+        "blood_sugar"
+      ],
+      "label": "Sweating, shakiness, sudden hunger, unusual fatigue or dizziness"
+    },
+    {
+      "id": "high_sugar_crisis_signs",
+      "kind": "symptom",
+      "indicator_ids": [
+        "blood_sugar"
+      ],
+      "label": "Vomiting, dehydration, abdominal pain or excessive thirst"
+    },
+    {
+      "id": "ketones_suspected",
+      "kind": "symptom",
+      "indicator_ids": [
+        "blood_sugar"
+      ],
+      "label": "Ketones detected or suspected"
+    },
+    {
+      "id": "confusion",
+      "kind": "symptom",
+      "indicator_ids": [
+        "blood_sugar",
+        "body_temperature",
+        "immune_signs"
+      ],
+      "label": "Confusion or unusual behaviour"
+    },
+    {
+      "id": "seizure_or_unconscious",
+      "kind": "symptom",
+      "indicator_ids": [
+        "blood_sugar"
+      ],
+      "label": "Seizure or loss of consciousness (crewmate reports)"
+    },
+    {
+      "id": "chills",
+      "kind": "symptom",
+      "indicator_ids": [
+        "body_temperature"
+      ],
+      "label": "Chills"
+    },
+    {
+      "id": "severe_headache",
+      "kind": "symptom",
+      "indicator_ids": [
+        "body_temperature"
+      ],
+      "label": "Severe headache"
+    },
+    {
+      "id": "heat_stress_signs",
+      "kind": "symptom",
+      "indicator_ids": [
+        "body_temperature"
+      ],
+      "label": "During exercise: dizziness, confusion or sweating stops"
+    },
+    {
+      "id": "sleep_aid_used",
+      "kind": "symptom",
+      "indicator_ids": [
+        "sleep_hours"
+      ],
+      "label": "I used a sleep aid"
+    },
+    {
+      "id": "fatigue_errors",
+      "kind": "symptom",
+      "indicator_ids": [
+        "sleep_hours"
+      ],
+      "label": "I made task errors because of fatigue"
+    },
+    {
+      "id": "persistent_low_mood",
+      "kind": "symptom",
+      "indicator_ids": [
+        "mood"
+      ],
+      "label": "Stress, sadness, loneliness or irritability on most recent days"
+    },
+    {
+      "id": "self_harm_thoughts",
+      "kind": "symptom",
+      "indicator_ids": [
+        "mood"
+      ],
+      "label": "Thoughts of harming myself"
+    },
+    {
+      "id": "severe_distress",
+      "kind": "symptom",
+      "indicator_ids": [
+        "mood"
+      ],
+      "label": "Severe anxiety, panic or rapidly worsening distress"
+    },
+    {
+      "id": "cannot_perform_duties",
+      "kind": "symptom",
+      "indicator_ids": [
+        "mood"
+      ],
+      "label": "I feel unable to do my mission tasks safely"
+    },
+    {
+      "id": "unusual_weakness",
+      "kind": "symptom",
+      "indicator_ids": [
+        "body_mass"
+      ],
+      "label": "Unusual weakness"
+    },
+    {
+      "id": "sore_throat",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs"
+      ],
+      "label": "Sore throat"
+    },
+    {
+      "id": "cough",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs"
+      ],
+      "label": "Cough"
+    },
+    {
+      "id": "unusual_fatigue",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs"
+      ],
+      "label": "Unusual fatigue"
+    },
+    {
+      "id": "skin_rash",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs",
+        "skin_health",
+        "body_temperature"
+      ],
+      "label": "Skin rash"
+    },
+    {
+      "id": "cold_sores",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs"
+      ],
+      "label": "Cold sores"
+    },
+    {
+      "id": "oral_lesions",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs"
+      ],
+      "label": "Sores in the mouth"
+    },
+    {
+      "id": "mild_allergic_reaction",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs"
+      ],
+      "label": "Mild allergic reaction"
+    },
+    {
+      "id": "rapidly_spreading_rash",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs"
+      ],
+      "label": "Rash that spreads quickly"
+    },
+    {
+      "id": "face_throat_swelling",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs",
+        "skin_health"
+      ],
+      "label": "Swelling of the face or throat"
+    },
+    {
+      "id": "severe_weakness",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs"
+      ],
+      "label": "Severe weakness"
+    },
+    {
+      "id": "dehydration_signs",
+      "kind": "symptom",
+      "indicator_ids": [
+        "immune_signs"
+      ],
+      "label": "Signs of dehydration"
+    },
+    {
+      "id": "skin_change_mild",
+      "kind": "symptom",
+      "indicator_ids": [
+        "skin_health"
+      ],
+      "label": "New itching, dryness, redness or mild swelling"
+    },
+    {
+      "id": "wound_not_healing_48h",
+      "kind": "symptom",
+      "indicator_ids": [
+        "skin_health"
+      ],
+      "label": "A small wound has not improved in 48 hours"
+    },
+    {
+      "id": "changing_mole",
+      "kind": "symptom",
+      "indicator_ids": [
+        "skin_health"
+      ],
+      "label": "New or changing mole or dark spot"
+    },
+    {
+      "id": "skin_spreading_redness",
+      "kind": "symptom",
+      "indicator_ids": [
+        "skin_health"
+      ],
+      "label": "Redness, warmth or swelling that spreads quickly"
+    },
+    {
+      "id": "wound_pus_streaks",
+      "kind": "symptom",
+      "indicator_ids": [
+        "skin_health"
+      ],
+      "label": "Pus or red streaks around a wound"
+    },
+    {
+      "id": "severe_skin_pain",
+      "kind": "symptom",
+      "indicator_ids": [
+        "skin_health"
+      ],
+      "label": "Severe skin pain"
+    },
+    {
+      "id": "blistering_peeling",
+      "kind": "symptom",
+      "indicator_ids": [
+        "skin_health"
+      ],
+      "label": "Fast-spreading blisters or skin peeling"
+    },
+    {
+      "id": "spe_warning",
+      "kind": "event",
+      "indicator_ids": [
+        "radiation_dose"
+      ],
+      "label": "Solar particle event warning received"
+    },
+    {
+      "id": "dosimeter_unexpected_high",
+      "kind": "event",
+      "indicator_ids": [
+        "radiation_dose"
+      ],
+      "label": "My dosimeter shows unexpectedly high exposure"
+    },
+    {
+      "id": "acute_radiation_event",
+      "kind": "event",
+      "indicator_ids": [
+        "radiation_dose"
+      ],
+      "label": "Acute radiation event announced"
+    }
+  ],
+  "indicators": [
+    {
+      "id": "blood_pressure",
+      "label": "Blood pressure",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "bp_y_high_sys",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "bp_systolic",
+            "op": ">=",
+            "value": 130
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Blood pressure, YELLOW",
+          "title": "Blood pressure higher than usual",
+          "explanation": "Your systolic pressure was 130 mmHg or higher on repeated readings. In microgravity, fluid shifts change how your heart and vessels work.",
+          "actions": [
+            "Rest for 5 minutes and measure again.",
+            "Note any dizziness, headache or unusual weakness.",
+            "Tell your crew medical officer if it stays high."
+          ],
+          "recheck": "Repeat after 5 minutes of rest."
+        },
+        {
+          "id": "bp_y_high_dia",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "bp_diastolic",
+            "op": ">=",
+            "value": 80
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Blood pressure, YELLOW",
+          "title": "Blood pressure higher than usual",
+          "explanation": "Your diastolic pressure was 80 mmHg or higher on repeated readings.",
+          "actions": [
+            "Rest for 5 minutes and measure again.",
+            "Note any dizziness, headache or unusual weakness.",
+            "Tell your crew medical officer if it stays high."
+          ],
+          "recheck": "Repeat after 5 minutes of rest."
+        },
+        {
+          "id": "bp_y_low_sys",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "bp_systolic",
+            "op": "<",
+            "value": 90
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Blood pressure, YELLOW",
+          "title": "Blood pressure lower than usual",
+          "explanation": "Your systolic pressure was below 90 mmHg on repeated readings. Low pressure can cause dizziness and fainting.",
+          "actions": [
+            "Rest for 5 minutes and measure again.",
+            "Note any dizziness or weakness.",
+            "Tell your crew medical officer if it stays low."
+          ],
+          "recheck": "Repeat after 5 minutes of rest."
+        },
+        {
+          "id": "bp_y_low_dia",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "bp_diastolic",
+            "op": "<",
+            "value": 60
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Blood pressure, YELLOW",
+          "title": "Blood pressure lower than usual",
+          "explanation": "Your diastolic pressure was below 60 mmHg on repeated readings.",
+          "actions": [
+            "Rest for 5 minutes and measure again.",
+            "Note any dizziness or weakness.",
+            "Tell your crew medical officer if it stays low."
+          ],
+          "recheck": "Repeat after 5 minutes of rest."
+        },
+        {
+          "id": "bp_y_baseline_sys",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "bp_systolic",
+            "baseline": "preflight",
+            "direction": "either",
+            "unit": "abs",
+            "amount": 10
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Blood pressure, YELLOW ('persistent deviation from individual baseline'); 10 mmHg [ANSWER: Lana, 14 Nov 13:36, '9-10 mmHg'] - SOURCE PENDING (PubMed, Ayesha); 2 consecutive days (A2)",
+          "title": "Blood pressure differs from your normal",
+          "explanation": "Your blood pressure has been at least 10 mmHg away from your personal normal for 2 days.",
+          "actions": [
+            "Measure again after 5 minutes of rest.",
+            "Tell your crew medical officer if it continues."
+          ],
+          "recheck": "Repeat tomorrow morning."
+        },
+        {
+          "id": "bp_y_baseline_dia",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "bp_diastolic",
+            "baseline": "preflight",
+            "direction": "either",
+            "unit": "abs",
+            "amount": 10
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Blood pressure, YELLOW ('persistent deviation from individual baseline'); 10 mmHg [ANSWER: Lana, 14 Nov 13:36, '9-10 mmHg'] - SOURCE PENDING (PubMed, Ayesha); 2 consecutive days (A2)",
+          "title": "Blood pressure differs from your normal",
+          "explanation": "Your blood pressure has been at least 10 mmHg away from your personal normal for 2 days.",
+          "actions": [
+            "Measure again after 5 minutes of rest.",
+            "Tell your crew medical officer if it continues."
+          ],
+          "recheck": "Repeat tomorrow morning."
+        },
+        {
+          "id": "bp_r_high_sys",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "bp_systolic",
+            "op": ">=",
+            "value": 180
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Blood pressure, RED",
+          "title": "Very high blood pressure",
+          "explanation": "Your systolic pressure reached 180 mmHg or higher. This needs medical assessment now.",
+          "actions": [
+            "Measure again now if you feel able.",
+            "Start the approved medical emergency procedure.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Repeat immediately."
+        },
+        {
+          "id": "bp_r_high_dia",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "bp_diastolic",
+            "op": ">=",
+            "value": 120
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Blood pressure, RED",
+          "title": "Very high blood pressure",
+          "explanation": "Your diastolic pressure reached 120 mmHg or higher. This needs medical assessment now.",
+          "actions": [
+            "Measure again now if you feel able.",
+            "Start the approved medical emergency procedure.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Repeat immediately."
+        },
+        {
+          "id": "bp_r_low_symptoms",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "bp_systolic",
+            "op": "<",
+            "value": 90
+          },
+          "persistence": 1,
+          "requires_flags": [
+            "fainting",
+            "severe_dizziness"
+          ],
+          "source": "TABLE: Blood pressure, RED ('very low BP with fainting or severe dizziness'). 'Very low' = below the YELLOW low limit: ASSUMPTION A5.",
+          "title": "Low blood pressure with fainting or severe dizziness",
+          "explanation": "Low blood pressure together with fainting or severe dizziness can mean your circulation is unstable.",
+          "actions": [
+            "Lie down and secure yourself.",
+            "Call your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Repeat as soon as it is safe."
+        }
+      ]
+    },
+    {
+      "id": "heart_rate",
+      "label": "Heart rate",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "hr_y_baseline",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "heart_rate",
+            "baseline": "preflight",
+            "direction": "either",
+            "unit": "abs",
+            "amount": 12
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Heart rate, YELLOW ('persistent deviation from individual baseline'); deviation 12 bpm [ANSWER: Lana, 14 Nov 13:36] - SOURCE PENDING (Ayesha); 'persistent' = 2 consecutive days (A2)",
+          "title": "Heart rate differs from your normal",
+          "explanation": "Your resting heart rate has been at least 12 beats per minute away from your personal normal for 2 days. Your heart adapts to microgravity, so a change from YOUR usual value matters even inside general limits.",
+          "actions": [
+            "Sit still for 5 minutes and measure again.",
+            "Note chest pain, dizziness or shortness of breath.",
+            "Tell your crew medical officer if it continues."
+          ],
+          "recheck": "Repeat after 5 minutes of rest and again tomorrow morning."
+        },
+        {
+          "id": "hr_y_abs_high",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "heart_rate",
+            "op": ">",
+            "value": 100
+          },
+          "source": "TABLE: Heart rate, Normal range (60-100 bpm, added by team 14 Nov) - SOURCE LINK PENDING (Ayesha)",
+          "title": "Resting heart rate above 100",
+          "explanation": "Your resting heart rate is above the general adult range of 60-100 beats per minute.",
+          "persistence": 1,
+          "requires_flags": [],
+          "actions": [
+            "Sit still for 5 minutes and measure again.",
+            "Note chest pain, dizziness or shortness of breath.",
+            "Tell your crew medical officer if it continues."
+          ],
+          "recheck": "Repeat after 5 minutes of rest."
+        },
+        {
+          "id": "hr_y_abs_low",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "heart_rate",
+            "op": "<",
+            "value": 60
+          },
+          "source": "TABLE: Heart rate, Normal range (60-100 bpm, added by team 14 Nov) - SOURCE LINK PENDING (Ayesha)",
+          "title": "Resting heart rate below 60",
+          "explanation": "Your resting heart rate is below the general adult range of 60-100 beats per minute.",
+          "persistence": 1,
+          "requires_flags": [],
+          "actions": [
+            "Sit still for 5 minutes and measure again.",
+            "Note chest pain, dizziness or shortness of breath.",
+            "Tell your crew medical officer if it continues."
+          ],
+          "recheck": "Repeat after 5 minutes of rest."
+        },
+        {
+          "id": "hr_r_baseline_symptoms",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "heart_rate",
+            "baseline": "preflight",
+            "direction": "either",
+            "unit": "abs",
+            "amount": 12
+          },
+          "persistence": 1,
+          "requires_flags": [
+            "chest_pain",
+            "fainting",
+            "severe_dizziness",
+            "breathing_difficulty"
+          ],
+          "source": "TABLE: Heart rate, RED ('abnormal heart rate with chest pain, fainting, severe dizziness or shortness of breath'); deviation 12 bpm [ANSWER: Lana] - SOURCE PENDING (Ayesha)",
+          "title": "Unusual heart rate with warning symptoms",
+          "explanation": "An unusual heart rate together with chest pain, fainting, severe dizziness or shortness of breath needs medical assessment now.",
+          "actions": [
+            "Stop all activity and secure yourself.",
+            "Call your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Repeat immediately."
+        },
+        {
+          "id": "hr_r_irregular",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "irregular_heartbeat"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Heart rate, RED ('suspected arrhythmia or irregular heart rhythm')",
+          "title": "Possible irregular heartbeat",
+          "explanation": "An irregular heartbeat needs to be checked by a doctor.",
+          "actions": [
+            "Stop strenuous activity.",
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Repeat the measurement at rest."
+        }
+      ]
+    },
+    {
+      "id": "blood_sugar",
+      "label": "Blood sugar",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "glu_y_low",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "glucose",
+            "op": "<",
+            "value": 70
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Blood sugar, YELLOW",
+          "title": "Low blood sugar",
+          "explanation": "Your glucose is below 70 mg/dL. Low sugar can affect energy and concentration.",
+          "actions": [
+            "Stop strenuous activity.",
+            "If you can swallow, take fast-acting glucose as in the approved protocol.",
+            "Tell your crew medical officer if it stays low."
+          ],
+          "recheck": "Recheck in 15 minutes."
+        },
+        {
+          "id": "glu_y_high",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "glucose",
+            "op": ">",
+            "value": 180
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Blood sugar, YELLOW",
+          "title": "High blood sugar",
+          "explanation": "Your glucose stayed above 180 mg/dL on repeated readings, not just after a meal. Long spaceflight can change how your body uses sugar.",
+          "actions": [
+            "Confirm the reading with a finger-prick test if you can.",
+            "Tell your crew medical officer if it stays high."
+          ],
+          "recheck": "Recheck at the next scheduled measurement."
+        },
+        {
+          "id": "glu_y_symptoms",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "low_sugar_symptoms"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Blood sugar, YELLOW",
+          "title": "Symptoms of low blood sugar",
+          "explanation": "Sweating, shakiness, sudden hunger or dizziness can be signs of low blood sugar.",
+          "actions": [
+            "Stop strenuous activity and measure your glucose.",
+            "Tell your crew medical officer if symptoms continue."
+          ],
+          "recheck": "Measure glucose now."
+        },
+        {
+          "id": "glu_r_low",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "glucose",
+            "op": "<",
+            "value": 54
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Blood sugar, RED",
+          "title": "Very low blood sugar",
+          "explanation": "Your glucose is below 54 mg/dL. This is clinically significant low blood sugar.",
+          "actions": [
+            "If you can swallow, take fast-acting glucose now.",
+            "Start the approved emergency procedure.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Recheck in 15 minutes."
+        },
+        {
+          "id": "glu_r_neuro",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "confusion",
+              "seizure_or_unconscious"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Blood sugar, RED ('regardless of the measured glucose level')",
+          "title": "Confusion or loss of consciousness",
+          "explanation": "Confusion, seizures or loss of consciousness need help right away, whatever the glucose value.",
+          "actions": [
+            "A crewmate starts the approved emergency procedure.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Measure glucose as soon as it is safe."
+        },
+        {
+          "id": "glu_r_high_symptoms",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "glucose",
+            "op": ">",
+            "value": 200
+          },
+          "persistence": 2,
+          "requires_flags": [
+            "high_sugar_crisis_signs",
+            "ketones_suspected"
+          ],
+          "source": "TABLE: Blood sugar, RED ('persistently above 200 mg/dL with symptoms or suspected ketones')",
+          "title": "High blood sugar with symptoms",
+          "explanation": "Glucose above 200 mg/dL with symptoms or ketones can mean a high-sugar crisis.",
+          "actions": [
+            "Check ketones if available.",
+            "Start the approved emergency procedure.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Recheck now."
+        },
+        {
+          "id": "glu_r_crisis_signs",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "high_sugar_crisis_signs"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Blood sugar, RED ('vomiting, dehydration, abdominal pain, excessive thirst ... suggest a possible hyperglycemic crisis')",
+          "title": "Possible high-sugar crisis",
+          "explanation": "Vomiting, dehydration, belly pain or strong thirst can be signs of a high-sugar crisis.",
+          "actions": [
+            "Measure your glucose now.",
+            "Tell your crew medical officer.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Measure glucose now."
+        }
+      ]
+    },
+    {
+      "id": "body_temperature",
+      "label": "Body temperature",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "temp_y_baseline",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "body_temp",
+            "baseline": "rolling",
+            "direction": "above",
+            "unit": "abs",
+            "amount": 1.0,
+            "context": "rest"
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Body temperature, YELLOW ('at least 1 °C above the astronaut's own 7-day baseline')",
+          "title": "Temperature above your normal",
+          "explanation": "Your resting temperature is at least 1 °C above your own 7-day average. In space, resting temperature runs higher than on Earth, so we compare with your normal.",
+          "actions": [
+            "Rest and drink water.",
+            "Lower exercise intensity and take cooling breaks.",
+            "Tell your crew medical officer if it stays high."
+          ],
+          "recheck": "Measure again in 30 minutes."
+        },
+        {
+          "id": "temp_y_abs",
+          "level": "yellow",
+          "enabled": false,
+          "trigger": {
+            "type": "threshold",
+            "metric": "body_temp",
+            "op": ">=",
+            "value": 37.8,
+            "context": "rest"
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Body temperature, YELLOW ('37.8 to 38.9 °C'). DISABLED pending OPEN QUESTION Q-TEMP: conflicts with TABLE: Body temperature, Normal ('in-flight resting core may stabilise near 38 °C').",
+          "title": "Raised temperature",
+          "explanation": "Your resting temperature is 37.8 °C or higher.",
+          "actions": [
+            "Rest and drink water.",
+            "Tell your crew medical officer if it stays high."
+          ],
+          "recheck": "Measure again in 30 minutes."
+        },
+        {
+          "id": "temp_y_low",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "body_temp",
+            "op": "<",
+            "value": 36.0,
+            "context": "rest"
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Body temperature, YELLOW",
+          "title": "Temperature lower than normal",
+          "explanation": "Your resting temperature is below 36.0 °C.",
+          "actions": [
+            "Check that the sensor is placed correctly.",
+            "Warm up and measure again.",
+            "Tell your crew medical officer if it stays low."
+          ],
+          "recheck": "Measure again in 30 minutes."
+        },
+        {
+          "id": "temp_y_exercise",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "body_temp",
+            "op": ">=",
+            "value": 39.0,
+            "context": "exercise"
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Body temperature, YELLOW ('core temperature after exercise is 39.0 °C or higher')",
+          "title": "Overheating after exercise",
+          "explanation": "Your temperature after exercise reached 39.0 °C. In microgravity your body loses heat less easily.",
+          "actions": [
+            "Stop or reduce exercise.",
+            "Take a cooling break, increase airflow, drink water."
+          ],
+          "recheck": "Measure again in 30 minutes."
+        },
+        {
+          "id": "temp_r_abs",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "body_temp",
+            "op": ">=",
+            "value": 39.0,
+            "context": "rest"
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Body temperature, RED",
+          "title": "High fever",
+          "explanation": "Your resting temperature is 39.0 °C or higher.",
+          "actions": [
+            "Rest and drink water.",
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth. Take fever medicine only on their advice."
+          ],
+          "recheck": "Measure again in 30 minutes."
+        },
+        {
+          "id": "temp_r_baseline_24h",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "body_temp",
+            "baseline": "rolling",
+            "direction": "above",
+            "unit": "abs",
+            "amount": 1.0,
+            "context": "rest"
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Body temperature, RED ('at least 1 °C above baseline for more than 24 hours'). '>24 h' = 2 consecutive daily readings: ASSUMPTION A4.",
+          "title": "Temperature above your normal for more than a day",
+          "explanation": "Your temperature has stayed at least 1 °C above your normal for more than a day.",
+          "actions": [
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Measure again in 30 minutes."
+        },
+        {
+          "id": "temp_r_fever_symptoms",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "body_temp",
+            "baseline": "rolling",
+            "direction": "above",
+            "unit": "abs",
+            "amount": 1.0,
+            "context": "rest"
+          },
+          "persistence": 1,
+          "requires_flags": [
+            "chills",
+            "confusion",
+            "severe_headache",
+            "skin_rash",
+            "breathing_difficulty"
+          ],
+          "source": "TABLE: Body temperature, RED ('fever with chills, confusion, severe headache, rash or breathing difficulty'). Fever = YELLOW baseline rule: ASSUMPTION A6.",
+          "title": "Fever with warning symptoms",
+          "explanation": "A raised temperature together with chills, confusion, severe headache, rash or breathing difficulty needs a doctor.",
+          "actions": [
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Measure again in 30 minutes."
+        },
+        {
+          "id": "temp_r_low",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "body_temp",
+            "op": "<",
+            "value": 35.0,
+            "context": "rest"
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Body temperature, RED",
+          "title": "Very low temperature",
+          "explanation": "Your temperature is below 35.0 °C.",
+          "actions": [
+            "Warm up and check the sensor.",
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Measure again now."
+        },
+        {
+          "id": "temp_r_exercise",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "body_temp",
+            "op": ">=",
+            "value": 40.0,
+            "context": "exercise"
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Body temperature, RED ('during exercise or spacewalks: 40.0 °C or higher')",
+          "title": "Dangerous overheating",
+          "explanation": "Your temperature during exercise reached 40.0 °C or higher.",
+          "actions": [
+            "Stop exercising now and cool down.",
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Measure again in 30 minutes."
+        },
+        {
+          "id": "temp_r_heat_stress",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "heat_stress_signs"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Body temperature, RED ('dizziness, confusion or sweating that stops' during exercise)",
+          "title": "Signs of heat stress",
+          "explanation": "Dizziness, confusion or sweating that stops during exercise are signs of dangerous heat stress.",
+          "actions": [
+            "Stop exercising now and cool down.",
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Measure temperature now."
+        }
+      ]
+    },
+    {
+      "id": "sleep_hours",
+      "label": "Sleep",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "sleep_y_avg7",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "window_average",
+            "metric": "sleep_hours",
+            "days": 7,
+            "op": "<",
+            "value": 7
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Sleep hours, YELLOW",
+          "title": "Not enough sleep this week",
+          "explanation": "Your 7-day average sleep is below 7 hours. Short sleep raises the risk of errors and lowers mood and immunity.",
+          "actions": [
+            "Review your schedule and protect your sleep window.",
+            "Keep the sleep area dark, quiet and cool.",
+            "Log your sleep every day."
+          ],
+          "recheck": "Log sleep tomorrow morning."
+        },
+        {
+          "id": "sleep_y_aids",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "sleep_aid_used"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Sleep hours, YELLOW ('any use of sleep aids')",
+          "title": "Sleep aid used",
+          "explanation": "Using a sleep aid is worth discussing with your crew medical officer.",
+          "actions": [
+            "Tell your crew medical officer.",
+            "Use sleep medicine only with flight surgeon guidance."
+          ],
+          "recheck": "Log sleep tomorrow morning."
+        },
+        {
+          "id": "sleep_r_streak",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "sleep_hours",
+            "op": "<=",
+            "value": 6
+          },
+          "persistence": 7,
+          "requires_flags": [],
+          "source": "TABLE: Sleep hours, RED ('6 hours or less per night for 7 nights in a row')",
+          "title": "A week of short sleep",
+          "explanation": "You slept 6 hours or less for 7 nights in a row.",
+          "actions": [
+            "Contact the flight surgeon on Earth.",
+            "Reduce critical tasks until rested, if possible."
+          ],
+          "recheck": "Log sleep tomorrow morning."
+        },
+        {
+          "id": "sleep_r_errors",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "fatigue_errors"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Sleep hours, RED ('errors during tasks caused by fatigue')",
+          "title": "Fatigue is causing errors",
+          "explanation": "Errors caused by fatigue are a safety risk for you and the crew.",
+          "actions": [
+            "Contact the flight surgeon on Earth.",
+            "Reduce critical tasks until rested, if possible."
+          ],
+          "recheck": "Log sleep tomorrow morning."
+        }
+      ]
+    },
+    {
+      "id": "mood",
+      "label": "Mood",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "mood_y_drop",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "mood",
+            "baseline": "preflight",
+            "direction": "below",
+            "unit": "abs",
+            "amount": 2
+          },
+          "persistence": 3,
+          "requires_flags": [],
+          "source": "TABLE: Mood, YELLOW ('decrease of 2 or more points from personal baseline for 3 consecutive days'); baseline = preflight per TABLE: Mood, Normal",
+          "title": "Mood lower than your usual",
+          "explanation": "Your mood has been 2 or more points below your usual for 3 days. Isolation and distance from home can affect mood.",
+          "actions": [
+            "Take a moment to review what changed recently.",
+            "Talk with a crewmate or contact family.",
+            "Keep regular sleep and exercise.",
+            "Contact your crew medical officer if it continues."
+          ],
+          "recheck": "Check in again tomorrow."
+        },
+        {
+          "id": "mood_y_reported",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "persistent_low_mood"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Mood, YELLOW ('repeatedly reports increased stress, sadness, loneliness or irritability')",
+          "title": "You have been feeling low",
+          "explanation": "Stress, sadness, loneliness or irritability on most days is worth paying attention to.",
+          "actions": [
+            "Talk with a crewmate or contact family.",
+            "Try a relaxation exercise.",
+            "Contact your crew medical officer if it continues."
+          ],
+          "recheck": "Check in again tomorrow."
+        },
+        {
+          "id": "mood_r_flags",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "self_harm_thoughts",
+              "severe_distress",
+              "cannot_perform_duties"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Mood, RED",
+          "title": "You deserve support right now",
+          "explanation": "What you are feeling matters. You do not have to handle it alone.",
+          "actions": [
+            "Talk to your crew medical officer now.",
+            "Send a private message to the flight surgeon and behavioral health support on Earth."
+          ],
+          "recheck": "Stay with a crewmate if you can."
+        }
+      ]
+    },
+    {
+      "id": "body_mass",
+      "label": "Body mass",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "bm_y_drop",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "body_mass",
+            "baseline": "preflight",
+            "direction": "below",
+            "unit": "percent",
+            "amount": 2
+          },
+          "persistence": 2,
+          "requires_flags": [],
+          "source": "TABLE: Body mass, YELLOW ('sustained decrease of approximately 2% or more from preflight baseline'). 'Sustained' = 2 consecutive readings: ASSUMPTION A2.",
+          "title": "Body mass going down",
+          "explanation": "Your body mass is at least 2% below your preflight value. Losing mass can mean you are not eating enough and losing muscle or bone.",
+          "actions": [
+            "Measure again.",
+            "Review your food and fluid intake and your exercise.",
+            "Tell your crew medical officer if it continues."
+          ],
+          "recheck": "Measure again at the next scheduled check."
+        },
+        {
+          "id": "bm_r_drop_symptoms",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "baseline_delta",
+            "metric": "body_mass",
+            "baseline": "preflight",
+            "direction": "below",
+            "unit": "percent",
+            "amount": 5
+          },
+          "persistence": 1,
+          "requires_flags": [
+            "unusual_weakness",
+            "dizziness"
+          ],
+          "source": "TABLE: Body mass, RED ('loss of approximately 5% or more accompanied by ... weakness, dizziness')",
+          "title": "Large body mass loss with symptoms",
+          "explanation": "You have lost 5% or more of your body mass and feel weak or dizzy.",
+          "actions": [
+            "Tell your crew medical officer.",
+            "Contact the flight surgeon on Earth for assessment."
+          ],
+          "recheck": "Measure again at the next scheduled check."
+        }
+      ]
+    },
+    {
+      "id": "immune_signs",
+      "label": "Immune signs",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "imm_y_flags",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "sore_throat",
+              "cough",
+              "unusual_fatigue",
+              "skin_rash",
+              "cold_sores",
+              "oral_lesions",
+              "mild_allergic_reaction"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Immune signs / symptoms, YELLOW",
+          "title": "New mild symptoms",
+          "explanation": "Spaceflight can weaken the immune system and wake up dormant viruses, so new symptoms are worth tracking.",
+          "actions": [
+            "Record your symptoms and measure your temperature.",
+            "Follow hygiene precautions.",
+            "Tell your crew medical officer."
+          ],
+          "recheck": "Check symptoms again tomorrow."
+        },
+        {
+          "id": "imm_r_flags",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "breathing_difficulty",
+              "chest_pain",
+              "rapidly_spreading_rash",
+              "face_throat_swelling",
+              "severe_weakness",
+              "confusion",
+              "dehydration_signs"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Immune signs / symptoms, RED",
+          "title": "Serious symptoms",
+          "explanation": "These symptoms need medical assessment right away.",
+          "actions": [
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Measure your temperature now."
+        },
+        {
+          "id": "imm_r_fever_symptoms",
+          "level": "red",
+          "enabled": false,
+          "trigger": {
+            "type": "threshold",
+            "metric": "body_temp",
+            "op": ">=",
+            "value": 38.0,
+            "context": "rest"
+          },
+          "persistence": 1,
+          "requires_flags": [
+            "sore_throat",
+            "cough",
+            "unusual_fatigue",
+            "skin_rash",
+            "cold_sores",
+            "oral_lesions"
+          ],
+          "source": "TABLE: Immune signs / symptoms, RED ('38 °C or higher with other infection symptoms'). DISABLED pending OPEN QUESTION Q-TEMP: conflicts with TABLE: Body temperature, RED (39.0 °C).",
+          "title": "Fever with signs of infection",
+          "explanation": "A temperature of 38 °C or higher with infection symptoms needs a doctor.",
+          "actions": [
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Measure your temperature again in 30 minutes."
+        }
+      ]
+    },
+    {
+      "id": "radiation_dose",
+      "label": "Radiation dose",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "rad_y_rate",
+          "level": "yellow",
+          "enabled": false,
+          "trigger": {
+            "type": "threshold",
+            "metric": "radiation_dose_rate",
+            "op": ">",
+            "value": null
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Radiation dose, YELLOW ('dose rate rises above the expected mission baseline'). OPEN QUESTION Q-RAD: mission value not in table.",
+          "title": "Radiation higher than expected",
+          "explanation": "The dose rate is above what is expected for this mission.",
+          "actions": [
+            "Check your personal dosimeter.",
+            "Follow radiation alerts and move to the shielded area when instructed."
+          ],
+          "recheck": "Check the dosimeter again in 1 hour."
+        },
+        {
+          "id": "rad_y_spe",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "spe_warning"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Radiation dose, YELLOW ('a solar particle event warning is issued')",
+          "title": "Solar particle event warning",
+          "explanation": "A solar storm can raise radiation levels quickly. Outside Earth's magnetic field you have less natural protection.",
+          "actions": [
+            "Check your personal dosimeter.",
+            "Move to the shielded area when instructed.",
+            "Wait for instructions from mission control."
+          ],
+          "recheck": "Check the dosimeter after the event."
+        },
+        {
+          "id": "rad_y_accum",
+          "level": "yellow",
+          "enabled": false,
+          "trigger": {
+            "type": "threshold",
+            "metric": "radiation_accumulated",
+            "op": ">=",
+            "value": null
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Radiation dose, YELLOW ('approaches the mission-specific action level'). OPEN QUESTION Q-RAD.",
+          "title": "Accumulated dose approaching the mission limit",
+          "explanation": "Your total radiation dose is close to this mission's action level.",
+          "actions": [
+            "Reduce unnecessary exposure.",
+            "Tell your crew medical officer."
+          ],
+          "recheck": "Check total dose daily."
+        },
+        {
+          "id": "rad_r_accum",
+          "level": "red",
+          "enabled": false,
+          "trigger": {
+            "type": "threshold",
+            "metric": "radiation_accumulated",
+            "op": ">=",
+            "value": null
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Radiation dose, RED ('reaches or exceeds a predefined mission-specific emergency threshold'). OPEN QUESTION Q-RAD.",
+          "title": "Accumulated dose at the emergency limit",
+          "explanation": "Your total radiation dose has reached this mission's emergency threshold.",
+          "actions": [
+            "Notify mission control and the flight surgeon on Earth now.",
+            "Follow radiation protection instructions."
+          ],
+          "recheck": "Arrange a medical evaluation."
+        },
+        {
+          "id": "rad_r_event",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "dosimeter_unexpected_high",
+              "acute_radiation_event"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Radiation dose, RED",
+          "title": "High radiation exposure",
+          "explanation": "An unexpectedly high exposure or an acute radiation event needs medical evaluation.",
+          "actions": [
+            "Notify mission control and the flight surgeon on Earth now.",
+            "Follow radiation protection instructions.",
+            "Note any symptoms such as nausea or skin redness."
+          ],
+          "recheck": "Arrange a medical evaluation."
+        }
+      ]
+    },
+    {
+      "id": "skin_health",
+      "label": "Skin",
+      "table_confidence": "verified",
+      "rules": [
+        {
+          "id": "skin_y_score",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "skin_symptom_score",
+            "op": ">=",
+            "value": 4
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Skin health, YELLOW ('symptom severity reaches 4/10 or higher')",
+          "title": "Skin symptoms bothering you",
+          "explanation": "Your skin symptoms are 4 out of 10 or higher. Dry cabin air and limited hygiene can irritate the skin.",
+          "actions": [
+            "Photograph the area to track changes.",
+            "Use moisturiser and avoid scratching.",
+            "Tell your crew medical officer."
+          ],
+          "recheck": "Check the area again tomorrow."
+        },
+        {
+          "id": "skin_y_flags",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "skin_change_mild",
+              "skin_rash",
+              "wound_not_healing_48h",
+              "changing_mole"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Skin health, YELLOW",
+          "title": "New skin change",
+          "explanation": "New skin changes and slow-healing wounds are worth tracking in space.",
+          "actions": [
+            "Photograph the area to track changes.",
+            "Keep minor wounds clean and covered.",
+            "Tell your crew medical officer."
+          ],
+          "recheck": "Check the area again tomorrow."
+        },
+        {
+          "id": "skin_r_flags",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "flag",
+            "flags": [
+              "skin_spreading_redness",
+              "wound_pus_streaks",
+              "severe_skin_pain",
+              "blistering_peeling",
+              "face_throat_swelling"
+            ]
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Skin health, RED",
+          "title": "Possible serious skin infection or reaction",
+          "explanation": "These signs can mean a serious infection or allergic reaction.",
+          "actions": [
+            "Tell your crew medical officer now.",
+            "Contact the flight surgeon on Earth."
+          ],
+          "recheck": "Check the area again in a few hours."
+        }
+      ]
+    }
+  ]
+}

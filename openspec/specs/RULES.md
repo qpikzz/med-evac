@@ -8,7 +8,6 @@
 
 Before writing or modifying any code, always consult the relevant specifications in `openspec/specs/`:
 - `RULES.md` — Agent operational rules, workflow, and hard prohibitions (this file).
-- `PRODUCT.md` — High-level product vision, mission context, and core goals.
 - `FEATURES.md` — Functional scope, screens, personal baseline logic, and synthetic/test data scenarios.
 - `API_CONTRACT.md` — Strict data contracts and IPC/HTTP schemas between frontend, rules engine, storage, and backend/SI.
 - `FRONTEND.md` — Frontend architecture, state management, and component implementation details.
