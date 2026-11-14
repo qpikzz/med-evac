@@ -1,0 +1,72 @@
+# 📚 Sources, Licenses & Attributions — MED-EVAC
+
+> **Project License:** This project is licensed under the **Apache License 2.0** (OSI-approved open-source license), in accordance with the NASA Space Apps Challenge 2026 Terms & Conditions.
+>
+> **Disclaimer:** MED-EVAC is an independent project created by **Team CyberAstro** for the NASA Space Apps Challenge. It is not officially affiliated with, endorsed, or sponsored by NASA.
+
+---
+
+## 1. Core Desktop & Frontend Stack
+*Actively used frameworks, libraries, and build tools bundled or required to build MED-EVAC.*
+
+| Technology / Package | Version | Source Repository | License | Role |
+| :--- | :--- | :--- | :--- | :--- |
+| **Tauri** (`tauri`, `@tauri-apps/api`, `@tauri-apps/cli`) | `2.12.x` | `https://github.com/tauri-apps/tauri` | **Apache-2.0 OR MIT** | Cross-platform desktop application framework and Rust IPC bridge |
+| **Tauri Plugin Opener** (`tauri-plugin-opener`) | `2.7.2` | `https://github.com/tauri-apps/plugins-workspace` | **Apache-2.0 OR MIT** | Opening external links and resources safely from the desktop app |
+| **React** (`react`, `react-dom`) | `19.3.1` | `https://github.com/facebook/react` | **MIT** | Frontend UI component rendering |
+| **TypeScript** | `6.0.3` | `https://github.com/microsoft/TypeScript` | **Apache-2.0** | Static type checking for frontend codebase |
+| **Vite** (`vite`, `@vitejs/plugin-react`) | `8.3.5` | `https://github.com/vitejs/vite` | **MIT** | Frontend build tool and development server |
+| **Node.js & npm** | `22.x` | `https://github.com/nodejs/node` | **MIT / Artistic-2.0** | JavaScript runtime and package management |
+| **Rust Toolchain** (`rustc`, `cargo`) | `1.97.1` | `https://github.com/rust-lang/rust` | **MIT OR Apache-2.0** | Native backend compilation |
+| **Docker & Nginx** *(containerized preview)* | `1.27-alpine` | `https://github.com/nginx/nginx` | **BSD-2-Clause** | Optional static web preview serving |
+
+---
+
+## 2. UI Visualization, Charts & Animation Libraries
+*Add visualization, body-map, icon, or animation packages here as they are imported into `src/`.*
+
+| Package / Asset | Source Repository | License | Role |
+| :--- | :--- | :--- | :--- |
+| **Custom Interactive Body Map SVG** | Original work by Team CyberAstro | **Apache-2.0** | Interactive anatomical figure for health status visualization |
+<!-- Template for new UI packages:
+| **Library Name** | `https://github.com/...` | **MIT / Apache-2.0** | Brief role description |
+-->
+
+---
+
+## 3. Local AI Models & Backend Inference
+*Add local LLM weights, embedding models, and Python/Rust AI runtimes here once integrated.*
+
+| Model / Tool | Developer / Provider | Source URL | License | Role |
+| :--- | :--- | :--- | :--- | :--- |
+<!-- Uncomment or add rows as models and backend packages are integrated:
+| **IBM Granite 3.3 8B Instruct** | IBM | `https://huggingface.co/ibm-granite/granite-3.3-8b-instruct` | **Apache-2.0** | Local reasoning LLM for medical telemetry analysis |
+| **Nomic Embed Text v2 MoE** | Nomic AI | `https://huggingface.co/nomic-ai/nomic-embed-text-v2-moe` | **Apache-2.0** | Local multilingual embeddings for RAG protocol retrieval |
+| **Ollama** | Ollama | `https://github.com/ollama/ollama` | **MIT** | Local offline model runtime |
+| **FastAPI / Uvicorn / NumPy** | Tiangolo / Encode / NumPy | `https://github.com/fastapi/fastapi` | **MIT / BSD-3-Clause** | Local REST API and vector similarity search |
+-->
+
+---
+
+## 4. Spaceflight Medical References & Data Sources
+*Cite every NASA, ESA, JAXA, or open scientific standard used in the RAG knowledge base, UI thresholds, or synthetic data generation.*
+
+| Resource Title | Organization | Source URL | License / Terms | How It Was Used |
+| :--- | :--- | :--- | :--- | :--- |
+<!-- Uncomment or add rows as NASA protocols and synthetic datasets are added:
+| **NASA Space Flight Human-System Standard (NASA-STD-3001)** | NASA | `https://www.nasa.gov/hhp/standards` | Public Domain (U.S. Government Work) | Physiological thresholds, environmental limits, and crew health protocols |
+| **NASA Human Research Program (HRP) — Five Hazards** | NASA | `https://www.nasa.gov/hrp` | Public Domain (U.S. Government Work) | Categorization of spaceflight health hazards |
+| **Synthetic Astronaut Telemetry Logs** | Team CyberAstro | Repository `/backend` | **Apache-2.0** | Synthetically generated vital sign scenarios (contains zero real PII) |
+-->
+
+---
+
+## 5. Media, Fonts & Branding
+* **Application Icons & UI Graphics:** Original artwork created by Team CyberAstro (**Apache-2.0**). Default starter template icons/logos (`tauri.svg`, `vite.svg`, default `src-tauri/icons/`) are replaced before submission to comply with third-party trademark and CC-BY-NC-ND restrictions.
+* **Typography:** System sans-serif fallback stack (`Inter, Avenir, Helvetica, Arial, sans-serif`) referenced via CSS without bundling proprietary font binaries.
+* **Demo Video & Screenshots:** Original screen recordings and narration produced by Team CyberAstro with full written consent of all adult participants and zero third-party copyrighted audio/video.
+
+---
+
+## 6. Third-Party Open-Source License Notices
+This software incorporates unmodified open-source components governed by **MIT**, **Apache-2.0**, **BSD-2-Clause**, **BSD-3-Clause**, **ISC**, and **MPL-2.0** (build-time CSS tooling via `lightningcss` and Rust CSS crates). Full lockfiles (`package-lock.json` and `Cargo.lock`) remain in the repository as the complete transitive dependency manifest.
