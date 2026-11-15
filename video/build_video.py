@@ -181,7 +181,9 @@ def make_clip(s, preview):
 
 def tts(i, text, voice):
     name = f"vo_{i}.mp3"
-    run(["edge-tts", "--voice", voice, "--rate=+0%", "--text", text, "--write-media", name])
+    exe = shutil.which("edge-tts")
+    cli = [exe] if exe else [sys.executable, "-m", "edge_tts"]
+    run([*cli, "--voice", voice, "--rate=+0%", "--text", text, "--write-media", name])
     return name
 
 
@@ -215,7 +217,12 @@ def main():
             static_ffmpeg.add_paths()
         except ImportError:
             pass
-    for tool in ("ffmpeg", "ffprobe") + (() if args.skip_tts else ("edge-tts",)):
+    if not args.skip_tts:
+        try:
+            import edge_tts  # noqa: F401
+        except ImportError:
+            sys.exit("edge-tts not installed: pip3 install edge-tts")
+    for tool in ("ffmpeg", "ffprobe"):
         if not shutil.which(tool):
             sys.exit(f"'{tool}' not found. See the header of this script.")
     if not os.path.exists(RAW):
