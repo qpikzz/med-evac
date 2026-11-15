@@ -35,7 +35,7 @@
 }
 
 .checkup-content .section-heading h2 {
-  font-size: 22px;
+  font-size: 28px;
 }
 
 .section-heading,
@@ -59,7 +59,7 @@
 .section-heading h2 {
   margin: 0;
   color: var(--text-primary);
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
   line-height: 1.3;
 }
@@ -67,7 +67,7 @@
 .section-eyebrow {
   margin: 0 0 5px;
   color: var(--accent-primary);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -91,7 +91,7 @@
   color: var(--text-muted);
   background: transparent;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -111,7 +111,7 @@
 .symptom-heading h3 {
   margin: 0;
   color: var(--text-primary);
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 650;
 }
 
@@ -129,7 +129,7 @@
 .measurement-group h4 {
   margin: 0 0 10px;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -177,7 +177,7 @@
   min-width: 0;
   margin: 0;
   color: var(--text-muted);
-  font-size: 10.5px;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -191,7 +191,7 @@
   padding: 2px 6px;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-size: 8.5px;
+  font-size: 11px;
   font-weight: 750;
   line-height: 1;
 }
@@ -258,7 +258,7 @@
   outline: 0;
   color: var(--text);
   background: transparent;
-  font-size: 15px;
+  font-size: 18px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -266,7 +266,7 @@
   flex: 0 0 auto;
   padding: 0 11px 0 4px;
   color: var(--text-muted);
-  font-size: 10.5px;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -281,7 +281,7 @@
 
 .bp-separator {
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 16px;
 }
 
 .temperature-control-row {
@@ -313,7 +313,7 @@
   color: var(--text-muted);
   background: transparent;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 650;
 }
 
@@ -325,13 +325,13 @@
 .field-error {
   margin: 4px 2px 0;
   color: var(--status-red);
-  font-size: 10px;
+  font-size: 13px;
   line-height: 1.35;
 }
 
 .score-readout {
   color: var(--text);
-  font-size: 12px;
+  font-size: 15px;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
@@ -347,7 +347,7 @@
   align-items: center;
   gap: 12px;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -416,13 +416,13 @@
 .symptom-heading p {
   margin: 3px 0 0;
   color: var(--text-muted);
-  font-size: 10.5px;
+  font-size: 13px;
 }
 
 .selection-count {
   flex: 0 0 auto;
   color: var(--text-muted);
-  font-size: 9.5px;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -453,7 +453,7 @@
   top: 5px;
   left: 0;
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.6;
   opacity: 0.8;
   pointer-events: none;
@@ -468,7 +468,7 @@
   outline: 0;
   color: var(--text);
   background: transparent;
-  font-size: 14px;
+  font-size: 17px;
   line-height: 1.7;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
@@ -485,7 +485,7 @@
   border-radius: 999px;
   color: var(--accent);
   background: rgba(122, 162, 255, 0.16);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.45;
   vertical-align: baseline;
@@ -507,7 +507,7 @@
   color: var(--text-muted);
   background: transparent;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1;
 }
 
@@ -553,7 +553,7 @@
   color: var(--text);
   background: transparent;
   cursor: pointer;
-  font-size: 10.5px;
+  font-size: 13px;
   text-align: left;
 }
 
@@ -572,7 +572,7 @@
   border-bottom: 1px solid var(--border);
   color: var(--text-muted);
   background: var(--surface);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -581,7 +581,7 @@
 .autocomplete-kind {
   flex: 0 0 auto;
   color: var(--text-muted);
-  font-size: 8.5px;
+  font-size: 11px;
   text-transform: uppercase;
 }
 
@@ -608,7 +608,7 @@
   color: var(--text-muted);
   background: var(--surface-2);
   cursor: pointer;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -655,7 +655,7 @@
   border-radius: 12px;
   color: #e0f2fe;
   background: #0b1120;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   letter-spacing: 0.025em;
   text-align: left;
@@ -743,7 +743,7 @@
   color: #020617;
   background: #6096fd;
   box-shadow: 0 10px 18px -8px rgba(59, 130, 246, 0.35);
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   transition: background-color 180ms ease-out, transform 180ms ease-out;
 }
@@ -775,7 +775,7 @@
   border: 1px solid transparent;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 650;
   transition: color 150ms ease-out, background-color 150ms ease-out, border-color 150ms ease-out;
 }
@@ -829,12 +829,12 @@
 
 .waiting-summary p {
   margin: 0;
-  font-size: 13px;
+  font-size: 16px;
 }
 
 .waiting-icon {
   color: var(--accent-cyan);
-  font-size: 25px;
+  font-size: 32px;
   line-height: 1;
 }
 
@@ -860,7 +860,7 @@
 .complete-copy p {
   margin: 0;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 650;
 }
 
@@ -902,7 +902,7 @@
 .summary-label {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
 }
 
@@ -916,7 +916,7 @@
   align-items: center;
   padding: 5px 10px;
   border-radius: 9999px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -942,14 +942,14 @@
 
 .escalation-value {
   color: var(--text-primary);
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 700;
 }
 
 .summary-description {
   margin: 6px 0 0;
   color: var(--text-secondary);
-  font-size: 11.5px;
+  font-size: 14px;
 }
 
 .dashboard-grid {
@@ -974,13 +974,13 @@
 .column-heading h2 {
   margin: 0;
   color: var(--text-primary);
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 650;
 }
 
 .column-heading span {
   color: var(--text-secondary);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .indicator-list {
@@ -1035,20 +1035,20 @@
 
 .indicator-title {
   color: var(--text-primary);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 700;
 }
 
 .indicator-title-row .status-badge {
   padding: 3px 7px;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .indicator-current-value {
   display: block;
   margin-top: 5px;
   color: var(--text-primary);
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -1056,7 +1056,7 @@
 .indicator-deviation {
   margin: 4px 0 3px;
   color: var(--text-secondary);
-  font-size: 10px;
+  font-size: 13px;
   line-height: 1.4;
 }
 
@@ -1066,7 +1066,7 @@
   border-radius: 9999px;
   color: var(--text-muted);
   background: var(--surface-2);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -1138,7 +1138,7 @@
   min-height: 42px;
   align-content: center;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .indicator-actions-row {
@@ -1156,7 +1156,7 @@
   color: var(--accent-primary);
   background: transparent;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 650;
 }
 
@@ -1174,7 +1174,7 @@
   color: var(--text-secondary);
   background: var(--surface-2);
   cursor: pointer;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   list-style: none;
 }
@@ -1197,7 +1197,7 @@
   background: var(--surface-2);
   box-shadow: var(--shadow-elevated);
   color: var(--text-secondary);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .source-popover strong {
@@ -1213,7 +1213,7 @@
   padding-top: 8px;
   border-top: 1px solid var(--border-hairline);
   color: var(--text-secondary);
-  font-size: 10.5px;
+  font-size: 13px;
 }
 
 .indicator-rule-details > p {
@@ -1229,7 +1229,7 @@
 .triggered-rule h4 {
   margin: 0 0 4px;
   color: var(--text-primary);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .triggered-rule p {
@@ -1255,7 +1255,7 @@
   min-height: 31px;
   margin-top: 7px;
   padding: 6px 9px;
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .body-map-panel {
@@ -1273,7 +1273,7 @@
 
 .body-map-heading h2 {
   margin: 0;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 650;
 }
 
@@ -1286,7 +1286,7 @@
   border-radius: 9999px;
   color: var(--accent-primary);
   background: var(--accent-soft);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 650;
 }
 
@@ -1416,7 +1416,7 @@
   background: var(--surface);
   box-shadow: var(--shadow-card);
   cursor: pointer;
-  font-size: 9px;
+  font-size: 12px;
   text-align: left;
 }
 
@@ -1426,7 +1426,7 @@
 }
 
 .body-callout strong {
-  font-size: 8.5px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: capitalize;
 }
@@ -1462,7 +1462,7 @@
   gap: 8px 13px;
   padding: 0 0 10px;
   color: var(--text-secondary);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .body-map-legend span {
@@ -1505,7 +1505,7 @@
 .layer-switcher-panel > p {
   margin: 0 0 2px;
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   text-align: center;
 }
@@ -1527,7 +1527,7 @@
   color: var(--text-secondary);
   background: var(--surface);
   cursor: pointer;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 650;
   transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
 }
@@ -1568,7 +1568,7 @@
 .comms-brand-expansion {
   margin: 4px 0 0;
   color: var(--text-muted);
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.02em;
 }
@@ -1588,7 +1588,7 @@
   color: var(--text-secondary);
   background: transparent;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
 }
 
@@ -1619,7 +1619,7 @@
   color: var(--status-red);
   background: var(--status-red-bg);
   box-shadow: var(--shadow-card);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -1640,7 +1640,7 @@
 .earth-panel-header h2 {
   margin: 0;
   color: var(--text-primary);
-  font-size: 17px;
+  font-size: 21px;
   font-weight: 650;
   overflow-wrap: anywhere;
 }
@@ -1653,7 +1653,7 @@
   border-radius: 9999px;
   color: var(--accent);
   background: var(--surface-2);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 750;
   white-space: nowrap;
 }
@@ -1664,7 +1664,7 @@
   border-radius: 9px;
   color: var(--accent);
   background: var(--accent-soft);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 650;
 }
 
@@ -1678,7 +1678,7 @@
 .earth-message-status > p {
   margin: 0;
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 650;
 }
 
@@ -1699,14 +1699,14 @@
   border-radius: 10px;
   color: var(--text-secondary);
   background: var(--bg-surface-subtle);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .earth-telemetry {
   display: grid;
   gap: 12px;
   color: var(--text-primary);
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .earth-telemetry > p {
@@ -1728,7 +1728,7 @@
 
 .earth-telemetry section h3 {
   margin: 0 0 8px;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -1753,7 +1753,7 @@
   display: block;
   margin-top: 2px;
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .earth-table-scroll {
@@ -1764,7 +1764,7 @@
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .earth-readings-table th,
@@ -1791,7 +1791,7 @@
 
 .earth-note-composer label {
   color: var(--text-primary);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 650;
 }
 
@@ -1816,7 +1816,7 @@
   justify-content: space-between;
   gap: 10px;
   color: var(--text-secondary);
-  font-size: 10px;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1824,14 +1824,14 @@
 .earth-transport-error {
   margin: 0;
   color: var(--status-red);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
 }
 
 .earth-note-locked {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .earth-transport-error {
@@ -1863,7 +1863,7 @@
 .safety-support-card h2 {
   margin: 0;
   color: var(--text-primary);
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 650;
 }
 
@@ -1873,7 +1873,7 @@
   border-radius: 9999px;
   color: var(--accent);
   background: var(--surface-2);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 650;
   white-space: nowrap;
 }
@@ -1890,7 +1890,7 @@
   border-radius: 9999px;
   color: var(--text-secondary);
   background: var(--bg-surface-subtle);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .rule-context-chip.status-yellow {
@@ -1907,7 +1907,7 @@
 .ai-safety-note {
   margin: 10px 0 0;
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .ai-safety-note {
@@ -1922,7 +1922,7 @@
 .overall-picture > p {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 12.5px;
+  font-size: 15px;
 }
 
 .combination-list {
@@ -1939,14 +1939,14 @@
 
 .matched-combination h3 {
   margin: 0 0 5px;
-  font-size: 13px;
+  font-size: 16px;
 }
 
 .matched-combination p,
 .matched-combination ul {
   margin: 5px 0;
   color: var(--text-secondary);
-  font-size: 11.5px;
+  font-size: 14px;
 }
 
 .matched-combination ul {
@@ -1974,7 +1974,7 @@
 .safety-support-card p,
 .safety-support-card ul {
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .safety-support-card ul {
@@ -1986,7 +1986,7 @@
   border-radius: 9px;
   color: var(--accent);
   background: var(--accent-soft);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 650;
 }
 
@@ -2017,7 +2017,7 @@
 .chat-message details p {
   margin: 8px 0 0;
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 15px;
   white-space: pre-wrap;
 }
 
@@ -2028,7 +2028,7 @@
   border-radius: 9px;
   color: var(--text-secondary);
   background: var(--bg-surface-subtle);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .chat-stream {
@@ -2060,13 +2060,13 @@
   display: block;
   margin-bottom: 4px;
   color: var(--text-secondary);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
 }
 
 .chat-message > p {
   margin: 0;
-  font-size: 12px;
+  font-size: 15px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
@@ -2085,7 +2085,7 @@
   color: var(--accent);
   background: var(--surface-2);
   cursor: pointer;
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .quick-prompts button:hover {
@@ -2111,7 +2111,7 @@
   gap: 10px;
   margin-top: 8px;
   color: var(--text-secondary);
-  font-size: 10px;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -2245,7 +2245,7 @@
   .unit-system-toggle button {
     flex: 1;
     padding-inline: 8px;
-    font-size: 11px;
+    font-size: 14px;
   }
 }
 
@@ -2459,14 +2459,14 @@
 
 .comms-channel-title {
   color: var(--text);
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 700;
   line-height: 1.3;
 }
 
 .comms-channel-subtitle {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .comms-channel-metadata {
@@ -2488,7 +2488,7 @@
   border-radius: 9999px;
   color: var(--text-muted);
   background: rgba(15, 23, 42, 0.55);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 650;
   line-height: 1.2;
 }
@@ -2526,7 +2526,7 @@
 
 .comms-channel-unavailable {
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .local-ai-panel {
@@ -2558,7 +2558,7 @@
   border: 1px solid var(--border);
   color: #d3ddf2;
   background: rgba(30, 41, 59, 0.54);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .clinical-reasoning {
@@ -2574,14 +2574,14 @@
   padding-top: 10px;
   color: #cbd9ff;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 650;
   list-style-position: inside;
 }
 
 .reasoning-hint {
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 400;
 }
 
@@ -2590,7 +2590,7 @@
   gap: 8px;
   padding: 10px 0 0 18px;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .clinical-reasoning-content > p {
@@ -2637,7 +2637,7 @@
   color: var(--text);
   background: var(--surface-2);
   font: inherit;
-  font-size: 11px;
+  font-size: 14px;
   text-overflow: ellipsis;
 }
 
@@ -2650,7 +2650,7 @@
   background: var(--surface-2);
   cursor: pointer;
   font: inherit;
-  font-size: 11px;
+  font-size: 14px;
   white-space: nowrap;
 }
 
@@ -2663,7 +2663,7 @@
   width: 34px;
   padding: 0;
   color: var(--text-muted);
-  font-size: 19px;
+  font-size: 23px;
   line-height: 1;
 }
 
@@ -2683,7 +2683,7 @@
   align-self: center;
   margin: auto;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .chat-message {
@@ -2702,7 +2702,7 @@
 
 .chat-message > p {
   color: var(--text);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.6;
 }
 
@@ -2710,7 +2710,7 @@
   margin: 0;
   padding: 4px 8px;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .ai-fallback-notice {
@@ -2725,7 +2725,7 @@
 .quick-prompts button {
   padding: 7px 10px;
   color: #cbd9ff;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .quick-prompts button:disabled {
@@ -2777,7 +2777,7 @@
 .ai-caption {
   margin: 0;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
   line-height: 1.4;
 }
 
@@ -2801,13 +2801,13 @@
 .earth-chat-title h2 {
   margin: 0;
   color: var(--text);
-  font-size: 17px;
+  font-size: 21px;
 }
 
 .earth-chat-eyebrow {
   margin: 0 0 5px;
   color: var(--accent);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2816,7 +2816,7 @@
 .earth-chat-subtitle {
   margin: 4px 0 0;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .earth-chat-header-actions {
@@ -2836,7 +2836,7 @@
   color: #cbd9ff;
   background: rgba(59, 130, 246, 0.1);
   cursor: pointer;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 650;
   white-space: nowrap;
 }
@@ -2850,7 +2850,7 @@
   display: grid;
   gap: 4px;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .crew-thread-select select {
@@ -2872,7 +2872,7 @@
 .earth-link-delay,
 .earth-chat-activity {
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .earth-chat-activity {
@@ -2930,14 +2930,14 @@
 
 .earth-chat-sender {
   color: var(--text);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
 }
 
 .earth-chat-role,
 .earth-chat-time {
   color: var(--text-muted);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .earth-chat-bubble {
@@ -2956,7 +2956,7 @@
 .earth-chat-bubble > p:first-child {
   margin: 0;
   color: var(--text);
-  font-size: 12px;
+  font-size: 15px;
   line-height: 1.55;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
@@ -2965,7 +2965,7 @@
 .earth-chat-delivery {
   margin: 7px 0 0;
   color: var(--text-muted);
-  font-size: 9px;
+  font-size: 12px;
   text-align: right;
 }
 
@@ -2976,7 +2976,7 @@
 .earth-chat-empty {
   margin: auto;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .telemetry-attachment {
@@ -2999,12 +2999,12 @@
 
 .telemetry-attachment-copy strong {
   color: var(--text);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .telemetry-attachment-copy span {
   color: var(--text-muted);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .telemetry-attachment button {
@@ -3014,7 +3014,7 @@
   color: #cbd9ff;
   background: var(--surface-2);
   cursor: pointer;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 650;
   white-space: nowrap;
 }
@@ -3030,7 +3030,7 @@
   align-items: center;
   gap: 8px;
   color: #cbd9ff;
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .telemetry-attach-toggle input {
@@ -3069,7 +3069,7 @@
 .earth-chat-caption {
   margin: 0;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .telemetry-drawer-layer {
@@ -3128,13 +3128,13 @@
 .telemetry-drawer-header h2 {
   margin: 0;
   color: var(--text);
-  font-size: 17px;
+  font-size: 21px;
 }
 
 .telemetry-drawer-header > div > p:last-child {
   margin: 5px 0 0;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .telemetry-drawer-close {
@@ -3148,7 +3148,7 @@
   color: var(--text);
   background: var(--surface-2);
   cursor: pointer;
-  font-size: 22px;
+  font-size: 28px;
   line-height: 1;
 }
 
@@ -3171,7 +3171,7 @@
 .telemetry-section-label {
   margin: 0;
   color: var(--text-muted);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -3183,7 +3183,7 @@
   align-items: center;
   gap: 8px;
   color: var(--text);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .telemetry-status-pill {
@@ -3195,7 +3195,7 @@
   border-radius: 999px;
   color: var(--text-muted);
   background: rgba(15, 23, 42, 0.65);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -3220,7 +3220,7 @@
 .telemetry-mission-date {
   margin: 0;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -3236,12 +3236,12 @@
   gap: 8px;
   margin: 0;
   color: var(--text);
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .telemetry-detail-section h3 span {
   color: var(--text-muted);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 400;
 }
 
@@ -3249,7 +3249,7 @@
 .telemetry-drawer-empty {
   margin: 0;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .telemetry-indicator-list {
@@ -3272,19 +3272,19 @@
   justify-content: space-between;
   gap: 8px;
   color: var(--text);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .telemetry-rule {
   padding-top: 8px;
   border-top: 1px solid rgba(38, 48, 73, 0.8);
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .telemetry-rule > strong {
   color: var(--text);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .telemetry-rule p {
@@ -3299,7 +3299,7 @@
 
 .telemetry-rule-meta,
 .telemetry-rule-source {
-  font-size: 9px;
+  font-size: 12px;
   overflow-wrap: anywhere;
 }
 
@@ -3315,7 +3315,7 @@
   border-radius: 999px;
   color: #cbd9ff;
   background: var(--surface-2);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .telemetry-note {
@@ -3324,7 +3324,7 @@
   border-left: 2px solid var(--accent);
   color: var(--text);
   background: rgba(122, 162, 255, 0.07);
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.5;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
@@ -3341,7 +3341,7 @@
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .telemetry-readings-table th,
@@ -3357,7 +3357,7 @@
   top: 0;
   color: var(--text-muted);
   background: var(--surface-2);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .telemetry-drawer-empty {
@@ -3393,7 +3393,7 @@
   }
 
   .comms-channel-title {
-    font-size: 13px;
+    font-size: 16px;
   }
 
   .earth-chat-header {

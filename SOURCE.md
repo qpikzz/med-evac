@@ -29,10 +29,13 @@
 
 | Package / Asset | Source Repository | License | Role |
 | :--- | :--- | :--- | :--- |
-| **lucide-react** | `1.73.0` · `https://github.com/lucide-icons/lucide` | **ISC** | Offline SVG icon set; used for the fixed header `ChevronDown`, profile-menu actions, and access-gate controls |
+| **lucide-react** | `1.73.0` · `https://github.com/lucide-icons/lucide` | **ISC** | Offline SVG icon set; header/profile/access-gate controls, the per-indicator icons (`src/components/indicatorIcons.tsx`: Gauge, HeartPulse, Droplet, Thermometer, Moon, Smile, Scale, ShieldPlus, Radiation, Hand) and the large animated alert illustrations |
+| **Inter** (`@fontsource/inter`) | `5.3.0` · `https://github.com/rsms/inter` (package: `https://github.com/fontsource/font-files`) | **SIL OFL 1.1** | Body text font, bundled locally (no Google Fonts / CDN) |
+| **Space Grotesk** (`@fontsource/space-grotesk`) | `5.3.0` · `https://github.com/floriankarsten/space-grotesk` | **SIL OFL 1.1** | Headings and large numbers, bundled locally |
+| **JetBrains Mono** (`@fontsource/jetbrains-mono`) | `5.3.0` · `https://github.com/JetBrains/JetBrainsMono` | **SIL OFL 1.1** | Technical labels (eyebrows, status words, mission day/date), bundled locally |
 | **Recharts** | `3.10.1` · `https://github.com/recharts/recharts` | **MIT** | 7-day trend sparklines in the indicator cards (`src/components/charts/TrendSparkline.tsx`) |
 | **Motion** (`motion`) | `14.9.0` · `https://github.com/motiondivision/motion` | **MIT** | Screen transitions, indicator-card entrance, animated radiation alert (`src/components/RadiationAlert/`); respects `prefers-reduced-motion` |
-| **Custom Interactive Body Map SVG** | Original work by the ORBITA project contributors | **Apache-2.0** | Interactive anatomical figure for health status visualization |
+| **Custom Interactive Body Map SVG** (`src/components/BodyMap/AnatomyArt.tsx`: stylised coloured vector anatomy — skin, muscles, organs, skeleton) and the animated space backdrop (`src/components/SpaceBackdrop/`) | Original work by the ORBITA project contributors (no third-party or AI-generated images) | **Apache-2.0** | Interactive anatomical figure for health status visualization |
 <!-- Template for new UI packages:
 | **Library Name** | `https://github.com/...` | **MIT / Apache-2.0** | Brief role description |
 -->
@@ -83,7 +86,7 @@ Cite every NASA, ESA, JAXA, or open scientific standard used in the RAG knowledg
 | *Human Adaptation to Spaceflight (2021)* | NASA | https://www.nasa.gov/wp-content/uploads/2024/08/human-adaptation-2021-final-b.pdf | NASA publication | Evidence link for the Body mass and Vision changes indicators |
 | *PubMed record PMID 28539140* | NIH National Library of Medicine (PubMed) | https://pubmed.ncbi.nlm.nih.gov/28539140/ | Abstract publicly available | Evidence link for the Blood oxygen (SpO2) indicator |
 | *Pulse Oximeter Basics* | U.S. Food and Drug Administration (FDA) | https://www.fda.gov/consumers/consumer-updates/pulse-oximeter-basics | FDA website content | Evidence link for the Blood oxygen (SpO2) indicator |
-| *NASA-STD-3001, Volume 2, Revision C* | NASA Office of the Chief Health and Medical Officer (OCHMO) | https://standards.nasa.gov/sites/default/files/standards/NASA/C/2022-04-08-NASA-STD-3001-Vol-2-Rev-C-Final_0.pdf | NASA standard | Evidence link for the Blood oxygen (SpO2) indicator |
+| *NASA-STD-3001, Volume 2, Revision C* | NASA Office of the Chief Health and Medical Officer (OCHMO) | https://standards.nasa.gov/sites/default/files/standards/NASA/B/1/NASA-STD-7009B-Final-3-5-2024.pdf | NASA standard | Evidence link for the Blood oxygen (SpO2) indicator |
 | *Risk of Spaceflight-Induced Bone Changes* | NASA | https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/ | NASA website content | Evidence link for the Bone health indicator |
 | *Bone and Mineral Evaluation and Analysis* | NASA | https://www.nasa.gov/directorates/esdmd/hhp/bone-and-mineral-evaluation-and-analysis | NASA website content | Evidence link for the Bone health indicator |
 | *ISCD 2023 Official Positions* | International Society for Clinical Densitometry (ISCD) | https://iscd.org/official-positions-2023/ | ISCD website content; society terms apply | Evidence link for the Bone health indicator |
@@ -92,7 +95,7 @@ Cite every NASA, ESA, JAXA, or open scientific standard used in the RAG knowledg
 | *Nutritional Biochemistry* | NASA | https://www.nasa.gov/directorates/esdmd/hhp/nutritional-biochemistry/ | NASA website content | Evidence link for the Nutrition & hydration indicator |
 | *PubMed record PMID 38144801* | NIH National Library of Medicine (PubMed) | https://pubmed.ncbi.nlm.nih.gov/38144801/ | Creative Commons license | Evidence link for the Nutrition & hydration indicator |
 | *PubMed record PMID 11435529* | NIH National Library of Medicine (PubMed) | https://pubmed.ncbi.nlm.nih.gov/11435529/ | Abstract publicly available | Evidence link for the Nutrition & hydration indicator |
-| *OCHMO-TB-031 Exercise Overview* | NASA Office of the Chief Health and Medical Officer (OCHMO) | https://www.nasa.gov/ochmo-tb-031-exercise-overview-2/ | NASA website content | Evidence link for the Exercise indicator |
+| *OCHMO-TB-031 Exercise Overview* | NASA Office of the Chief Health and Medical Officer (OCHMO) | https://www.nasa.gov/wp-content/uploads/2025/02/sp-20250000273.pdf?emrc=7609ab | NASA website content | Evidence link for the Exercise indicator |
 | *npj Microgravity article s41526-020-00111-x* | npj Microgravity (Springer Nature) | https://www.nature.com/articles/s41526-020-00111-x | CC BY 4.0 | Evidence link for the Exercise indicator |
 | *Astronaut Exercise* | NASA | https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/ | NASA website content | Evidence link for the Exercise indicator |
 | *OCHMO-MTB-001 Spaceflight-Associated Neuro-ocular Syndrome (SANS)* | NASA Office of the Chief Health and Medical Officer (OCHMO) | https://www.nasa.gov/wp-content/uploads/2024/02/ochmo-mtb-001-sans.pdf | NASA publication | Evidence link for the Vision changes indicator |
@@ -119,7 +122,7 @@ Cite every NASA, ESA, JAXA, or open scientific standard used in the RAG knowledg
 * **Application Icons & UI Graphics:** Original artwork created by the ORBITA project contributors (**Apache-2.0**). Default starter template icons/logos (`tauri.svg`, `vite.svg`, default `src-tauri/icons/`) are replaced before submission to comply with third-party trademark and CC-BY-NC-ND restrictions.
 * **Body map figure (`src/components/BodyMap/BodyMap.tsx`):** Placeholder line-art silhouettes (skin, organs, skeleton) drawn as inline SVG by the ORBITA project contributors (**Apache-2.0**). Optional layer art from Rəna goes in `src/assets/body/` and must be listed here with its licence; AI-generated art also needs an "AI-generated illustration" note in About/Credits.
 * **Dark space theme (`src/styles/theme.css`):** Original; starfield is pure CSS radial-gradients, no image files.
-* **Typography:** System sans-serif stack (`system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif`) referenced via CSS without bundling proprietary font binaries.
+* **Typography:** Inter (body), Space Grotesk (headings, numbers) and JetBrains Mono (technical labels), all **SIL OFL 1.1**, bundled locally through `@fontsource` packages (see §2) — no Google Fonts or CDN requests; system sans-serif stack as fallback.
 * **Demo Video & Screenshots:** Original screen recordings and narration produced by the ORBITA project team with full written consent of all adult participants and zero third-party copyrighted audio/video.
 
 ---

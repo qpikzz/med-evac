@@ -66,3 +66,12 @@ describe("BodyMap render", () => {
     expect(html).not.toMatch(/https?:\/\//);
   });
 });
+
+describe("BodyMap v2 layers", () => {
+  it("has a muscles layer whose zone reads body mass", () => {
+    const views = allZoneViews(mockDay40, mockRules);
+    expect(views.muscles.zone.layer).toBe("muscles");
+    expect(views.muscles.style).toBe("green");
+    expect(allLayerBadges(views).muscles).toBe("green");
+  });
+});

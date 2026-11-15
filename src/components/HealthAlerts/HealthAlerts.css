@@ -1,0 +1,360 @@
+.health-alerts {
+  display: grid;
+  gap: 12px;
+}
+
+.alert-card {
+  --alert: var(--status-yellow);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 1fr);
+  align-items: center;
+  gap: 24px;
+  padding: 28px 32px;
+  border: 1px solid var(--alert);
+  border-radius: 22px;
+  background:
+    linear-gradient(110deg, color-mix(in srgb, var(--alert) 12%, transparent) 0%, transparent 55%),
+    var(--surface);
+  box-shadow: 0 30px 80px -40px color-mix(in srgb, var(--alert) 60%, transparent);
+  overflow: hidden;
+}
+
+.alert-card-red {
+  --alert: var(--status-red);
+}
+
+.alert-card::before,
+.alert-card::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: var(--alert);
+  border-style: solid;
+}
+
+.alert-card::before { top: -1px; left: -1px; border-width: 3px 0 0 3px; border-top-left-radius: 22px; }
+.alert-card::after { bottom: -1px; right: -1px; border-width: 0 3px 3px 0; border-bottom-right-radius: 22px; }
+
+.alert-card-body {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  max-width: 68ch;
+}
+
+.alert-card-body p,
+.alert-card-body h3,
+.alert-card-body ul {
+  margin: 0;
+}
+
+.alert-eyebrow {
+  color: var(--alert);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.alert-rule {
+  display: grid;
+  gap: 6px;
+}
+
+.alert-rule + .alert-rule {
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.alert-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.alert-text,
+.alert-actions {
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.alert-actions {
+  padding-left: 20px;
+}
+
+.alert-meta {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.alert-escalation {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.alert-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+/* ---- Big illustration ---- */
+.alert-art {
+  position: relative;
+  display: grid;
+  width: 300px;
+  height: 300px;
+  place-items: center;
+  color: var(--alert);
+  justify-self: center;
+}
+
+.alert-art-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.art-ring,
+.art-orbit {
+  fill: none;
+  stroke: currentColor;
+}
+
+.art-ring {
+  stroke-width: 2;
+  transform-origin: 150px 150px;
+  animation: art-ring 2.6s ease-out infinite;
+}
+
+.art-ring-2 { animation-delay: 0.85s; }
+.art-ring-3 { animation-delay: 1.7s; }
+
+.alert-art-red .art-ring { animation-duration: 1.4s; }
+.alert-art-red .art-ring-2 { animation-delay: 0.45s; }
+.alert-art-red .art-ring-3 { animation-delay: 0.9s; }
+
+@keyframes art-ring {
+  0% { transform: scale(0.7); opacity: 0.8; }
+  100% { transform: scale(1.75); opacity: 0; }
+}
+
+.art-orbit {
+  stroke-opacity: 0.25;
+  stroke-dasharray: 4 10;
+  transform-origin: 150px 150px;
+  animation: art-spin 30s linear infinite;
+}
+
+.art-halo {
+  transform-origin: 150px 150px;
+  animation: art-halo 3s ease-in-out infinite;
+}
+
+@keyframes art-halo {
+  0%, 100% { opacity: 0.55; transform: scale(0.94); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+.alert-art-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  color: var(--alert);
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--alert) 30%, #0c1428), #0c1428 70%);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--alert) 55%, transparent), inset 0 0 0 2px color-mix(in srgb, var(--alert) 60%, transparent);
+}
+
+.alert-art-icon svg {
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--alert) 70%, transparent));
+}
+
+/* Per-indicator motion */
+.art-beat svg { animation: art-beat 1.4s ease-in-out infinite; }
+.alert-art-red .art-beat svg { animation-duration: 0.9s; }
+@keyframes art-beat {
+  0%, 100% { transform: scale(1); }
+  12% { transform: scale(1.16); }
+  24% { transform: scale(0.97); }
+  36% { transform: scale(1.08); }
+}
+
+.art-sway svg { transform-origin: 50% 80%; animation: art-sway 2.4s ease-in-out infinite; }
+@keyframes art-sway {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
+
+.art-drip svg { animation: art-drip 2.2s ease-in-out infinite; }
+@keyframes art-drip {
+  0%, 100% { transform: translateY(-6px); }
+  50% { transform: translateY(6px); }
+}
+
+.art-rise svg { animation: art-rise 2.6s ease-in-out infinite; }
+@keyframes art-rise {
+  0%, 100% { transform: translateY(4px) scaleY(0.96); }
+  50% { transform: translateY(-6px) scaleY(1.04); }
+}
+
+.art-float svg { animation: art-float 3.4s ease-in-out infinite; }
+@keyframes art-float {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-10px) rotate(4deg); }
+}
+
+.art-pulse svg { animation: art-pulse 2s ease-in-out infinite; }
+@keyframes art-pulse {
+  0%, 100% { transform: scale(0.95); opacity: 0.85; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+.art-spin svg { animation: art-spin 8s linear infinite; }
+.alert-art-red .art-spin svg { animation-duration: 4s; }
+@keyframes art-spin {
+  to { transform: rotate(360deg); }
+}
+
+.art-ecg {
+  stroke: currentColor;
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: art-ecg 2.2s linear infinite;
+}
+@keyframes art-ecg {
+  0% { stroke-dashoffset: 400; opacity: 1; }
+  75% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.art-particles circle,
+.art-sparkles circle {
+  fill: currentColor;
+  animation: art-twinkle 2.4s ease-in-out infinite;
+}
+.art-particles circle:nth-child(2n),
+.art-sparkles circle:nth-child(2n) { animation-delay: 1.2s; }
+@keyframes art-twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+.art-zzz {
+  fill: currentColor;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  animation: art-zzz 3s ease-in-out infinite;
+}
+.art-zzz2 { font-size: 20px; animation-delay: 1.5s; }
+@keyframes art-zzz {
+  0% { opacity: 0; transform: translateY(10px); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+
+.art-drop {
+  fill: currentColor;
+  animation: art-drop 2.2s ease-in infinite;
+}
+@keyframes art-drop {
+  0% { opacity: 0; transform: translateY(-30px); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(40px); }
+}
+
+/* ---- Compact rows for other alerts ---- */
+.alert-others {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alert-chip {
+  --alert: var(--status-yellow);
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 18px;
+  border: 1px solid color-mix(in srgb, var(--alert) 45%, transparent);
+  border-radius: 14px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--alert) 9%, transparent), transparent 40%), var(--surface);
+  color: var(--text);
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.alert-chip:hover {
+  border-color: var(--alert);
+}
+
+.alert-chip-red {
+  --alert: var(--status-red);
+}
+
+.alert-chip-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 10px;
+  color: var(--alert);
+  background: color-mix(in srgb, var(--alert) 14%, transparent);
+}
+
+.alert-chip-label {
+  font-weight: 600;
+}
+
+.alert-chip-rule {
+  overflow: hidden;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.alert-chip-status {
+  color: var(--alert);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .alert-card {
+    grid-template-columns: 1fr;
+  }
+  .alert-art {
+    justify-self: center;
+  }
+  .alert-chip {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  .alert-chip-rule {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alert-art *,
+  .alert-art-icon svg {
+    animation: none !important;
+  }
+}

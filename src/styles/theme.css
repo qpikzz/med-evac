@@ -1,79 +1,103 @@
-/* Dark space theme — app-wide. Imported once in src/main.tsx (after the app's own CSS so it wins).
-   No palette from Rəna found in the repo yet → spec defaults. Replace values here when she sends hers. */
+/* ORBITA dark space theme v3 — "Orbit Control": Mission-Control precision (teal/amber status, mono labels)
+   + Deep-Orbit depth (deep navy, blue glow, gradients). Imported last in src/main.tsx so it wins.
+   Fonts are bundled locally (@fontsource, OFL-1.1) — no network. */
 
 :root {
   color-scheme: dark;
 
-  --bg: #0b0f1a;
-  --surface: #121829;
-  --surface-2: #1a2238;
-  --border: #263049;
-  --text: #e6eaf2;
-  --text-muted: #8a94a8;
-  --accent: #7aa2ff;
-  --status-green: #3ddc97;
-  --status-yellow: #ffc857;
+  --bg: #060b18;
+  --surface: rgba(12, 20, 40, 0.86);
+  --surface-solid: #0c1428;
+  --surface-2: #13203c;
+  --border: rgba(120, 160, 255, 0.16);
+  --border-strong: rgba(120, 160, 255, 0.32);
+  --text: #e8efff;
+  --text-muted: #98a8c8;
+  --accent: #7fa8ff;
+  --accent-2: #4fe3d0;
+  --status-green: #3fe0b0;
+  --status-yellow: #ffb84d;
   --status-red: #ff5c6c;
-  --status-none: #5b6478;
+  --status-none: #63739a;
+  --glow-blue: rgba(96, 140, 255, 0.35);
 
-  --radius: 12px;
+  --radius: 18px;
   --space-1: 8px;
   --space-2: 16px;
   --space-3: 24px;
   --space-4: 32px;
 
-  /* Three text sizes */
-  --fs-lg: 17px;
-  --fs-md: 14px;
-  --fs-sm: 11px;
+  /* Three text sizes for new components */
+  --fs-lg: 20px;
+  --fs-md: 16px;
+  --fs-sm: 13px;
 
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Map the existing app tokens (src/App.css) onto the dark palette */
+  /* Map the existing app tokens (src/App.css, Dashboard.css, LoginScreen.css) onto the palette */
   --bg-canvas: var(--bg);
   --bg-surface: var(--surface);
-  --bg-surface-solid: var(--surface);
+  --bg-surface-solid: var(--surface-solid);
   --bg-surface-subtle: var(--surface-2);
   --border-hairline: var(--border);
   --accent-primary: var(--accent);
-  --accent-primary-hover: #94b4ff;
-  --accent-soft: var(--surface-2);
-  --accent-cyan: var(--accent);
+  --accent-primary-hover: #a3c0ff;
+  --accent-soft: rgba(127, 168, 255, 0.12);
+  --accent-cyan: var(--accent-2);
   --text-primary: var(--text);
   --text-secondary: var(--text-muted);
-  --status-green-bg: rgba(61, 220, 151, 0.12);
+  --status-green-bg: rgba(63, 224, 176, 0.12);
   --status-green-border: var(--status-green);
-  --status-yellow-bg: rgba(255, 200, 87, 0.12);
+  --status-yellow-bg: rgba(255, 184, 77, 0.13);
   --status-yellow-border: var(--status-yellow);
-  --status-red-bg: rgba(255, 92, 108, 0.12);
+  --status-red-bg: rgba(255, 92, 108, 0.13);
   --status-red-border: var(--status-red);
   --status-no-data: var(--text-muted);
   --status-no-data-bg: var(--surface-2);
   --status-no-data-border: var(--status-none);
   --radius-card: var(--radius);
-  --radius-control: 8px;
-  --shadow-card: none;
-  --shadow-elevated: 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+  --radius-control: 12px;
+  --shadow-card: 0 24px 60px -32px rgba(60, 100, 255, 0.35);
+  --shadow-elevated: 0 18px 40px -16px rgba(0, 0, 0, 0.7);
 
   font-family: var(--font-sans);
+  font-size: 16px;
   color: var(--text);
   background-color: var(--bg);
 }
 
-/* Very subtle starfield: CSS radial-gradients only, no image files */
 body {
   color: var(--text);
-  background-color: var(--bg);
-  background-image:
-    radial-gradient(1px 1px at 12% 18%, rgba(230, 234, 242, 0.35) 50%, transparent 51%),
-    radial-gradient(1px 1px at 68% 9%, rgba(230, 234, 242, 0.25) 50%, transparent 51%),
-    radial-gradient(1px 1px at 84% 42%, rgba(230, 234, 242, 0.3) 50%, transparent 51%),
-    radial-gradient(1px 1px at 31% 63%, rgba(230, 234, 242, 0.2) 50%, transparent 51%),
-    radial-gradient(1px 1px at 52% 88%, rgba(230, 234, 242, 0.25) 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 91% 77%, rgba(122, 162, 255, 0.3) 50%, transparent 51%),
-    radial-gradient(1px 1px at 7% 92%, rgba(230, 234, 242, 0.2) 50%, transparent 51%);
-  background-size: 420px 420px;
-  background-attachment: fixed;
+  background: var(--bg);
+}
+
+h1, h2, h3, h4,
+.brand-name,
+.indicator-current-value,
+.summary-value,
+.escalation-value {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+.section-eyebrow,
+.summary-label,
+.bm-eyebrow,
+.dose-budget-title,
+.rad-eyebrow,
+.mission-day,
+.mission-date,
+.column-heading span {
+  font-family: var(--font-mono);
+}
+
+/* Content sits above the fixed space backdrop */
+.app-shell,
+#root > *:not(.space-backdrop) {
+  position: relative;
+  z-index: 1;
 }
 
 /* Section titles: small uppercase muted labels */
@@ -88,7 +112,8 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(6px);
 }
 
 input,
@@ -164,4 +189,148 @@ select {
   border-color: var(--status-yellow);
   color: var(--status-yellow);
   background: rgba(255, 200, 87, 0.12);
+}
+
+/* ---- Main dashboard proportions: two equal columns; the indicator list fills the body-map height and scrolls ---- */
+.dashboard-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 20px !important;
+}
+
+.indicator-column {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 0;
+}
+
+.indicator-list {
+  max-height: none !important;
+  min-height: 0;
+  contain: size;
+  padding-right: 6px !important;
+}
+
+.body-map {
+  position: sticky;
+  top: 16px;
+  align-self: start;
+}
+
+.status-summary-row {
+  gap: 20px !important;
+}
+
+/* ---- Indicator icons ---- */
+.indicator-title-row {
+  justify-content: flex-start !important;
+  gap: 10px !important;
+}
+
+.indicator-title-row .indicator-title {
+  flex-grow: 1;
+}
+
+.indicator-icon {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 11px;
+  color: var(--accent);
+  background: rgba(127, 168, 255, 0.12);
+}
+
+.indicator-icon-green { color: var(--status-green); background: rgba(63, 224, 176, 0.12); }
+.indicator-icon-yellow { color: var(--status-yellow); background: rgba(255, 184, 77, 0.14); }
+.indicator-icon-red { color: var(--status-red); background: rgba(255, 92, 108, 0.14); }
+
+/* ---- Comms: larger channel emblems with their own space ---- */
+.comms-channel-icon {
+  width: 84px !important;
+  height: 84px !important;
+  flex: 0 0 84px !important;
+  border-radius: 24px !important;
+  box-shadow: 0 0 40px -10px rgba(79, 227, 208, 0.45), inset 0 0 24px rgba(34, 211, 238, 0.08) !important;
+}
+
+.comms-channel-icon svg {
+  width: 70px !important;
+  height: 70px !important;
+}
+
+/* ---- Login: big centred brand and a planet rising behind the card ---- */
+.orbita-gate {
+  position: relative;
+  overflow: hidden;
+}
+
+.orbita-gate::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -118vmin;
+  width: 150vmin;
+  height: 150vmin;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle at 50% 8%, rgba(127, 168, 255, 0.35), transparent 30%),
+    radial-gradient(circle at 50% 50%, #0d1a3a 0%, #070d1f 70%);
+  box-shadow: 0 -20px 80px rgba(96, 140, 255, 0.35), inset 0 30px 60px rgba(127, 190, 255, 0.25);
+  pointer-events: none;
+}
+
+.orbita-gate-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 600px) !important;
+  padding: 32px 36px 36px !important;
+  box-shadow: 0 40px 120px -40px rgba(80, 120, 255, 0.55) !important;
+}
+
+.orbita-gate-header {
+  flex-direction: column;
+  justify-content: center !important;
+  gap: 18px !important;
+  text-align: center;
+  padding-bottom: 26px !important;
+}
+
+.orbita-brand {
+  flex-direction: column;
+  gap: 14px !important;
+}
+
+.orbita-brand > svg {
+  width: 72px !important;
+  height: 72px !important;
+  filter: drop-shadow(0 0 24px rgba(127, 168, 255, 0.6));
+}
+
+.orbita-brand-copy {
+  align-items: center;
+}
+
+.orbita-brand-name {
+  font-family: var(--font-display) !important;
+  font-size: 52px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  line-height: 1 !important;
+  background: linear-gradient(180deg, #ffffff 30%, #9fbcff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+.orbita-brand-tagline {
+  max-width: 34ch;
+  font-size: 15px !important;
+}
+
+.orbita-gate-tag {
+  font-family: var(--font-mono);
+  color: var(--accent-2) !important;
 }

@@ -5,7 +5,7 @@ import type { TriggeredRule } from "../rules/types";
 import CheckupFormCard from "./CheckupFormCard";
 import IndicatorSparklineList from "./IndicatorSparklineList";
 import InteractiveBody3DMap, { LayerSwitcher } from "./InteractiveBody3DMap";
-import RadiationAlert from "./RadiationAlert/RadiationAlert.tsx";
+import HealthAlerts from "./HealthAlerts/HealthAlerts";
 import "../Dashboard.css";
 
 interface MainDashboardProps {
@@ -51,8 +51,8 @@ function MainDashboard({
   const [activeLayer, setActiveLayer] = useState<"Skin" | "Muscles" | "Organs">("Organs");
   const showForm = !hasCheckup || editing;
 
-  function showRadiationOnMap(): void {
-    setSelectedIndicator("radiation_dose");
+  function showOnMap(indicatorId: string): void {
+    setSelectedIndicator(indicatorId);
     document.querySelector(".body-map")?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
@@ -120,10 +120,10 @@ function MainDashboard({
       ) : (
         !editing && (
           <>
-            <RadiationAlert
+            <HealthAlerts
               result={evaluation}
               rules={rules}
-              onShowOnMap={showRadiationOnMap}
+              onShowOnMap={showOnMap}
               onContactEarth={onContactEarth}
             />
             <motion.section
