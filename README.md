@@ -136,7 +136,7 @@ Demo video coming soon.
 
 ### Project Links
 
-- [ORBITA repository](https://github.com/qpikzz/med-evac)
+- [ORBITA repository](https://github.com/qpikzz/orbita)
 - [Rules engine specification](openspec/specs/rules-engine.md)
 - [Frontend architecture specification](openspec/specs/FRONTEND.md)
 - [API contract](openspec/specs/API_CONTRACT.md)
