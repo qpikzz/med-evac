@@ -12,7 +12,12 @@ import {
   askModel,
   type LlmResult,
 } from "../features/ai-helper/ollama";
-import { buildMessages, PromptError } from "../features/ai-helper/prompt";
+import {
+  buildMessages,
+  formatClinicalResponse,
+  PromptError,
+  sortIndicatorsBySeverity,
+} from "../features/ai-helper/prompt";
 import {
   loadDefaultCombinations,
 } from "../features/ai-helper/defaultCombinations";
@@ -113,11 +118,11 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
         }
         if (result.status === "ok") {
           if (mode === "explain_today") {
-            setAutoExplanation(result.text);
+            setAutoExplanation(formatClinicalResponse(result.text));
           } else {
             setChat((current) => [
               ...current,
-              { role: "assistant", content: result.text },
+              { role: "assistant", content: formatClinicalResponse(result.text) },
             ]);
           }
         } else {
@@ -201,8 +206,8 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
     }
   }
 
-  const triggeredIndicators = evaluation.indicators.filter(
-    (indicator) => indicator.triggered.length > 0,
+  const triggeredIndicators = sortIndicatorsBySeverity(
+    evaluation.indicators.filter((indicator) => indicator.triggered.length > 0),
   );
 
   return (

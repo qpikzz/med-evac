@@ -2330,6 +2330,121 @@
   stroke-width: 1.35;
 }
 
+.comms-channel-icon {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 48% 48%, rgba(103, 232, 249, 0.19), transparent 68%),
+    linear-gradient(145deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.92));
+  box-shadow: inset 0 0 18px rgba(34, 211, 238, 0.06);
+}
+
+.comms-channel-icon.earth-channel-icon {
+  background:
+    radial-gradient(circle at 42% 60%, rgba(52, 211, 153, 0.16), transparent 66%),
+    linear-gradient(145deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.92));
+  box-shadow: inset 0 0 18px rgba(56, 189, 248, 0.06);
+}
+
+.comms-channel-icon .emblem-aura {
+  stroke: none;
+}
+
+.comms-channel-icon .emblem-halo,
+.comms-channel-icon .emblem-planet-halo {
+  fill: none;
+  stroke: rgba(165, 243, 252, 0.22);
+  stroke-width: 0.65;
+}
+
+.comms-channel-icon .emblem-orbit,
+.comms-channel-icon .emblem-planet-orbit {
+  fill: none;
+  stroke-width: 0.8;
+  opacity: 0.86;
+}
+
+.comms-channel-icon .emblem-orbit-secondary {
+  fill: none;
+  stroke: rgba(129, 140, 248, 0.44);
+  stroke-dasharray: 1 2.2;
+  stroke-width: 0.55;
+}
+
+.comms-channel-icon .emblem-circuit {
+  fill: none;
+  stroke-width: 0.65;
+  opacity: 0.72;
+}
+
+.comms-channel-icon .emblem-core-shell {
+  stroke: rgba(224, 242, 254, 0.9);
+  stroke-width: 0.6;
+}
+
+.comms-channel-icon .emblem-core-node {
+  stroke: #ecfeff;
+  stroke-width: 0.7;
+  filter: drop-shadow(0 0 3px rgba(103, 232, 249, 0.95));
+}
+
+.comms-channel-icon .emblem-node {
+  fill: #a5f3fc;
+  stroke: rgba(15, 23, 42, 0.9);
+  stroke-width: 0.45;
+}
+
+.comms-channel-icon .emblem-node-highlight {
+  fill: #c4b5fd;
+  stroke: #eef2ff;
+  stroke-width: 0.35;
+}
+
+.comms-channel-icon .emblem-continent {
+  stroke: rgba(167, 243, 208, 0.8);
+  stroke-width: 0.35;
+}
+
+.comms-channel-icon .emblem-earth-latitude {
+  fill: none;
+  stroke: rgba(224, 242, 254, 0.6);
+  stroke-width: 0.48;
+}
+
+.comms-channel-icon .emblem-horizon {
+  fill: none;
+  stroke: #d1fae5;
+  stroke-width: 0.9;
+  filter: drop-shadow(0 0 2px rgba(52, 211, 153, 0.8));
+}
+
+.comms-channel-icon .emblem-uplink {
+  fill: none;
+  stroke: #7dd3fc;
+  stroke-linecap: round;
+  stroke-width: 0.8;
+}
+
+.comms-channel-icon .emblem-uplink-node {
+  fill: #a7f3d0;
+  stroke: #ecfeff;
+  stroke-width: 0.45;
+}
+
+.comms-channel-icon .emblem-uplink-pulse {
+  fill: #7dd3fc;
+  stroke: #e0f2fe;
+  stroke-width: 0.45;
+  filter: drop-shadow(0 0 2px rgba(125, 211, 252, 0.9));
+}
+
+.comms-channel-icon .emblem-uplink-beam {
+  fill: none;
+  stroke: rgba(125, 211, 252, 0.7);
+  stroke-dasharray: 1 1.3;
+  stroke-width: 0.65;
+}
+
 .earth-channel-icon {
   color: #a5b4fc;
   border-color: rgba(129, 140, 248, 0.35);

@@ -15,7 +15,12 @@ import {
   type CombinationsFile,
 } from "./combinations";
 import { DEFAULT_HELPER_SETTINGS, askModel, type HelperSettings } from "./ollama";
-import { SYSTEM_PROMPT, buildMessages } from "./prompt";
+import {
+  SYSTEM_PROMPT,
+  buildMessages,
+  formatClinicalResponse,
+  sortIndicatorsBySeverity,
+} from "./prompt";
 import { buildSafetySupportCard, checkSafety } from "./safety";
 
 const today = "2026-11-14";
@@ -71,6 +76,77 @@ function explainMessages(ev: EvaluationResult) {
 }
 
 describe("ai helper", () => {
+  it("prioritizes red indicators in summary order and clinical context", () => {
+    const { ev } = day40();
+    const prioritized = cloneEvaluation(ev);
+    const sleep = prioritized.indicators.find((item) => item.indicator_id === "sleep_hours");
+    const heart = prioritized.indicators.find((item) => item.indicator_id === "heart_rate");
+    if (!sleep || !heart || sleep.triggered.length === 0 || heart.triggered.length === 0) {
+      throw new Error("Day-40 severity indicators are missing");
+    }
+
+    sleep.status = "red";
+    sleep.escalation = rules.escalation.red;
+    sleep.triggered[0].level = "red";
+    heart.status = "yellow";
+    heart.escalation = rules.escalation.yellow;
+
+    const pills = sortIndicatorsBySeverity(prioritized.indicators.filter(
+      (indicator) => indicator.triggered.length > 0,
+    ));
+    expect(pills.map((indicator) => indicator.status)).toEqual(["red", "yellow"]);
+
+    const messages = explainMessages(prioritized);
+    const context = messages[1].content;
+    expect(context.indexOf("CRITICAL / RED ALERTS")).toBeLessThan(
+      context.indexOf("ELEVATED / YELLOW WARNINGS"),
+    );
+    expect(context.indexOf("Sleep (sleep_hours): RED")).toBeLessThan(
+      context.indexOf("Heart rate (heart_rate): YELLOW"),
+    );
+    expect(SYSTEM_PROMPT).toContain("Open immediately with all CRITICAL / RED alerts");
+  });
+
+  it("rounds computed prompt values and displayed clinical responses", () => {
+    const { ev } = day40();
+    const evaluation = cloneEvaluation(ev);
+    const heart = evaluation.indicators.find((item) => item.indicator_id === "heart_rate");
+    const sleep = evaluation.indicators.find((item) => item.indicator_id === "sleep_hours");
+    if (!heart?.triggered[0] || !sleep?.triggered[0]) {
+      throw new Error("Day-40 numeric observations are missing");
+    }
+    heart.triggered[0].observed = {
+      metric: "heart_rate",
+      value: 80.12345,
+      baseline: 62.654321,
+      delta: 17.345678,
+    };
+    sleep.triggered[0].observed = {
+      metric: "sleep_hours",
+      value: 6.642857142857,
+      baseline: 6.642857142857,
+      delta: -0.123456789,
+    };
+
+    const context = explainMessages(evaluation)[1].content;
+    expect(context).toContain("Observed value: 80 bpm");
+    expect(context).toContain("Observed baseline: 63 bpm");
+    expect(context).toContain("Observed delta: 17");
+    expect(context).toContain("Observed value: 6.6 h");
+    expect(context).toContain("Observed baseline: 6.6 h");
+    expect(context).toContain("Observed delta: -0.12");
+    expect(context).not.toContain("80.12345");
+    expect(context).not.toContain("6.642857142857");
+
+    expect(
+      formatClinicalResponse(
+        "Temperature 39.012345 °C; sleep 6.642857 h; pulse 80.123 bpm; pressure 121.9 mmHg; average 36.84285714285715.",
+      ),
+    ).toBe(
+      "Temperature 39.01 °C; sleep 6.6 h; pulse 80 bpm; pressure 122 mmHg; average 36.84.",
+    );
+  });
+
   it("criterion 1: Day-40 picture matches the heart-and-sleep combination", () => {
     const { ev } = day40();
     const picture = matchCombinations(ev, [], fixture);
