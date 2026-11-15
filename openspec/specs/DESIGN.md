@@ -1,88 +1,79 @@
 # DESIGN.md — Design System & UI/UX Specification (ORBITA)
 
+> **Version:** 2.1 · 15 Nov 2026 — dark space theme, layered 2D body map (`FEATURES/body-map.md`), Recharts sparklines, Motion animations, daily radiation check + animated radiation alert.
+>
 > **Scope:** Visual design system, color tokens, typography, layout architecture, and screen specifications for **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*) (NASA Space Apps Challenge 2026, ORBITA project team). All UI text rendered in the application must be in **English** per `RULES.md`.
 
 ---
 
 ## 1. Visual Direction & Aesthetic Philosophy
 
-* **Style:** Clinical Light-Tech & Minimalist 3D/Flat Glassmorphism (inspired by modern medical telemetry suites).
-* **Atmosphere:** Calm, high-trust, breathable aerospace medical interface. Uses an icy light-blue canvas with crisp translucent white cards, soft ambient elevation shadows, fine hairline borders, and high-contrast semantic status pills.
+* **Style:** Dark, calm, minimalist "space" interface (v2.0 — replaces the earlier Clinical Light-Tech / glassmorphism direction).
+* **Atmosphere:** Deep navy canvas with a very subtle CSS-only starfield, flat dark cards with 1 px hairline borders, one blue accent, and high-contrast semantic status colours. No glassmorphism, no gradients on text, no decorative clutter.
 * **Key Principles:**
   1. **Zero Visual Clutter:** Progressive disclosure — the dashboard remains clean until the daily check-up is submitted, or reveals details on hover/click.
-  2. **Deterministic Status Clarity:** Color coding (`Green`, `Amber-Yellow`, `Coral-Red`, `Neutral Gray`) strictly reflects the deterministic output of `Rules Engine` (`src/rules/engine.ts`).
-  3. **Tactile & Interactive Anatomy:** The central human body figure is **opaque** (solid stylized 3D-shaded flat vector/render) with an interactive layer switcher (`Skin`, `Muscles`, `Organs`) and floating callout pins linked to active indicators.
+  2. **Deterministic Status Clarity:** Status colours (`green`, `yellow`, `red`, `no_data`) strictly reflect the output of the `Rules Engine` (`src/rules/engine.ts`). The UI never computes, softens or recomputes a status — it only shows the worst one it was given.
+  3. **Never colour-only:** every status also shows a word (`OK` / `Watch` / `Alert` / `No data` / `Monitoring`) and an icon (`✓` / `!` / `!!` / `–` / `◌`).
+  4. **Layered 2D Body Map:** the central figure is a flat 2D line-art human with three layers (`Skin` · `Organs` · `Skeleton`). Status is drawn by an SVG hotspot layer on top of the art. Full spec: `FEATURES/body-map.md`.
+  5. **Fully offline:** no CDN fonts, images or scripts. Everything is bundled locally.
 
 ---
 
 ## 2. Color Tokens
 
-### 2.1 Surfaces & Backgrounds
-| Token | Hex / RGBA | Usage |
-| :--- | :--- | :--- |
-| `--bg-canvas` | `#EEF4FA` (radial gradient to `#F8FAFC`) | Main application window background |
-| `--bg-surface` | `rgba(255, 255, 255, 0.86)` (`backdrop-filter: blur(16px)`) | Primary cards, panels, and floating callouts |
-| `--bg-surface-solid` | `#FFFFFF` | Active inputs, dropdowns, modal dialogs |
-| `--bg-surface-subtle` | `#F1F5F9` | Secondary containers, inactive tab pills, table headers |
-| `--border-hairline` | `rgba(148, 163, 184, 0.24)` | Card borders and subtle dividers (`1px solid`) |
+Source of truth: `src/styles/theme.css` (CSS variables, applied app-wide, imported last in `src/main.tsx`). Change colours there, not in component CSS.
 
-### 2.2 Brand & Interactive Accents
+### 2.1 Core Palette
 | Token | Hex | Usage |
 | :--- | :--- | :--- |
-| `--accent-primary` | `#2563EB` | Primary CTA buttons, active navigation underline, active layer button |
-| `--accent-primary-hover` | `#1D4ED8` | Primary button hover state |
-| `--accent-soft` | `#EFF6FF` | Active pill background, selected metric highlight |
-| `--accent-cyan` | `#0EA5E9` | Telemetry sparkline accents, anatomical highlight glow |
+| `--bg` | `#0B0F1A` | App background (plus a subtle starfield of CSS `radial-gradient`s, no image files) |
+| `--surface` | `#121829` | Cards, panels, header |
+| `--surface-2` | `#1A2238` | Secondary containers, active tab, tooltips |
+| `--border` | `#263049` | 1 px card borders and dividers |
+| `--text` | `#E6EAF2` | Headings, values, primary labels |
+| `--text-muted` | `#8A94A8` | Secondary text, units, section labels, `Monitoring` style |
+| `--accent` | `#7AA2FF` | The only accent: primary buttons (dark text on it), active nav, links, focus rings |
 
-### 2.3 Typography Colors
-| Token | Hex | Usage |
-| :--- | :--- | :--- |
-| `--text-primary` | `#0F172A` | Headings, metric values, primary labels (contrast > 14:1) |
-| `--text-secondary` | `#475569` | Subtitles, units, explanations, timestamps |
-| `--text-muted` | `#94A3B8` | Placeholders, disabled controls, `no_data` labels |
-
-### 2.4 Semantic Status Colors (Strictly Bound to `Rules Engine`)
-| Status | Text / Icon Hex | Pill Background Hex | Border / Pin Glow Hex |
+### 2.2 Semantic Status Colours (strictly bound to the `Rules Engine`)
+| Status | Token | Hex | Word · Icon |
 | :--- | :--- | :--- | :--- |
-| **`green` (Normal / Optimal)** | `#15803D` | `#DCFCE7` | `#22C55E` |
-| **`yellow` (Caution / Crew)** | `#B45309` | `#FEF3C7` | `#F59E0B` |
-| **`red` (Critical / Earth)** | `#B91C1C` | `#FEE2E2` | `#EF4444` |
-| **`no_data` (Unmeasured)** | `#475569` | `#F1F5F9` | `#CBD5E1` |
+| `green` | `--status-green` | `#3DDC97` | `OK` · `✓` |
+| `yellow` | `--status-yellow` | `#FFC857` | `Watch` · `!` |
+| `red` | `--status-red` | `#FF5C6C` | `Alert` · `!!` |
+| `no_data` | `--status-none` | `#5B6478` | `No data` · `–` |
+| monitoring-only | `--text-muted` + dashed outline | `#8A94A8` | `Monitoring` · `◌` |
+
+Status pill backgrounds use the status colour at 12 % opacity.
+
+### 2.3 Legacy Token Mapping
+The older tokens used across `App.css` / `Dashboard.css` / `LoginScreen.css` (`--bg-canvas`, `--bg-surface`, `--bg-surface-subtle`, `--border-hairline`, `--accent-primary`, `--accent-soft`, `--text-primary`, `--text-secondary`, `--status-*-bg`, `--status-*-border`, `--radius-card`, …) are kept and **remapped** in `theme.css` onto the palette above. New code should use the new tokens directly.
 
 ---
 
 ## 3. Typography & Spacing
 
-* **Font Family:**
-  * Primary UI: `'Inter', 'Overpass', -apple-system, BlinkMacSystemFont, sans-serif` (referenced via CSS; if bundled locally, use SIL OFL `Inter` or `Overpass` and log in `SOURCES.md`).
-  * Numeric Telemetry: `font-variant-numeric: tabular-nums` on all vitals, dates, and sparkline values to prevent layout jitter.
-* **Type Scale:**
-  * **Page / Status Title:** `20px` / `600` (SemiBold), line-height `1.3`
-  * **Card Title:** `15px` / `600` (SemiBold), line-height `1.4`
-  * **Metric Hero Value:** `22px` / `700` (Bold), tabular-nums
-  * **Body / Protocol Text:** `13.5px` / `400` (Regular), line-height `1.5`
-  * **Micro / Badge / Unit:** `11.5px` / `500` (Medium), letter-spacing `+0.02em`
+* **Font Family:** system font stack only — `system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` (`--font-sans`). No Google Fonts / CDN. A locally bundled OFL font is allowed if logged in `SOURCE.md`.
+* **Numeric Telemetry:** `font-variant-numeric: tabular-nums` on vitals, dates, and sparkline values.
+* **Type Scale (max 3 sizes in new components):**
+  * `--fs-lg` `17px` / `600` — section titles, captions
+  * `--fs-md` `14px` / `400` — body text, buttons, list items
+  * `--fs-sm` `11px` / `600` — small **uppercase muted** labels (section eyebrows, status words), letter-spacing `+0.08em`
+  * *Note:* older screens still use their own sizes; new or reworked components must stick to these three.
 * **Layout & Radii:**
-  * Outer window padding: `20px`
-  * Grid gap between cards: `16px`
-  * Card border radius: `18px`
-  * Inner container / input radius: `12px`
-  * Pill / status badge radius: `9999px`
-  * Card shadow: `0 8px 24px -4px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03)`
+  * Spacing on an **8 px scale** (`--space-1` 8 · `--space-2` 16 · `--space-3` 24 · `--space-4` 32)
+  * Outer window padding: `20px`; grid gap between cards: `16px`
+  * Card: `--surface`, radius `12px`, `1px solid var(--border)`, no shadow
+  * Inner controls / inputs radius: `8px`; pills: `9999px`
 
 ---
 
 ## 4. Persistent Top Navigation Bar (Header)
 
-Displayed across all screens (`height: 64px`, transparent/glass bar):
-1. **Left — Mission Context & Brand:**
-   * Minimalist **ORBITA** emblem + Mission Day badge (`Day 40`) + Mission Date (`2026-11-21` / `YYYY-MM-DD`).
-   * Offline autonomous badge (`OFFLINE READY` subtle indicator).
-2. **Center — Primary Navigation Tabs (Pill / Underline Switcher):**
-   * **`Main`** (`Главная` — Check-up & Health Summary Dashboard)
-   * **`Comms`** (`Связь` — Local AI Assistant & Ground Operator Chat)
-3. **Right — Astronaut Profile Avatar:**
-   * Circular astronaut avatar (`38px × 38px`) with subtle blue ring (`#2563EB`) and crew member name/ID tooltip or popover (e.g., `Cmdr. Alex Vance · Mission Specialist`, preflight baseline summary).
+Displayed across all screens after login (`height: 64px`, `--surface` card, compact):
+1. **Left — Brand & Mission Context:** 36 px ORBITA logo, `Day 40`, muted `·` separator, live local date (`YYYY-MM-DD`).
+2. **Center — Primary Navigation Tabs:** flat `Main` · `Comms` tabs (hidden for Ground Operator).
+3. **Right — Profile Switcher:** crew SVG avatar, name and role; dropdown with saved accounts, add account, forget account, log out (see `FEATURES/login.md`).
+* The `SYNTHETIC DATA` badge is shown on the daily check-up card (not in the header since the header-polish task).
 
 ---
 
@@ -102,7 +93,7 @@ The `Main` screen implements a progressive two-state layout so the astronaut com
        * Subjective Mood (`mood` 0–10 slider/stepper)
        * Body Mass (`body_mass` kg)
        * Skin Symptom Score (`skin_symptom_score` 0–10)
-       * Radiation (`radiation_dose_rate` µSv/h & `radiation_accumulated` mSv)
+       * **Radiation check** — a separate dashed block under the measurements: `radiation_dose_rate` µSv/h, `radiation_accumulated` mSv, plus the three radiation event toggles from `rules.json` (`spe_warning`, `dosimeter_unexpected_high`, `acute_radiation_event`). Text: *"Read your personal dosimeter. Dose limits are set by mission flight surgeons; any radiation event you mark here is checked by the rules."* The same flags also stay in the symptom list.
    * **Right Column — Symptoms, Tags & Free-Text Notes:**
      * **Quick Symptom Tags (42 Flags from `rules.json`):** Searchable/categorized compact multi-select pill tags (e.g., `Dizziness`, `Fainting`, `Face/Throat Swelling`, `Skin Rash`, `Fatigue`). Selected tags turn highlighted blue/amber and pass directly to `EvaluationInput.flags`.
      * **Free-Text Concern Box:** Textarea (`"Tell us if anything else is bothering you..."`). Any free-text notes not covered by structured tags are forwarded as context to the **Local AI Helper (Ollama)** for personalized explanation alongside triggered rules.
@@ -117,26 +108,29 @@ Once the check-up is submitted, the top form collapses into a compact confirmati
 
 1. **Top Confirmation Banner:**
    * Full-width sleek pill banner: *"Thank you for taking care of yourself!"* with a secondary action button **`Edit Check-up`** (re-expands State A form if needed).
-2. **Summary Status Row (Two Equal Cards):**
+2. **Radiation Alert (only when the engine reports `radiation_dose` yellow or red):**
+   * Full-width card with a status-coloured border, a radiation trefoil icon in a status-coloured circle with expanding rings (yellow 2.4 s, red 1.2 s) and slow rotation, spring entrance (Motion).
+   * Eyebrow `! RADIATION WARNING · WATCH` (yellow) or `!! RADIATION ALERT · ALERT` (red); then, for every triggered radiation rule (red first): `title`, `explanation`, `actions`, `recheck` — all text straight from the engine / `rules.json`.
+   * "You reported: …" (flag labels), escalation text from `rules.json` `ui_text`, buttons **`Show on body map`** (switches the map to the Skin layer and selects the radiation aura) and, for red, **`Contact Earth`**.
+3. **Summary Status Row (Two Equal Cards):**
    * **Card 1 — Overall Status (`overall_status`):** Large semantic badge (`Green — Normal`, `Yellow — Attention Needed`, `Red — Critical Alert`).
    * **Card 2 — Escalation Level (`overall_escalation`):** Clear action directive (`Self-Care`, `Crew Medical Officer`, `Ground Flight Surgeon`) with dynamic accent border matching `overall_status`.
-3. **3-Column Main Diagnostic Grid:**
-   * **Left Column (~32% width) — Indicator Cards Stack:**
+4. **2-Column Main Diagnostic Grid:**
+   * **Left Column (~42% width) — Indicator Cards Stack:**
      * Vertical scrollable list of the 10 tracked indicators (`rules.json`).
      * Each card displays:
        * Indicator name & current measured value + unit (e.g., `Heart Rate · 84 bpm`).
-       * Compact **7-day trend sparkline** (using `Recharts` or `Apache ECharts`) showing daily trajectory and baseline reference band.
+       * **7-day trend sparkline (Recharts `AreaChart`, 56 px high):** smooth line in the indicator's status colour with a soft gradient fill below, "your normal" baseline as a solid faint line and rule thresholds as dashed lines in their level colour; hover tooltip shows date + value + unit; the line draws in over 0.9 s (off with reduced motion).
        * Semantic status pill (`Green` / `Yellow` / `Red` / `No Data`) + `baseline_forming` subtle badge if applicable.
        * Clicking a card expands its triggered rule details: `title`, `explanation`, `actions` checklist, `recheck` timer, an `(i)` info icon revealing `Source: TABLE: ...`, and an **`Ask AI Helper`** button that opens `Comms` pre-loaded with that rule.
-   * **Center Column (~48% width) — Opaque Interactive Human Body Figure:**
-     * High-craft **opaque** anatomical figure centered on a subtle circular pedestal grid.
-     * **Interactive Callout Pins:** Floating glass cards connected via thin leader lines to relevant body zones (similar to *Veridia* callouts — e.g., `Cardiac`, `Sleep / CNS`, `Skin`, `Immune`). Pins pulse softly in `Yellow` or `Red` when a rule triggers for that region; clicking a pin highlights and scrolls to the corresponding indicator card on the left.
-   * **Right Column (~20% width) — Anatomical Layer Switcher (`Layers`):**
-     * Vertical stack of 3 large, tactile toggle cards:
-       1. **`Skin`** (highlights dermatological & radiation surface indicators)
-       2. **`Muscles`** (highlights musculoskeletal, body mass, and physical strain indicators)
-       3. **`Organs`** (highlights cardiovascular, metabolic/glucose, thermoregulation, sleep/CNS, and immune systems)
-     * Switching layers updates the opaque body visual layer and filters/highlights the matching callout pins.
+   * **Right Column (~58% width) — Layered 2D Body Map (`BodyMap`, full spec in `FEATURES/body-map.md`):**
+     * Header: small `BODY MAP` label, caption `Check-up · YYYY-MM-DD` (or `No check-up yet today`), and the **layer tabs `Skin · Organs · Skeleton`** (default `Organs`). Each tab shows a badge with the worst zone status on that layer (icon + word), so a red status on a hidden layer is never invisible.
+     * Flat 2D line-art figure (SVG viewBox `0 0 400 800`). Optional art per layer from `src/assets/body/` (`skin.*`, `organs.*`, `skeleton.*`); if missing, a minimal placeholder silhouette is drawn. Layers cross-fade in `200ms`.
+     * **Zones (hotspots):** Brain · Sleep & mood, Heart · Rate & pressure, Blood · Glucose, Immune system (Organs layer); Skin · Temperature and Radiation dose — drawn as a soft aura around the whole body (Skin layer); Bones & muscle · Body mass (Skeleton layer). Positions live in `src/components/BodyMap/zones.ts` and can be moved without touching code.
+     * Hotspot = status-coloured circle with icon. Yellow pulses slowly (2.5 s), red faster (1.2 s), green static, `no_data` dim, monitoring-only = neutral dashed outline. The radiation aura additionally sends out expanding waves when yellow/red.
+     * The radiation zone carries a note: *"Read your dosimeter at every check-up. Dose limits are set by mission flight surgeons; alerts come from the radiation events you report."*
+     * Hover/focus → tooltip (label, status word, hazard line). Click / Enter / Space → selects the zone (white 2 px ring) and highlights + scrolls to the matching indicator card on the left.
+     * Below the figure: a list of **all 7 zones** with status word, so every zone is reachable without switching layers.
 
 ---
 
@@ -160,5 +154,11 @@ Accessible from the top navigation bar (`Comms`) or via `Contact Earth` / `Ask A
 
 ## 7. Responsive & Desktop Window Constraints
 
-* **Target Resolution:** Optimized for Tauri desktop window (`1280 × 800` minimum, fluid scaling up to `1920 × 1080` and `2560 × 1440`).
-* **Motion & Transitions:** Subtle, purposeful transitions (`150ms–250ms ease-out` via `Motion` / CSS transitions) for state collapse (Pre-Checkup → Post-Checkup), layer switching (`Skin` / `Muscles` / `Organs`), and callout pin focus. Avoid heavy continuous GPU animations to preserve battery in offline spaceflight scenarios.
+* **Target Resolution:** Optimized for Tauri desktop window (`1280 × 800` minimum, fluid scaling up to `1920 × 1080` and `2560 × 1440`). Also runs in a normal browser via `npm run dev`.
+* **Motion & Transitions:** `motion` (Motion for React) for screen-level animation, CSS for small loops:
+  * check-up form ↔ "Thank you" bar: cross-fade + 12 px slide (250 ms), check mark springs in;
+  * summary row and dashboard grid fade up (300–350 ms), indicator cards appear one after another (50 ms stagger);
+  * radiation alert: spring entrance, expanding rings, rotating trefoil; body-map layer cross-fade (200 ms, CSS), hotspot pulse and aura waves (CSS).
+  * `<MotionConfig reducedMotion="user">` wraps the app; looping animations are skipped and CSS animations disabled when `prefers-reduced-motion: reduce`.
+* **Accessibility:** hotspots are `role="button"`, `tabIndex=0`, with `aria-label` like `Heart: Watch — tell your crew medical officer`; layer tabs and zone list are keyboard-reachable buttons; visible focus rings in `--accent`.
+* **Branding & Assets:** no NASA logo or NASA branding in art or UI (Space Apps branding only). Images must be own drawings or CC0 / CC-BY and logged in `SOURCE.md`; AI-generated images need a visible "AI-generated illustration" note in About/Credits.

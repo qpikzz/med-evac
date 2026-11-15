@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { MotionConfig } from "motion/react";
 import App from "./App";
 import { AuthProvider } from "./features/auth/AuthContext";
 import { AppStateProvider } from "./features/app-state/AppStateContext";
@@ -12,10 +13,12 @@ migrateLegacyStorageKeys();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <AuthProvider>
-      <AppStateProvider>
-        <App />
-      </AppStateProvider>
-    </AuthProvider>
+    <MotionConfig reducedMotion="user">
+      <AuthProvider>
+        <AppStateProvider>
+          <App />
+        </AppStateProvider>
+      </AuthProvider>
+    </MotionConfig>
   </React.StrictMode>,
 );

@@ -9,8 +9,8 @@
 - **Core Runtime:** Tauri v2, React 19, TypeScript (strict mode), Vite.
 - **Approved UI Libraries (OSI-compliant, offline-capable):**
   - **Styling:** Tailwind CSS (or CSS Modules + CSS custom properties matching `DESIGN.md` tokens).
-  - **Charts & Sparklines:** `Recharts` (MIT) or `Apache ECharts` (Apache-2.0) — bundled locally, zero CDN calls.
-  - **Animations:** `motion` (MIT, formerly Framer Motion) for smooth layout transitions (`Pre-Checkup` $\rightarrow$ `Post-Checkup`) and drawer animations.
+  - **Charts & Sparklines:** `recharts@3.10.1` (MIT) — used for the indicator sparklines (`src/components/charts/TrendSparkline.tsx`); bundled locally, zero CDN calls.
+  - **Animations:** `motion@14.9.0` (MIT, formerly Framer Motion) for the `Pre-Checkup` $\rightarrow$ `Post-Checkup` transition, card entrance and the radiation alert; app wrapped in `<MotionConfig reducedMotion="user">`.
   - **Icons:** `lucide-react` (ISC) or `phosphor-react` (MIT).
   - **Typography:** Self-hosted `Fira Sans` / `Overpass` / `Inter` (SIL OFL-1.1) or system UI fallback stack.
 - **Compliance Rule (`RULES.md`):** Any newly installed npm package, icon set, or font **MUST** be immediately recorded in `SOURCES.md` with its version, repository URL, and OSI license.
@@ -52,25 +52,22 @@ Clicking the circular profile avatar in the top-right header opens a clean dropd
 #### State B: `Post-Checkup` (Active Health Summary Dashboard)
 - **Top Acknowledgment Banner (`CheckupCompleteBar`):**
   - Compact glass card displaying *"Thank you for taking care of yourself!"* alongside a secondary **`Edit Check-up`** button (reopens the form for today's check-up).
+- **Radiation Alert (`RadiationAlert`):** shown above the summary row only when the engine reports `radiation_dose` as `yellow` or `red` (`src/components/RadiationAlert/`). Renders the triggered radiation rules' `title`, `explanation`, `actions`, `recheck`, the reported flags and the escalation text — no own logic. `Show on body map` selects the radiation zone (map switches to the Skin layer).
 - **Status Summary Row (2 Equal Cards):**
   - **Card 1 — `Overall Status`:** Displays `overall_status` (`Green` / `Yellow` / `Red` / `No Data`) with semantic pill styling and status subtitle.
   - **Card 2 — `Escalation Level`:** Displays `overall_escalation` (`Self` / `Crew Medical Officer` / `Flight Surgeon on Earth`) with clear action priority indicator.
-- **Main Workspace Grid (3-Column Asymmetric Layout):**
-  - **Left Column (`IndicatorSparklineList` — ~32% width):**
+- **Main Workspace Grid (2-Column Layout):**
+  - **Left Column (`IndicatorSparklineList` — ~42% width):**
     - Vertical stack of compact cards for each indicator from `EvaluationResult.indicators`.
     - Each card displays: indicator label, today's value + unit, status dot/badge, mini time-series sparkline (last 7–14 days), and an info icon `(i)` revealing `source` attribution on hover/click.
     - Clicking a card highlights the corresponding anatomical zone on the Body Map and expands triggered rules (`title`, `explanation`, `actions`, `recheck`) plus an **`Ask Local AI`** shortcut button.
     - *Strict Rule:* Never display `table_confidence` in the UI.
-  - **Center Stage (`InteractiveBody3DMap` — ~53% width):**
-    - Custom, high-detail **opaque 3D-styled anatomical SVG component** (layered gradients, specular highlights, anatomical shading, and depth shadows to achieve a pseudo-3D clinical look matching `DESIGN.md`).
-    - **Clickable Hotspots & Floating Callout Cards:** Anatomical regions map to `indicator_id`s (e.g., brain/head $\rightarrow$ `sleep_hours`, `mood`; heart $\rightarrow$ `heart_rate`, `blood_pressure`; torso/core $\rightarrow$ `body_temp`, `blood_sugar`, `body_mass`, `immune_signs`; skin surface $\rightarrow$ `skin_health`; full-body aura $\rightarrow$ `radiation_dose`).
-    - Regions dynamically tint/glow according to their `IndicatorResult.status` (`green`, `yellow`, `red`, `no_data`).
-    - Floating callout cards connect via thin leader lines to active/triggered hotspots (showing metric name, value, and status pill).
-  - **Right Edge (`LayerSwitcher` — ~15% width):**
-    - Vertical stack of 3 tactile toggle cards switching the active anatomical layer of the opaque body model:
-      1. **`Skin`** (surface layer: `skin_health`, `body_temp`, `radiation_dose`)
-      2. **`Muscles`** (musculoskeletal layer: `body_mass`, `sleep_hours`, physical fatigue flags)
-      3. **`Organs`** (internal organs layer: `heart_rate`, `blood_pressure`, `blood_sugar`, `immune_signs`, `mood`)
+  - **Right Column (`BodyMap` — ~58% width):** layered 2D body map, full spec in `FEATURES/body-map.md`.
+    - Component: `src/components/BodyMap/BodyMap.tsx` (`BodyMapProps { result, rules, selectedZone?, onSelect }`). It never imports or calls the engine; the parent passes `EvaluationResult` in. `InteractiveBody3DMap.tsx` stays at its path as a thin wrapper so `MainDashboard` did not change; its old `LayerSwitcher` export now renders nothing.
+    - Flat 2D line-art figure with three layers switched by tabs **`Skin` · `Organs` · `Skeleton`** (default `Organs`), 200 ms cross-fade. Optional art from `src/assets/body/`, placeholder silhouette if missing.
+    - Zones (`src/components/BodyMap/zones.ts`): brain → `sleep_hours`, `mood`; heart → `heart_rate`, `blood_pressure`; blood → `blood_sugar`; immune → `immune_signs` (Organs); skin → `skin_health`, `body_temperature`; radiation → `radiation_dose`, whole-body aura (Skin); musculoskeletal → `body_mass` (Skeleton).
+    - Zone status = worst of its indicators (`red` > `yellow` > `green` > `no_data`). Indicators whose rules are **all** `enabled: false` are monitoring-only: excluded from the colour and shown as *"Monitoring only — limits are set by mission flight surgeons."* Layer tab badge = worst zone on that layer.
+    - Every status shows a word + icon (`OK ✓` / `Watch !` / `Alert !!` / `No data –` / `Monitoring ◌`). Clicking a zone highlights and scrolls to its indicator card.
 
 ### 3.2 `Comms` View — Dual-Channel Chat Interface
 Accessible via the top `Comms` tab (for `Astronaut`) or as the sole view (for `Ground Operator`).
@@ -99,6 +96,6 @@ Accessible via the top `Comms` tab (for `Astronaut`) or as the sole view (for `G
 ## 5. UX, Accessibility & Security Rules
 
 - **Plain Text Escaping:** Render all strings from `rules.json`, `knowledge_base.json`, free-text check-up notes, and LLM chat responses using standard React text nodes. **Never** use `dangerouslySetInnerHTML`.
-- **Contrast & Legibility:** Maintain $\ge 4.5:1$ contrast ratio on all light-surface cards and status badges.
+- **Contrast & Legibility:** Maintain $\ge 4.5:1$ contrast ratio on all dark-surface cards and status badges (`DESIGN.md` §2). Status is never colour-only.
 - **Responsive Desktop Layout:** Optimize for `1280×800` and `1440×900` Tauri desktop viewports without horizontal scrollbars.
 - **Zero Production Console Leaks:** Do not `console.log` raw health telemetry or user free-text notes in production builds.

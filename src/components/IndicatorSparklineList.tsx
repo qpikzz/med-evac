@@ -1,17 +1,14 @@
 import { useState } from "react";
+import { motion } from "motion/react";
 import { describeDeviation, getReferenceLines } from "../features/personal-baseline/baseline";
 import { useAppState } from "../features/app-state/AppStateContext";
 import type { IndicatorResult, Reading, Status, TriggeredRule } from "../rules/types";
+import TrendSparkline, { type TrendPoint } from "./charts/TrendSparkline";
 
 interface IndicatorSparklineListProps {
   selectedIndicator: string | null;
   onSelectIndicator: (indicatorId: string) => void;
   onAskLocalAI: (indicatorLabel: string, rule?: TriggeredRule) => void;
-}
-
-interface TrendPoint {
-  date: string;
-  value: number;
 }
 
 function statusLabel(status: Status): string {
@@ -43,85 +40,15 @@ function getTrend(readings: Reading[], metric: string): TrendPoint[] {
     .slice(-7);
 }
 
-function IndicatorSparkline({
-  points,
-  status,
-  referenceLines,
-  label,
-}: {
-  points: TrendPoint[];
-  status: Status;
-  referenceLines: ReturnType<typeof getReferenceLines>;
-  label: string;
-}) {
-  if (points.length < 2) {
-    return (
-      <div className="sparkline-empty" aria-label={`${label} trend unavailable`}>
-        Trend appears as more readings are recorded.
-      </div>
-    );
-  }
-
-  const width = 220;
-  const height = 48;
-  const padding = 4;
-  const values = [
-    ...points.map((point) => point.value),
-    ...referenceLines.map((line) => line.value).filter((value) =>
-      Number.isFinite(value),
-    ),
-  ];
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const span = max - min || 1;
-  const yFor = (value: number): number =>
-    height - padding - ((value - min) / span) * (height - padding * 2);
-  const xFor = (index: number): number =>
-    padding + (index / (points.length - 1)) * (width - padding * 2);
-  const polyline = points
-    .map((point, index) => `${xFor(index)},${yFor(point.value)}`)
-    .join(" ");
-
-  return (
-    <svg
-      className={`indicator-sparkline status-stroke-${status}`}
-      viewBox={`0 0 ${width} ${height}`}
-      role="img"
-      aria-label={`Seven-day ${label} trend`}
-    >
-      {referenceLines.map((line, index) => (
-        <line
-          key={`${line.rule_id ?? line.kind}-${line.value}-${index}`}
-          x1={padding}
-          x2={width - padding}
-          y1={yFor(line.value)}
-          y2={yFor(line.value)}
-          className={`sparkline-reference reference-${line.kind} reference-${line.level}`}
-        >
-          <title>{line.label}</title>
-        </line>
-      ))}
-      <polyline points={polyline} className="sparkline-trend" />
-      {points.map((point, index) => (
-        <circle
-          key={point.date}
-          cx={xFor(index)}
-          cy={yFor(point.value)}
-          r={index === points.length - 1 ? 2.7 : 1.8}
-          className="sparkline-point"
-        />
-      ))}
-    </svg>
-  );
-}
-
 function IndicatorCard({
   indicator,
+  index,
   selected,
   onSelect,
   onAskLocalAI,
 }: {
   indicator: IndicatorResult;
+  index: number;
   selected: boolean;
   onSelect: () => void;
   onAskLocalAI: (indicatorLabel: string, rule?: TriggeredRule) => void;
@@ -169,9 +96,12 @@ function IndicatorCard({
   const statusClass = `status-${indicator.status}`;
 
   return (
-    <article
+    <motion.article
       id={`indicator-${indicator.indicator_id}`}
       className={`indicator-card dashboard-card ${statusClass}${selected ? " is-focused" : ""}`}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut", delay: 0.15 + index * 0.05 }}
     >
       <button
         className="indicator-select"
@@ -202,11 +132,12 @@ function IndicatorCard({
       )}
 
       {trendMetric ? (
-        <IndicatorSparkline
+        <TrendSparkline
           points={trendPoints}
           status={indicator.status}
           referenceLines={referenceLines}
           label={definition.label.toLowerCase()}
+          unit={primaryMetric?.unit ?? ""}
         />
       ) : (
         <div className="sparkline-empty">Symptom flags are checked by the rules engine.</div>
@@ -257,7 +188,7 @@ function IndicatorCard({
           </button>
         </div>
       )}
-    </article>
+    </motion.article>
   );
 }
 
@@ -275,10 +206,11 @@ function IndicatorSparklineList({
         <span>Today · 7-day trend</span>
       </div>
       <div className="indicator-list">
-        {evaluation.indicators.map((indicator) => (
+        {evaluation.indicators.map((indicator, index) => (
           <IndicatorCard
             key={indicator.indicator_id}
             indicator={indicator}
+            index={index}
             selected={selectedIndicator === indicator.indicator_id}
             onSelect={() => onSelectIndicator(indicator.indicator_id)}
             onAskLocalAI={onAskLocalAI}
