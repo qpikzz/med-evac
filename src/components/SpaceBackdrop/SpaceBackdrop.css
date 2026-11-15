@@ -1,0 +1,126 @@
+.space-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 0%, #0b1530 0%, var(--bg) 60%);
+}
+
+.space-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(79, 227, 208, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 227, 208, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, transparent 30%, #000 85%);
+}
+
+.space-nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: space-drift 28s ease-in-out infinite alternate;
+}
+
+.space-nebula-a {
+  left: -12%;
+  bottom: -18%;
+  width: 55vw;
+  height: 50vh;
+  background: rgba(70, 110, 255, 0.22);
+}
+
+.space-nebula-b {
+  right: -10%;
+  top: -12%;
+  width: 45vw;
+  height: 45vh;
+  background: rgba(140, 100, 255, 0.16);
+  animation-duration: 34s;
+  animation-direction: alternate-reverse;
+}
+
+.space-nebula-c {
+  right: 8%;
+  bottom: 4%;
+  width: 26vw;
+  height: 26vh;
+  background: rgba(79, 227, 208, 0.08);
+  animation-duration: 40s;
+}
+
+@keyframes space-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(4vw, -3vh) scale(1.08); }
+}
+
+.space-stars {
+  position: absolute;
+  inset: 0;
+}
+
+.space-star {
+  animation: space-twinkle 4s ease-in-out infinite;
+}
+
+@keyframes space-twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+
+.space-orbit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.space-orbit-ring {
+  fill: none;
+  stroke: rgba(127, 168, 255, 0.09);
+  stroke-width: 1;
+  transform-origin: 800px 500px;
+  animation: space-turn 120s linear infinite;
+}
+
+.space-satellite {
+  fill: rgba(79, 227, 208, 0.7);
+  stroke: none;
+}
+
+@keyframes space-turn {
+  to { transform: rotate(360deg); }
+}
+
+.space-shooting {
+  position: absolute;
+  top: 12%;
+  left: 70%;
+  width: 140px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent);
+  opacity: 0;
+  transform: rotate(-30deg);
+  animation: space-shoot 11s ease-in 3s infinite;
+}
+
+@keyframes space-shoot {
+  0%, 92% { opacity: 0; transform: translate(0, 0) rotate(-30deg); }
+  93% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-360px, 210px) rotate(-30deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .space-nebula,
+  .space-star,
+  .space-orbit-ring,
+  .space-shooting {
+    animation: none;
+  }
+  .space-shooting {
+    display: none;
+  }
+}

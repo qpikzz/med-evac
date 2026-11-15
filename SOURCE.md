@@ -29,10 +29,13 @@
 
 | Package / Asset | Source Repository | License | Role |
 | :--- | :--- | :--- | :--- |
-| **lucide-react** | `1.73.0` · `https://github.com/lucide-icons/lucide` | **ISC** | Offline SVG icon set; used for the fixed header `ChevronDown`, profile-menu actions, and access-gate controls |
+| **lucide-react** | `1.73.0` · `https://github.com/lucide-icons/lucide` | **ISC** | Offline SVG icon set; header/profile/access-gate controls, the per-indicator icons (`src/components/indicatorIcons.tsx`: Gauge, HeartPulse, Droplet, Thermometer, Moon, Smile, Scale, ShieldPlus, Radiation, Hand) and the large animated alert illustrations |
+| **Inter** (`@fontsource/inter`) | `5.3.0` · `https://github.com/rsms/inter` (package: `https://github.com/fontsource/font-files`) | **SIL OFL 1.1** | Body text font, bundled locally (no Google Fonts / CDN) |
+| **Space Grotesk** (`@fontsource/space-grotesk`) | `5.3.0` · `https://github.com/floriankarsten/space-grotesk` | **SIL OFL 1.1** | Headings and large numbers, bundled locally |
+| **JetBrains Mono** (`@fontsource/jetbrains-mono`) | `5.3.0` · `https://github.com/JetBrains/JetBrainsMono` | **SIL OFL 1.1** | Technical labels (eyebrows, status words, mission day/date), bundled locally |
 | **Recharts** | `3.10.1` · `https://github.com/recharts/recharts` | **MIT** | 7-day trend sparklines in the indicator cards (`src/components/charts/TrendSparkline.tsx`) |
 | **Motion** (`motion`) | `14.9.0` · `https://github.com/motiondivision/motion` | **MIT** | Screen transitions, indicator-card entrance, animated radiation alert (`src/components/RadiationAlert/`); respects `prefers-reduced-motion` |
-| **Custom Interactive Body Map SVG** | Original work by the ORBITA project contributors | **Apache-2.0** | Interactive anatomical figure for health status visualization |
+| **Custom Interactive Body Map SVG** (`src/components/BodyMap/AnatomyArt.tsx`: stylised coloured vector anatomy — skin, muscles, organs, skeleton) and the animated space backdrop (`src/components/SpaceBackdrop/`) | Original work by the ORBITA project contributors (no third-party or AI-generated images) | **Apache-2.0** | Interactive anatomical figure for health status visualization |
 <!-- Template for new UI packages:
 | **Library Name** | `https://github.com/...` | **MIT / Apache-2.0** | Brief role description |
 -->
@@ -119,7 +122,7 @@ Cite every NASA, ESA, JAXA, or open scientific standard used in the RAG knowledg
 * **Application Icons & UI Graphics:** Original artwork created by the ORBITA project contributors (**Apache-2.0**). Default starter template icons/logos (`tauri.svg`, `vite.svg`, default `src-tauri/icons/`) are replaced before submission to comply with third-party trademark and CC-BY-NC-ND restrictions.
 * **Body map figure (`src/components/BodyMap/BodyMap.tsx`):** Placeholder line-art silhouettes (skin, organs, skeleton) drawn as inline SVG by the ORBITA project contributors (**Apache-2.0**). Optional layer art from Rəna goes in `src/assets/body/` and must be listed here with its licence; AI-generated art also needs an "AI-generated illustration" note in About/Credits.
 * **Dark space theme (`src/styles/theme.css`):** Original; starfield is pure CSS radial-gradients, no image files.
-* **Typography:** System sans-serif stack (`system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif`) referenced via CSS without bundling proprietary font binaries.
+* **Typography:** Inter (body), Space Grotesk (headings, numbers) and JetBrains Mono (technical labels), all **SIL OFL 1.1**, bundled locally through `@fontsource` packages (see §2) — no Google Fonts or CDN requests; system sans-serif stack as fallback.
 * **Demo Video & Screenshots:** Original screen recordings and narration produced by the ORBITA project team with full written consent of all adult participants and zero third-party copyrighted audio/video.
 
 ---

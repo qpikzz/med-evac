@@ -79,7 +79,7 @@ The component never changes, softens or recomputes a status. It only takes the w
 ## 5. Visual rules
 
 ### 5.1 Layers and art
-- Three layers, switched by tabs "Skin · Organs · Skeleton" (default: Organs). Only one visible at a time,
+- Three layers, switched by tabs "Skin · Organs · Skeleton" (default: Organs). → v2: four layers incl. Muscles, see §12. Only one visible at a time,
   with a 200 ms cross-fade.
 - Base art per layer is loaded from `src/assets/body/` (`skin.*`, `organs.*`, `skeleton.*`, SVG or transparent PNG
   from Rəna). Art is decoration only; status colour is drawn by an SVG hotspot layer ON TOP of the art.
@@ -151,6 +151,22 @@ Mocks go to `src/components/BodyMap/mocks.ts`.
 
 ## 10. Estimate and priority
 MVP (the body map is part of the Day-40 story). Agent ~1–1.5 h, Nikita review/integration ~20 min.
+
+## 12. v2 (15 Nov 2026, evening) — four layers and organ hotspots
+- Layers: `skin · muscles · organs · skeleton` (`LayerId` gained `muscles`; default still `organs`).
+- Art: stylised coloured vector anatomy in `AnatomyArt.tsx` (own drawing, Apache-2.0) replaces the line-art placeholder; `src/assets/body/*` can still override a layer.
+- Zones moved onto the organs and one zone added (`ZoneId` gained `muscles`):
+
+| ZoneId | Layer | Indicators | Hotspot |
+|---|---|---|---|
+| brain | organs | sleep_hours, mood | brain |
+| heart | organs | heart_rate, blood_pressure | heart |
+| blood | organs | blood_sugar | pancreas ("Pancreas & blood · Glucose") |
+| immune | organs | immune_signs | spleen ("Immune system · Spleen & lymph nodes") |
+| skin | skin | skin_health, body_temperature | forearm skin |
+| radiation | skin | radiation_dose | whole-body aura |
+| muscles | muscles | body_mass | thigh muscles |
+| musculoskeletal | skeleton | body_mass | pelvis ("Bones · Body mass") |
 
 ## 11. Implementation Notes (15 Nov 2026)
 - **Radiation — decided:** `radiation_dose` is **not** monitoring-only. Since 15 Nov 2026 its numeric rules are enabled with illustrative mission settings for a 180-day Mars transit (rate > 150 µSv/h → yellow; accumulated ≥ 480 mSv → yellow, ≥ 600 mSv → red; see rules-engine Q-RAD), and two event rules are enabled and must stay on: `rad_y_spe` (solar particle event warning → yellow) and `rad_r_event` (dosimeter unexpectedly high / acute radiation event → red). Switching them off would hide a red. So:
