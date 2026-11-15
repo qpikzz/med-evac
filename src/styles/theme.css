@@ -1,0 +1,122 @@
+/* Dark space theme — app-wide. Imported once in src/main.tsx (after the app's own CSS so it wins).
+   No palette from Rəna found in the repo yet → spec defaults. Replace values here when she sends hers. */
+
+:root {
+  color-scheme: dark;
+
+  --bg: #0b0f1a;
+  --surface: #121829;
+  --surface-2: #1a2238;
+  --border: #263049;
+  --text: #e6eaf2;
+  --text-muted: #8a94a8;
+  --accent: #7aa2ff;
+  --status-green: #3ddc97;
+  --status-yellow: #ffc857;
+  --status-red: #ff5c6c;
+  --status-none: #5b6478;
+
+  --radius: 12px;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+
+  /* Three text sizes */
+  --fs-lg: 17px;
+  --fs-md: 14px;
+  --fs-sm: 11px;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Map the existing app tokens (src/App.css) onto the dark palette */
+  --bg-canvas: var(--bg);
+  --bg-surface: var(--surface);
+  --bg-surface-solid: var(--surface);
+  --bg-surface-subtle: var(--surface-2);
+  --border-hairline: var(--border);
+  --accent-primary: var(--accent);
+  --accent-primary-hover: #94b4ff;
+  --accent-soft: var(--surface-2);
+  --accent-cyan: var(--accent);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-muted);
+  --status-green-bg: rgba(61, 220, 151, 0.12);
+  --status-green-border: var(--status-green);
+  --status-yellow-bg: rgba(255, 200, 87, 0.12);
+  --status-yellow-border: var(--status-yellow);
+  --status-red-bg: rgba(255, 92, 108, 0.12);
+  --status-red-border: var(--status-red);
+  --status-no-data: var(--text-muted);
+  --status-no-data-bg: var(--surface-2);
+  --status-no-data-border: var(--status-none);
+  --radius-card: var(--radius);
+  --radius-control: 8px;
+  --shadow-card: none;
+  --shadow-elevated: 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+
+  font-family: var(--font-sans);
+  color: var(--text);
+  background-color: var(--bg);
+}
+
+/* Very subtle starfield: CSS radial-gradients only, no image files */
+body {
+  color: var(--text);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(230, 234, 242, 0.35) 50%, transparent 51%),
+    radial-gradient(1px 1px at 68% 9%, rgba(230, 234, 242, 0.25) 50%, transparent 51%),
+    radial-gradient(1px 1px at 84% 42%, rgba(230, 234, 242, 0.3) 50%, transparent 51%),
+    radial-gradient(1px 1px at 31% 63%, rgba(230, 234, 242, 0.2) 50%, transparent 51%),
+    radial-gradient(1px 1px at 52% 88%, rgba(230, 234, 242, 0.25) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 91% 77%, rgba(122, 162, 255, 0.3) 50%, transparent 51%),
+    radial-gradient(1px 1px at 7% 92%, rgba(230, 234, 242, 0.2) 50%, transparent 51%);
+  background-size: 420px 420px;
+  background-attachment: fixed;
+}
+
+/* Section titles: small uppercase muted labels */
+.section-eyebrow,
+.summary-label {
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dashboard-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: none;
+}
+
+input,
+textarea,
+select {
+  color: var(--text);
+  background-color: var(--bg);
+  border-color: var(--border);
+}
+
+::placeholder {
+  color: var(--text-muted);
+}
+
+/* Header extras */
+.mission-transit {
+  color: var(--text-muted);
+}
+
+.synthetic-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border: 1px solid var(--status-yellow);
+  border-radius: 999px;
+  color: var(--status-yellow);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
