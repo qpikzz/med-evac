@@ -139,13 +139,11 @@ This project was built with SI assistance (GitHub Copilot, DeepSeek, Google Gemi
 
 ## 7. Links & Demo Video
 
-**[▶ Watch Demo Video](#demo-video)** — the hosted video link will be added here when available.
+## Demo Video
 
-### Demo Video
+**[▶ Watch Demo Video](https://drive.google.com/file/d/1xSq_Abmd09tTH5uSKSEMFyHMJj4BzDR1/view?usp=sharing)**
 
-Demo video coming soon.
-
-### Project Links
+## Project Links
 
 - [ORBITA repository](https://github.com/qpikzz/orbita)
 - [Rules engine specification](openspec/specs/rules-engine.md)
