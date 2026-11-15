@@ -12,13 +12,13 @@
 
 ORBITA is a desktop prototype by the CyberAstro team for the NASA Space Apps Challenge 2026.
 
-## 2. Core Idea
+## 1. Core Idea
 
 Deep-space missions can face **more than 20 minutes of one-way communication delay**. That makes real-time consultation with Earth impractical when a crew member needs an immediate check-in.
 
 ORBITA pairs an **offline-first deterministic clinical rules engine** with a local neural assistant. The rules engine assigns Green, Yellow, or Red status using configured thresholds and personal baselines, then sets the escalation path. The optional `granite3.3:8b` assistant runs through Ollama on the same device and explains the supplied context; it cannot assign or override a status or urgency level. The interface remains usable when Ollama is unavailable.
 
-## 3. Key Capabilities
+## 2. Key Capabilities
 
 1. **Daily Biometric Check-up & Baseline Tracking** — Enter vital signs and radiation readings, switch between Metric and Imperial units, score mood and skin symptoms, and select symptom tags inline. Baseline comparisons include signed deviations, using the seven-day rolling window where configured by the rules.
 2. **Onboard SI Assistant (Multi-Session Local AI)** — Keep separate saved conversations per crew profile, start with an immediate deterministic briefing, use context-aware prompt chips, and see an actionable `Next:` step for each triggered metric. Ollama is called only after a user request.
@@ -26,7 +26,7 @@ ORBITA pairs an **offline-first deterministic clinical rules engine** with a loc
 4. **Crew Access Gate (NFC Demo Profiles)** — Switch between the demo profiles for Cmdr. Alex Vance, Dr. Maya Lin, and Flight Surgeon (Houston), each with isolated profile history. The gate also supports onboarding an unregistered badge.
 5. **Zero-Cloud Privacy & Graceful Offline Fallback** — Check-up history and chat sessions are stored locally in profile-scoped `localStorage`. No cloud inference is required; if the local Ollama model is offline, ORBITA falls back to a deterministic local clinical summary.
 
-## 4. Architecture & Tech Stack
+## 3. Architecture & Tech Stack
 
 ```text
 Check-up readings, symptom flags, and notes
@@ -62,7 +62,7 @@ Check-up readings, symptom flags, and notes
 
 This repository is licensed under the **Apache License 2.0**. See [LICENSE](LICENSE).
 
-## 5. Quick Start
+## 4. Quick Start
 
 ### Prerequisites
 
@@ -91,7 +91,7 @@ npx vitest run
 npm run build
 ```
 
-## 6. Project Structure
+## 5. Project Structure
 
 ```text
 .
@@ -126,7 +126,7 @@ npm run build
 └── LICENSE
 ```
 
-## 7. Links & Demo Video
+## 6. Links & Demo Video
 
 **[▶ Watch Demo Video](#demo-video)** — the hosted video link will be added here when available.
 
