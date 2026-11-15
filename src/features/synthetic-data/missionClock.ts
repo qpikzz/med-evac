@@ -1,5 +1,8 @@
 export const MISSION_DAY1 = "2026-10-06";
 export const DEMO_DAY = 40;
+/** Illustrative Mars transit length (one way). NASA estimates use a ~180-day outbound leg
+ *  (NASA/JPL PIA17601, "Radiation Exposure Comparisons with Mars Trip Calculation", 2013). */
+export const TRANSIT_DAYS = 180;
 
 const MS_PER_DAY = 86_400_000;
 

@@ -109,7 +109,7 @@ export function buildSyntheticDataset() {
     schema_version: "1.0",
     generator: "scripts/generate-synthetic.mjs",
     astronaut: { id: "SYN-01", display_name: "Astronaut A (synthetic)" },
-    mission: { name: "Mars transit (synthetic)", day1_date: MISSION_DAY1, demo_day: 40 },
+    mission: { name: "Mars transit (synthetic)", day1_date: MISSION_DAY1, demo_day: 40, transit_days: 180 },
     preflight: { readings: preflightReadings() },
     history: { readings: historyReadings, flags_by_date: flagsByDate },
     day40_checkup: {

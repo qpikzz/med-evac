@@ -4,6 +4,9 @@ import { describeDeviation, getReferenceLines } from "../features/personal-basel
 import { useAppState } from "../features/app-state/AppStateContext";
 import type { IndicatorResult, Reading, Status, TriggeredRule } from "../rules/types";
 import TrendSparkline, { type TrendPoint } from "./charts/TrendSparkline";
+import DoseBudgetMeter from "./charts/DoseBudgetMeter";
+import { doseBudget } from "../features/radiation/doseBudget";
+import { TRANSIT_DAYS } from "../features/synthetic-data";
 
 interface IndicatorSparklineListProps {
   selectedIndicator: string | null;
@@ -53,7 +56,7 @@ function IndicatorCard({
   onSelect: () => void;
   onAskLocalAI: (indicatorLabel: string, rule?: TriggeredRule) => void;
 }) {
-  const { rules, readings, baselines, today } = useAppState();
+  const { rules, readings, baselines, today, missionDay } = useAppState();
   const [expanded, setExpanded] = useState(false);
   const definition = rules.indicators.find((item) => item.id === indicator.indicator_id);
   if (!definition) {
@@ -142,6 +145,11 @@ function IndicatorCard({
       ) : (
         <div className="sparkline-empty">Symptom flags are checked by the rules engine.</div>
       )}
+
+      {indicator.indicator_id === "radiation_dose" && (() => {
+        const budget = doseBudget(readings, today, missionDay, TRANSIT_DAYS);
+        return budget ? <DoseBudgetMeter budget={budget} rules={rules} /> : null;
+      })()}
 
       <div className="indicator-actions-row">
         <button

@@ -299,7 +299,7 @@ The agent must set these values in `rules.json → metrics`. They are "physicall
 | glucose | 0 | 600 | \[ANSWER: Lana, 16:08\] |
 | body\_temp | 25 | 45 | \[ANSWER: Lana, 16:08\] |
 | radiation\_dose\_rate | 0 | null | already in rules.json (max not given) |
-| radiation\_accumulated | 0 | 100 | \[ANSWER: Lana, 16:34: 0–100 is in mSv\] |
+| radiation\_accumulated | 0 | 1000 | \[ANSWER: Lana, 16:34: 0–100 is in mSv\] → **changed 15 Nov 2026 to 0–1000 mSv**: a 180-day Mars transit at ≈ 1.8 mSv/day reaches ≈ 324 mSv, so 100 would reject real readings from day 55 (see rules-engine Q-RAD). |
 | body\_mass | 0 | null | ASSUMPTION A-IC3; no max needed: body mass is not part of the mandatory daily check-up \[ANSWER: Lana, 16:34\] |
 | sleep\_hours | 0 | 24 | already in rules.json |
 | mood | 0 | 10 | already in rules.json |
@@ -341,7 +341,7 @@ The form (Nikita) must:
 6. **BP order.** systolic 80 \+ diastolic 120 → both results `bp_order`, `allOk:false`, `readings:[]`. 120 \+ 80 → both ok. 300 \+ 200 → ok. Systolic 301 → out\_of\_range.  
 7. **Glucose.** 0 → ok; 600 → ok; 601 and −1 → out\_of\_range.  
 8. **Existing ranges.** sleep\_hours 25 → out\_of\_range; mood 11 → out\_of\_range.  
-9. **Body mass and radiation.** body\_mass 70.4 → ok; −5 → out\_of\_range (A-IC3); 500 → ok (no max by decision). radiation\_accumulated 100 → ok, 100.1 → out\_of\_range; radiation\_dose\_rate 150 → ok (no max).  
+9. **Body mass and radiation.** body\_mass 70.4 → ok; −5 → out\_of\_range (A-IC3); 500 → ok (no max by decision). radiation\_accumulated 1000 → ok, 1000.1 → out\_of\_range (was 100 / 100.1 before the 15 Nov 2026 change); radiation\_dose\_rate 150 → ok (no max).  
 10. **Unknown metric.** `metric:"sugar"` → `unknown_metric`.  
 11. **Mixed check-up.** entries heart\_rate "920", sleep\_hours "6.5", glucose "" → results length 2, `skipped:["glucose"]`, `allOk:false`, `readings:[]`. After fixing heart\_rate to "80" → `allOk:true`, 2 readings.  
 12. **Exercise context.** body\_temp "39.3" with context "exercise" → reading.context "exercise".  

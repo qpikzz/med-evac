@@ -10,7 +10,8 @@
   "mission": {
     "name": "Mars transit (synthetic)",
     "day1_date": "2026-10-06",
-    "demo_day": 40
+    "demo_day": 40,
+    "transit_days": 180
   },
   "preflight": {
     "readings": [
