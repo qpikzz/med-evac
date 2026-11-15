@@ -1,6 +1,6 @@
 # RULES.md — Agent Operational Rules & Guardrails (ORBITA)
 
-> **Scope:** Mandatory operational rules for all AI coding agents working in the **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*) repository (NASA Space Apps Challenge 2026, Team CyberAstro). You MUST read and obey this file before executing any task.
+> **Scope:** Mandatory operational rules for all AI coding agents working in the **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*) repository (NASA Space Apps Challenge 2026, ORBITA project team). You MUST read and obey this file before executing any task.
 
 ---
 

@@ -236,7 +236,7 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
       <div className="orbita-gate-card">
         <header className="orbita-gate-header">
           <div className="orbita-brand" aria-label="ORBITA">
-            <OrbitaLogo size={44} />
+            <OrbitaLogo size={40} />
             <span className="orbita-brand-copy">
               <span className="orbita-brand-name">ORBITA</span>
               <span className="orbita-brand-tagline">
@@ -244,12 +244,14 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
               </span>
             </span>
           </div>
-          <span className="orbita-gate-tag">{SCAN_COPY.gateTag}</span>
-          {allowCancel && (
-            <button className="gate-cancel" type="button" onClick={onCancel}>
-              {SCAN_COPY.cancel}
-            </button>
-          )}
+          <div className="orbita-gate-actions">
+            {allowCancel && (
+              <button className="gate-cancel" type="button" onClick={onCancel}>
+                {SCAN_COPY.cancel}
+              </button>
+            )}
+            <span className="orbita-gate-tag">{SCAN_COPY.gateTag}</span>
+          </div>
         </header>
 
         {step === "scan" && (

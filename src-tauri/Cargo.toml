@@ -2,7 +2,7 @@
 name = "orbita"
 version = "0.1.0"
 description = "ORBITA - Onboard Remote Biometric & Integrated Telemetry Assistant"
-authors = ["Team CyberAstro"]
+authors = ["ORBITA Contributors"]
 license = "Apache-2.0"
 edition = "2024"
 

@@ -74,7 +74,12 @@ function Header({
       <div className="header-brand">
         <div className="brand-lockup" aria-label="ORBITA">
           <OrbitaLogo size={32} />
-          <span className="brand-name">ORBITA</span>
+          <span className="brand-copy">
+            <span className="brand-name">ORBITA</span>
+            <span className="brand-tagline">
+              Onboard Remote Biometric &amp; Integrated Telemetry Assistant
+            </span>
+          </span>
         </div>
         <div className="mission-context">
           <span className="mission-day">Day 40</span>

@@ -1,6 +1,6 @@
 # DESIGN.md — Design System & UI/UX Specification (ORBITA)
 
-> **Scope:** Visual design system, color tokens, typography, layout architecture, and screen specifications for **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*) (NASA Space Apps Challenge 2026, Team CyberAstro). All UI text rendered in the application must be in **English** per `RULES.md`.
+> **Scope:** Visual design system, color tokens, typography, layout architecture, and screen specifications for **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*) (NASA Space Apps Challenge 2026, ORBITA project team). All UI text rendered in the application must be in **English** per `RULES.md`.
 
 ---
 

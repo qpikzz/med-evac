@@ -3,11 +3,11 @@
   # 🚀 ORBITA
   **Onboard Remote Biometric & Integrated Telemetry Assistant**
 
-  *A project by **Team CyberAstro** for the **NASA Space Apps Challenge***
+  *A project by the **ORBITA team** for the **NASA Space Apps Challenge***
 
   <p>
     <img src="https://img.shields.io/badge/NASA-Space_Apps_Challenge-0B3D91?style=for-the-badge" alt="NASA Space Apps Challenge" />
-    <img src="https://img.shields.io/badge/Team-CyberAstro-1E293B?style=for-the-badge" alt="Team CyberAstro" />
+    <img src="https://img.shields.io/badge/Project-ORBITA-1E293B?style=for-the-badge" alt="ORBITA project" />
     <img src="https://img.shields.io/badge/Tauri-24C8DB?style=for-the-badge&logo=tauri&logoColor=white" alt="Tauri" />
     <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
     <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
