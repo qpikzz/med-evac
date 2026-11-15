@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import rulesJson from "../../data/rules.json";
 import { evaluate } from "../../rules/engine";
 import { loadRules } from "../../rules/loadRules";
-import { alertViews } from "./healthAlerts";
+import { alertViews } from "./alertViews";
 
 const rules = loadRules(rulesJson);
 const run = (flags: string[]) => evaluate({ today: "2026-11-14", readings: [], flags, baselines: {}, rules });

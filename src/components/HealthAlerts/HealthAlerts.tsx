@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import type { EvaluationResult, RulesFile } from "../../rules/types";
 import { IndicatorIcon } from "../indicatorIcons";
 import AlertArt from "./AlertArt";
-import { alertViews } from "./healthAlerts";
+import { alertViews } from "./alertViews";
 import "./HealthAlerts.css";
 
 interface HealthAlertsProps {
