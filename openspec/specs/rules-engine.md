@@ -117,6 +117,7 @@ export interface IndicatorResult {
   triggered: TriggeredRule[];     // red first, then yellow, then rules.json order
   skipped: SkippedRule[];
   baseline_forming: boolean;      // true if ≥1 rule skipped with "no_baseline"
+  pending?: PendingRule[];        // rules met TODAY whose persistence is not yet reached (info only, never changes status)
 }
 
 export interface EvaluationResult {
@@ -337,7 +338,7 @@ Test runner: whatever Nikita's React template already has (if the project uses V
 | ID | Item | Who decides |
 | ----- | ----- | ----- |
 | **Q-HR** | OPEN QUESTION: heart-rate yellow rule. How many SDs from the preflight baseline, and for how many days? Lana's example "70 ± 12" is the *baseline* (mean ± sd); still needed: the trigger size (e.g. "≥ k × sd") and days. Fill `hr_y_baseline.trigger.amount`, `persistence`, `enabled: true`, and the same amount in `hr_r_baseline_symptoms`. An absolute 60–100 bpm rule can be added only with a source; it is not in the table. | Lana \+ Ayesha |
-| **Q-TEMP** | OPEN QUESTION: (1) Keep the absolute yellow ≥ 37.8 °C (`temp_y_abs`, now disabled) given in-flight normal ≈ 38 °C \[TABLE: Body temperature, Normal\]? (2) In the Immune row, 38 °C conflicts with 39.0 °C in the Body temperature row; `imm_r_fever_symptoms` is disabled. Recommendation: keep both disabled and change the Immune row text to refer to the Body temperature row. | Ayesha |
+| **Q-TEMP** | **RESOLVED by Health_Indicators_Research table v5 (15 Nov 2026):** the absolute yellow 37.8–38.9 °C is no longer in the table, so `temp_y_abs` was removed; yellow is now "at least 1 °C above the personal 7-day baseline, or below 36.0 °C" (`temp_y_baseline`, `temp_y_low`). `imm_r_fever_symptoms` is enabled with the same definition (+1 °C over the rolling baseline) plus sore throat / cough / unusual fatigue. | Ayesha |
 | **Q-BP** | OPEN QUESTION: size of "persistent deviation from baseline" for blood pressure (`bp_y_baseline`, disabled). Nice-to-have. | Ayesha |
 | **Q-RAD** | **RESOLVED for the demo (15 Nov 2026) with ILLUSTRATIVE MISSION SETTINGS for a 180-day Mars transit** (not medical limits; Lana + Ayesha to confirm): `rad_y_rate` enabled, `radiation_dose_rate > 150` µSv/h; **new red rule `rad_r_rate`** (added 15 Nov 2026 evening) `radiation_dose_rate >= 1000` µSv/h — ≈ 13 × cruise rate and, sustained for a day, ≈ 24 mSv ≈ 10 % of NASA's 250 mSv SPE design limit; `radiation_dose_rate.plausible_max` null → 100 000 µSv/h (input sanity only) (2 × the ≈ 75 µSv/h cruise rate measured by MSL/RAD; SwRI press release 2013); `rad_y_accum` enabled, `radiation_accumulated >= 480` mSv (80 % of NASA career limit); `rad_r_accum` enabled, `>= 600` mSv (NASA-STD-3001 Vol. 1 Rev. C career limit). A nominal 180-day transit at ≈ 1.8 mSv/day gives ≈ 324 mSv, so these do not fire without extra exposure. `radiation_accumulated.plausible_max` raised 100 → 1000 mSv. Flag rules `rad_y_spe`, `rad_r_event` unchanged. Sources in `SOURCE.md` §4. | Lana \+ Ayesha |
 | **Q-PLAUS** | OPEN QUESTION: plausible min/max for bp, heart\_rate, glucose, body\_temp, body\_mass, radiation (null now). Belongs to the Input validation spec. | Ayesha |
@@ -371,3 +372,11 @@ Test runner: whatever Nikita's React template already has (if the project uses V
 | Security requirements | ✓ |
 | Fits MVP and the time estimate | ✓ (but the Day-40 heart yellow needs Q-HR) |
 
+## 14. Audit update — 15 Nov 2026 (table v5)
+
+- **Source of truth:** Health_Indicators_Research table **v5** (Ayesha). Every rule `source` now ends with `| Sources (Health_Indicators_Research table v5): <links>`; no rule says "SOURCE PENDING" any more. Remaining team decisions stay labelled `[ANSWER: …]` / `ASSUMPTION Ax` in the data and are shown as "(team decision)" / "(assumption Ax)" in the UI.
+- **Daily rules vs knowledge base:** the 10 indicators in `rules.json` are the **daily check-up** (measurable every day). The other 6 in `knowledge_base.json` (SpO₂, bone health, nutrition & hydration, exercise, vision changes, pulmonary function) are reference material for the AI helper only — by design, so the astronaut is not overloaded.
+- **Rule changes:** `temp_y_abs` removed (Q-TEMP); `imm_r_fever_symptoms` enabled; new `rad_y_bfo30` (yellow when the 30-day average dose rate ≥ 278 µSv/h ≈ 80 % of NASA's 250 mGy-Eq / 30-day blood-forming-organ limit, needs 30 daily readings); `rad_y_accum` source cites the 1-year BFO limit (500 mGy-Eq); `rad_r_rate` (≥ 1000 µSv/h) from the earlier Q-RAD pass. **52 rules, all enabled.**
+- **Plausibility:** `glucose` 20–600 mg/dL (values 2–33 get "This looks like mmol/L…"); `body_mass` ≥ 30 kg; `radiation_dose_rate` ≤ 100 000 µSv/h; `radiation_accumulated` ≤ 1000 mSv.
+- **Pending rules:** `IndicatorResult.pending` lists rules whose condition is met today but whose `persistence` (e.g. "repeated readings" = 2 days) is not yet reached. Status is unchanged (the table asks for repeated readings); the card says "measure again tomorrow". Example: glucose 400 mg/dL on one day → green + pending `glu_y_high`.
+- **Known limits of the table (for the flight-surgeon review):** single extreme readings without symptoms (e.g. glucose 400 mg/dL, systolic 85 mmHg, one 3-hour night, resting HR 150) are not red on day 1 because the table defines them by repetition or by symptoms; the pending note makes them visible.

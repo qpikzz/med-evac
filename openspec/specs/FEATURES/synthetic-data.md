@@ -499,3 +499,9 @@ MVP, critical path (no data → no story). Agent \~1 h, Nikita \~20 min, Ayesha 
 | MVP and time | ✓ |
 
 &nbsp;
+
+## Audit update — 15 Nov 2026
+
+- **Storage (as implemented):** each crew profile has its own history in `localStorage` (`src/features/auth/profileHistory.ts`), seeded from this JSON; "in memory only" in §4.3 describes the v1 store.
+- **Day 40 is not pre-filled** for Cmdr. Alex Vance: the demo opens on the daily check-up form (story steps 2–3). The form has a **"Load Day-40 demo values"** button (visible in every build) that fills the scripted Day-40 values; the presenter then types the invalid heart rate 920 and corrects it to 80.
+- **Header:** shows the mission day and its mission date (Day 40 · 2026-11-14) plus a "SYNTHETIC DATA" badge on every screen after login.

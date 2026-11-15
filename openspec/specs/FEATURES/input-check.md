@@ -388,3 +388,12 @@ MVP, critical path (story step 2). Agent \~40 min, Nikita review \~20 min.
 | MVP and time | ✓ |
 
 &nbsp;
+
+## Audit update — 15 Nov 2026
+
+| metric | min | max | why |
+| :--- | :--- | :--- | :--- |
+| glucose | **20** (was 0) | 600 | 5.4 typed as mmol/L was accepted as 5.4 mg/dL and raised a false RED (hypoglycaemia). Values 2–33 now get "This looks like mmol/L. Please enter mg/dL (mmol/L × 18, e.g. 5.4 mmol/L = 97 mg/dL)." |
+| body_mass | **30** (was 0) | none (team decision) | 0 kg was accepted. |
+
+Tests: criterion 7 updated (0 → out_of_range, 20 → ok); new test for the mmol/L hint and body mass 0.

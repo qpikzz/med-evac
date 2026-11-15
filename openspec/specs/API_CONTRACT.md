@@ -99,6 +99,7 @@ export interface IndicatorResult {
   triggered: TriggeredRule[];
   skipped: SkippedRule[];
   baseline_forming: boolean;
+  pending?: { rule_id: string; level: "yellow" | "red"; title: string; days_needed: number }[]; // info only
 }
 
 export interface EvaluationResult {

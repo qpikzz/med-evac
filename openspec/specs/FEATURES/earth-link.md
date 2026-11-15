@@ -237,3 +237,11 @@ MVP [BRIEF §4]. Agent ~1 h (logic + tests), Nikita ~1 h (two windows, Tauri eve
 | Testable criteria | ✓ 13 |
 | Security | ✓ |
 | MVP and time | ✓ |
+
+## Audit update — 15 Nov 2026 (implementation v2: async chat)
+
+The module is now an asynchronous chat (`src/features/earth-link/chat.ts`, `EarthLinkPanel.tsx`) instead of a single message object. Behaviour kept from v1, as implemented:
+- **Red status:** the Main screen shows "A message for the flight surgeon is ready. Review and send." with **Review draft**; it opens Comms → Earth with a draft built only from the rules result (`buildEarthDraftText`: overall status, red then yellow indicators with rule titles, "Telemetry attached"). The astronaut reviews, edits and presses Send. Telemetry is attached by default (checkbox).
+- **Delay:** one-way ~20 min shown ×60 faster (20 s); messages show "Transmitting (×60 demo)…" until they arrive.
+- **Automatic receipt:** when an astronaut message arrives, Earth sends "Received — under review by the flight surgeon. (Automatic receipt, simulated.)", which takes the same delay back (`pendingReceipts`, `createAutoReceipt`). A real reply typed in the Flight Surgeon profile makes the receipt unnecessary.
+- **Dates:** messages show the mission date for their mission day (Day 40 = 14 Nov 2026), never the computer clock.
