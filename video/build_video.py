@@ -28,7 +28,7 @@ WORK = os.path.join(HERE, "build")
 
 W, H, FPS = 1920, 1080, 30
 MAX_LEN = 28.5          # hard limit is 30.0 — keep a safety margin
-VOICE_RATE = "+5%"
+VOICE_RATES = ["+5%", "+10%", "+15%", "+20%"]   # tried in order until it fits
 
 TEAM = "CyberAstro"
 MEMBERS = ["Nurlana Nurullayeva", "Nikita Shvedov", "Ayesha Aliyeva", "Rəna Rüstəmli"]
@@ -65,11 +65,11 @@ SHOTS = [
 # line has finished (+0.15 s gap). The last line must end ≥ 0.8 s before the end.
 # ---------------------------------------------------------------------------
 VOICE = [
-    dict(at="title",   off=0.3, text="Mars is twenty light-minutes from any doctor. ORBITA watches crew health, fully offline."),
-    dict(at="checkup", off=0.1, text="Fifty-two transparent rules check ten daily vitals against the astronaut's own baseline. Radiation: red."),
-    dict(at="body",    off=0.1, text="The body map shows what's at risk."),
-    dict(at="ask",     off=0.1, text="A local AI explains why. It never decides."),
-    dict(at="draft",   off=0.1, text="ORBITA drafts a report for the flight surgeon. Mission Control reviews the data and replies."),
+    dict(at="title",   off=0.3, text="Mars is twenty minutes from any doctor. ORBITA guards crew health offline."),
+    dict(at="checkup", off=0.1, text="Fifty-two rules compare daily vitals with the astronaut's own baseline. Radiation: red."),
+    dict(at="body",    off=0.1, text="The body map shows the risk."),
+    dict(at="ask",     off=0.1, text="Local AI explains. It never decides."),
+    dict(at="draft",   off=0.1, text="ORBITA drafts a report, and Earth replies."),
     dict(at="end",     off=0.2, text="Offline. Explainable. Ready for Mars."),
 ]
 
@@ -234,11 +234,11 @@ def make_clip(s, preview):
     return name
 
 
-def tts(i, text, voice):
+def tts(i, text, voice, rate):
     name = f"vo_{i}.mp3"
     exe = shutil.which("edge-tts")
     cli = [exe] if exe else [sys.executable, "-m", "edge_tts"]
-    run([*cli, "--voice", voice, f"--rate={VOICE_RATE}", "--text", text, "--write-media", name])
+    run([*cli, "--voice", voice, f"--rate={rate}", "--text", text, "--write-media", name])
     return name
 
 
@@ -301,21 +301,36 @@ def main():
         sys.exit(f"Too long: {total:.2f} s > {MAX_LEN} s — shorten SHOTS.")
 
     # 2) voice (first, so a timing problem stops the build early)
-    vo, cues, prev_end, ok = [], [], 0.0, True
-    for i, v in enumerate(VOICE):
-        f = f"vo_{i}.mp3" if args.skip_tts else tts(i, v["text"], voice)
-        if not os.path.exists(os.path.join(WORK, f)):
-            sys.exit(f"Missing build/{f} (run without --skip-tts)")
-        d = duration(os.path.join(WORK, f))
-        st = max(starts[v["at"]] + v["off"], prev_end + 0.15 if i else 0.0)
-        prev_end = st + d
-        print(f"  VO{i} {st:5.2f}–{prev_end:5.2f}  {v['text'][:48]}…")
+    def layout(durs):
+        out, prev = [], 0.0
+        for i, (v, d) in enumerate(zip(VOICE, durs)):
+            st = max(starts[v["at"]] + v["off"], prev + 0.15 if i else 0.0)
+            prev = st + d
+            out.append(st)
+        return out, prev
+
+    for rate in ([None] if args.skip_tts else VOICE_RATES):
+        files = []
+        for i, v in enumerate(VOICE):
+            f = f"vo_{i}.mp3" if args.skip_tts else tts(i, v["text"], voice, rate)
+            if not os.path.exists(os.path.join(WORK, f)):
+                sys.exit(f"Missing build/{f} (run without --skip-tts)")
+            files.append(f)
+        durs = [duration(os.path.join(WORK, f)) for f in files]
+        vstarts, prev_end = layout(durs)
+        ok = prev_end <= total - 0.8
+        print(f"Voice rate {rate or '(existing)'}: speech {sum(durs):.1f} s, ends at {prev_end:.2f} s"
+              f"  {'OK' if ok else '— too long'}")
+        if ok:
+            break
+    vo, cues = [], []
+    for v, f, st, d in zip(VOICE, files, vstarts, durs):
+        print(f"  VO {st:5.2f}–{st + d:5.2f}  {v['text']}")
         vo.append((f, st))
         cues += split_cues(v["text"], st, d)
-    if prev_end > total - 0.8:
-        ok = False
+    if not ok:
         print(f"!! Voice ends at {prev_end:.2f} s, too close to the end ({total:.2f} s). "
-              f"Shorten a VOICE line or raise VOICE_RATE.")
+              f"Shorten a VOICE line.")
 
     # 3) video shots
     files = [make_card(s, font, bold, args.preview) if s["kind"] == "card"
