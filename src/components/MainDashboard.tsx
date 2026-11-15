@@ -5,7 +5,7 @@ import type { TriggeredRule } from "../rules/types";
 import CheckupFormCard from "./CheckupFormCard";
 import IndicatorSparklineList from "./IndicatorSparklineList";
 import InteractiveBody3DMap, { LayerSwitcher } from "./InteractiveBody3DMap";
-import HealthAlerts from "./HealthAlerts/HealthAlerts";
+import HealthAlerts from "./HealthAlerts/HealthAlerts.tsx";
 import "../Dashboard.css";
 
 interface MainDashboardProps {
