@@ -31,7 +31,12 @@ import {
   loadDefaultCombinations,
 } from "../features/ai-helper/defaultCombinations";
 import { matchCombinations } from "../features/ai-helper/combinations";
-import { buildSafetySupportCard, checkSafety } from "../features/ai-helper/safety";
+import {
+  buildSafetySupportCard,
+  checkSafety,
+  reviewAiAnswer,
+  rulesCheckNote,
+} from "../features/ai-helper/safety";
 import { useAppState } from "../features/app-state/AppStateContext";
 import { useAuth } from "../features/auth/AuthContext";
 import type { EvaluationResult, RulesFile } from "../rules/types";
@@ -129,10 +134,17 @@ function LocalAIChannel({ onOpenCheckup }: LocalAIChannelProps) {
         }
 
         if (result.status === "ok" && result.text.trim()) {
+          const answer = result.text.trim();
+          const review = reviewAiAnswer(answer, evaluation.overall_status);
+          const escalation = evaluation.overall_escalation
+            ? rules.ui_text[`escalation_${evaluation.overall_escalation}`] ?? ""
+            : "";
           sessionStore.appendMessage(
             sessionId,
             "assistant",
-            formatClinicalResponse(result.text.trim()),
+            review.ok
+              ? formatClinicalResponse(answer)
+              : `${formatClinicalResponse(answer)}\n\n${rulesCheckNote(review, evaluation.overall_status, escalation)}`,
           );
         } else {
           const reason =
@@ -288,6 +300,48 @@ function LocalAIChannel({ onOpenCheckup }: LocalAIChannelProps) {
           <button className="button button-secondary" type="button" onClick={onOpenCheckup}>
             Open today&apos;s check-up
           </button>
+        </section>
+      )}
+
+      {(picture.matched.length > 0 || picture.unverified) && (
+        <section className="verified-picture" aria-label="Verified symptom combinations">
+          <p className="verified-picture-eyebrow">Layer 1 · verified combinations (no AI)</p>
+          {picture.matched.map(({ combination }) => {
+            const [quote, links = ""] = combination.source.split(" | ");
+            return (
+              <article className="verified-combo" key={combination.id}>
+                <h3>{combination.title}</h3>
+                {combination.possible_explanations.map((text) => (
+                  <p key={text}>{text}</p>
+                ))}
+                {combination.actions.length > 0 && (
+                  <ul>
+                    {combination.actions.map((action) => (
+                      <li key={action}>{action}</li>
+                    ))}
+                  </ul>
+                )}
+                <p className="verified-combo-discuss">
+                  Discuss with your{" "}
+                  {combination.discuss_with === "ground_flight_surgeon" ? "flight surgeon on Earth" : "crew medical officer"}.
+                </p>
+                <p className="verified-combo-source">
+                  Based on: {quote}
+                  {links && <span className="verified-combo-links">{links}</span>}
+                </p>
+              </article>
+            );
+          })}
+          {picture.unverified && (
+            <p className="verified-picture-unverified">
+              Unverified picture:{" "}
+              {picture.non_green_indicators
+                .map((id) => rules.indicators.find((indicator) => indicator.id === id)?.label ?? id)
+                .join(" and ")}{" "}
+              changed together, and this combination is not in the verified list. Discuss with your crew medical
+              officer.
+            </p>
+          )}
         </section>
       )}
 

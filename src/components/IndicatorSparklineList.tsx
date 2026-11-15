@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Clock } from "lucide-react";
 import { motion } from "motion/react";
 import { describeDeviation, getReferenceLines } from "../features/personal-baseline/baseline";
 import { useAppState } from "../features/app-state/AppStateContext";
@@ -7,7 +8,7 @@ import TrendSparkline, { type TrendPoint } from "./charts/TrendSparkline";
 import { IndicatorIcon } from "./indicatorIcons";
 import DoseBudgetMeter from "./charts/DoseBudgetMeter";
 import { doseBudget } from "../features/radiation/doseBudget";
-import { TRANSIT_DAYS } from "../features/synthetic-data";
+import { MISSION_DAY1, TRANSIT_DAYS } from "../features/synthetic-data";
 
 interface IndicatorSparklineListProps {
   selectedIndicator: string | null;
@@ -32,16 +33,18 @@ function formatValue(value: number): string {
   return new Intl.NumberFormat("en", { maximumFractionDigits: 1 }).format(value);
 }
 
-function getTrend(readings: Reading[], metric: string): TrendPoint[] {
+function getTrend(readings: Reading[], metric: string, days: number | "mission" = 7): TrendPoint[] {
   const byDate = new Map<string, number>();
   for (const reading of readings) {
     if (reading.metric === metric && reading.valid && Number.isFinite(reading.value)) {
       byDate.set(reading.date, reading.value);
     }
   }
-  return Array.from(byDate, ([date, value]) => ({ date, value }))
-    .sort((left, right) => left.date.localeCompare(right.date))
-    .slice(-7);
+  const sorted = Array.from(byDate, ([date, value]) => ({ date, value })).sort((left, right) =>
+    left.date.localeCompare(right.date),
+  );
+  // "mission": every in-flight day (preflight days are left out so the x-axis is the mission itself).
+  return days === "mission" ? sorted.filter((point) => point.date >= MISSION_DAY1) : sorted.slice(-days);
 }
 
 function IndicatorCard({
@@ -59,6 +62,12 @@ function IndicatorCard({
 }) {
   const { rules, readings, baselines, today, missionDay } = useAppState();
   const [expanded, setExpanded] = useState(false);
+  // Selecting the indicator elsewhere (body map, alert) opens its details.
+  useEffect(() => {
+    if (selected) {
+      setExpanded(true);
+    }
+  }, [selected]);
   const definition = rules.indicators.find((item) => item.id === indicator.indicator_id);
   if (!definition) {
     return null;
@@ -95,8 +104,32 @@ function IndicatorCard({
     : null;
   const trendMetric = primaryMetric?.id;
   const trendPoints = trendMetric ? getTrend(readings, trendMetric) : [];
+  const missionPoints = trendMetric ? getTrend(readings, trendMetric, "mission") : [];
+  const escalationText = indicator.escalation ? rules.ui_text[`escalation_${indicator.escalation}`] : undefined;
   const referenceLines = trendMetric ? getReferenceLines(trendMetric, baselines, rules) : [];
-  const sourceLines = Array.from(new Set(definition.rules.map((rule) => rule.source)));
+  // Rule provenance for display: the table quote (internal chat references tidied) + one list of links.
+  const sourceQuotes = Array.from(
+    new Set(
+      definition.rules.map((rule) =>
+        rule.source
+          .split(" | ")[0]
+          .replace(/\s*\[ANSWER:[^\]]*\]/g, " (team decision)")
+          .replace(/\(A(\d+)\)/g, "(assumption A$1)")
+          .trim(),
+      ),
+    ),
+  );
+  const sourceLinks = Array.from(
+    new Set(
+      definition.rules.flatMap((rule) =>
+        (rule.source.split(" | ")[1] ?? "")
+          .replace(/^[^:]*:\s*/, "")
+          .split(";")
+          .map((url) => url.trim())
+          .filter((url) => url.startsWith("http")),
+      ),
+    ),
+  );
   const statusClass = `status-${indicator.status}`;
 
   return (
@@ -170,13 +203,42 @@ function IndicatorCard({
           </summary>
           <div className="source-popover">
             <strong>Rule sources</strong>
-            {sourceLines.map((source) => <p key={source}>{source}</p>)}
+            {sourceQuotes.map((source) => <p key={source}>{source}</p>)}
+            {sourceLinks.length > 0 && (
+              <ul className="source-links">
+                {sourceLinks.map((url) => (
+                  <li key={url}>{url}</li>
+                ))}
+              </ul>
+            )}
           </div>
         </details>
       </div>
 
+      {indicator.pending && indicator.pending.length > 0 && (
+        <p className="pending-note">
+          <Clock size={16} aria-hidden="true" />
+          <span>
+            Today is outside the range of “{indicator.pending[0].title}”. The rules count it only if it repeats
+            for {indicator.pending[0].days_needed} days in a row — measure again tomorrow.
+          </span>
+        </p>
+      )}
+
       {expanded && (
         <div className="indicator-rule-details">
+          {missionPoints.length > 7 && (
+            <div className="mission-trend">
+              <p className="mission-trend-title">Whole mission · {missionPoints.length} days</p>
+              <TrendSparkline
+                points={missionPoints}
+                status={indicator.status}
+                referenceLines={referenceLines}
+                label={`${definition.label.toLowerCase()} mission`}
+                unit={primaryMetric?.unit ?? ""}
+              />
+            </div>
+          )}
           {indicator.triggered.length > 0 ? (
             indicator.triggered.map((rule) => (
               <section className="triggered-rule" key={rule.rule_id}>
@@ -191,6 +253,7 @@ function IndicatorCard({
           ) : (
             <p>No rules were triggered for this indicator today.</p>
           )}
+          {escalationText && <p className="escalation-text">{escalationText}</p>}
           <button
             className="button button-secondary ask-ai-button"
             type="button"

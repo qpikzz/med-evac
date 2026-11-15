@@ -3,6 +3,7 @@ import type { RawEntry } from "../features/input-check/inputCheck";
 import { useAppState } from "../features/app-state/AppStateContext";
 import type { MeasurementContext, RulesFile } from "../rules/types";
 import SymptomNotesComposer from "./SymptomNotesComposer";
+import syntheticHistory from "../data/synthetic_history.json";
 
 interface CheckupFormCardProps {
   onContactEarth: () => void;
@@ -506,6 +507,23 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     );
   }
 
+  // Demo helper (synthetic data): fill the scripted Day-40 values from synthetic_history.json.
+  function loadDay40Demo(): void {
+    const demoValues: FieldValues = {};
+    for (const reading of syntheticHistory.day40_checkup.readings) {
+      demoValues[reading.metric] = String(reading.value);
+      if (reading.metric === "body_temp") {
+        setTemperatureContext(reading.context === "exercise" ? "exercise" : "rest");
+      }
+    }
+    for (const metric of rules.metrics) {
+      demoValues[metric.id] ??= "";
+    }
+    setValues(demoValues);
+    setDisplayDrafts({});
+    setSelectedFlags(syntheticHistory.day40_checkup.flags);
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     const result = submitCheckup(entries, selectedFlags, clinicalNotes);
@@ -669,7 +687,10 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
               <span className="contact-star" />
               <span className="contact-star" />
             </span>
-            <span className="contact-earth-label">Contact to Earth</span>
+            <span className="contact-earth-label">Contact Earth</span>
+          </button>
+          <button className="button button-quiet demo-fill-button" type="button" onClick={loadDay40Demo}>
+            Load Day-40 demo values
           </button>
         </div>
         <button

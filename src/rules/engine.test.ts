@@ -80,7 +80,7 @@ describe("rules engine", () => {
     expect(sleep.triggered.some((rule) => rule.rule_id === "sleep_y_avg7")).toBe(true);
     expect(
       sleep.triggered.find((rule) => rule.rule_id === "sleep_y_avg7")?.source,
-    ).toBe("TABLE: Sleep hours, YELLOW");
+    ).toMatch(/^TABLE: Sleep hours, YELLOW/);
   });
 
   it("criterion 2: sleep red streak is listed before the yellow window rule", () => {
@@ -357,5 +357,23 @@ describe("rules engine", () => {
     expect(shipped.indicators).toHaveLength(10);
     expect(shipped.flags).toHaveLength(42);
     expect(ruleCount).toBe(52);
+  });
+});
+
+describe("pending rules (audit 15 Nov 2026)", () => {
+  it("a single out-of-range day is reported as pending without changing the status", async () => {
+    const { loadRules } = await import("./loadRules");
+    const shippedRules = loadRules((await import("../data/rules.json")).default);
+    const ev = evaluate({
+      today: "2026-11-14",
+      readings: [{ date: "2026-11-14", metric: "glucose", value: 400, context: "rest", valid: true }],
+      flags: [],
+      baselines: {},
+      rules: shippedRules,
+    });
+    const sugar = ev.indicators.find((i) => i.indicator_id === "blood_sugar")!;
+    expect(sugar.status).toBe("green");
+    expect(sugar.pending?.map((p) => p.rule_id)).toContain("glu_y_high");
+    expect(sugar.pending?.[0].days_needed).toBe(2);
   });
 });

@@ -3,6 +3,7 @@ import type {
   EvaluationInput,
   EvaluationResult,
   IndicatorResult,
+  PendingRule,
   Op,
   Reading,
   Rule,
@@ -312,6 +313,7 @@ export function evaluate(input: EvaluationInput): EvaluationResult {
   const indicators: IndicatorResult[] = rules.indicators.map((indicator) => {
     const triggered: TriggeredRule[] = [];
     const skipped: SkippedRule[] = [];
+    const pending: PendingRule[] = [];
 
     for (const rule of indicator.rules) {
       if (!rule.enabled) {
@@ -320,6 +322,19 @@ export function evaluate(input: EvaluationInput): EvaluationResult {
       }
 
       const outcome = evaluateRule(rule, input, lookup);
+      const persistence = rule.persistence ?? 1;
+      const flagsOk =
+        rule.requires_flags.length === 0 ||
+        rule.requires_flags.some((flag) => input.flags.includes(flag));
+      if (
+        outcome.kind !== "met" &&
+        persistence > 1 &&
+        flagsOk &&
+        (outcome.kind === "not_met" || outcome.reason === "insufficient_history") &&
+        evaluateRule({ ...rule, persistence: 1 }, input, lookup).kind === "met"
+      ) {
+        pending.push({ rule_id: rule.id, level: rule.level, title: rule.title, days_needed: persistence });
+      }
       if (outcome.kind === "skipped") {
         skipped.push({ rule_id: rule.id, reason: outcome.reason });
         continue;
@@ -371,6 +386,7 @@ export function evaluate(input: EvaluationInput): EvaluationResult {
       triggered: ordered,
       skipped,
       baseline_forming: skipped.some((entry) => entry.reason === "no_baseline"),
+      ...(pending.length > 0 ? { pending } : {}),
     };
   });
 

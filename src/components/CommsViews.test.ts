@@ -190,7 +190,7 @@ describe("Comms views", () => {
     expect(markup).toContain("Flight Surgeon (Houston)");
     expect(markup).toContain("Day 39");
     expect(markup).toContain("resting heart rate has been slightly elevated");
-    expect(markup).toContain("prioritize steady hydration");
+    expect(markup).toContain("keep steady hydration");
     expect(markup).not.toContain("Unread reply");
     expect(markup).toContain("Check-up Telemetry");
     expect(markup).not.toContain("SYNTHETIC");

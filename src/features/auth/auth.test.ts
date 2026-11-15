@@ -307,8 +307,9 @@ describe("per-profile history isolation", () => {
     const astroOneDates = new Set(astroOne.getReadings().map((reading) => reading.date));
     expect(astroOne.getPreflight().length).toBeGreaterThan(0);
     expect(astroOne.getReadings().length).toBeGreaterThan(0);
-    expect(astroOneDates.size).toBe(40);
-    expect(astroOne.hasCheckup(getToday())).toBe(true);
+    // Days 1–39 are seeded; Day 40 is entered live in the demo (story steps 2–3).
+    expect(astroOneDates.size).toBe(39);
+    expect(astroOne.hasCheckup(getToday())).toBe(false);
 
     expect(astroTwo.getPreflight()).toEqual([]);
     expect(astroTwo.getReadings()).toEqual([]);

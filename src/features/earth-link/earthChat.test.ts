@@ -66,7 +66,7 @@ describe("Earth chat", () => {
     expect(seeded[1].read).toBe(true);
     expect(seeded[1].arrivesAtMs - seeded[0].createdAtMs).toBe(40 * 60_000);
     expect(seeded[0].text).toContain("resting heart rate has been slightly elevated");
-    expect(seeded[1].text).toContain("prioritize steady hydration (2.5–3 L)");
+    expect(seeded[1].text).toContain("12 bpm or more above your preflight normal");
 
     const reply = createEarthChatMessage({
       id: "astro-01-new-reply",

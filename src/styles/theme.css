@@ -374,3 +374,151 @@ select {
   70% { opacity: 0; transform: scale(1.05); }
   100% { opacity: 0; transform: scale(1.05); }
 }
+
+/* ---- Indicator card: pending rule, whole-mission trend, escalation ---- */
+.pending-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 0 2px;
+  padding: 10px 12px;
+  border: 1px dashed rgba(255, 184, 77, 0.5);
+  border-radius: 12px;
+  color: #ffd9a0;
+  background: rgba(255, 184, 77, 0.07);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.pending-note svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--status-yellow);
+}
+
+.mission-trend {
+  padding: 10px 12px 4px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(6, 11, 24, 0.5);
+}
+
+.mission-trend-title {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.escalation-text {
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+
+/* ---- Synthetic-data badge (header) ---- */
+.synthetic-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--status-yellow);
+  border-radius: 999px;
+  color: var(--status-yellow);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---- Red status: draft for the flight surgeon is ready ---- */
+.red-auto-draft-banner {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px !important;
+  border: 1px solid var(--status-red) !important;
+  border-radius: 16px !important;
+  color: #ffd2d7 !important;
+  background: linear-gradient(90deg, rgba(255, 92, 108, 0.16), rgba(12, 20, 40, 0.86) 60%) !important;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* ---- Local AI: layer 1, verified combinations ---- */
+.verified-picture {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.verified-picture-eyebrow {
+  margin: 0;
+  color: var(--accent-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.verified-combo {
+  display: grid;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.verified-combo h3,
+.verified-combo p,
+.verified-combo ul {
+  margin: 0;
+}
+
+.verified-combo h3 {
+  font-size: 19px;
+}
+
+.verified-combo ul {
+  padding-left: 20px;
+}
+
+.verified-combo-discuss {
+  font-weight: 600;
+}
+
+.verified-combo-source,
+.verified-picture-unverified {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.verified-combo-links {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.verified-picture-unverified {
+  padding: 10px 12px;
+  border: 1px dashed rgba(255, 184, 77, 0.5);
+  border-radius: 12px;
+  color: #ffd9a0;
+}
+
+.source-links {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}

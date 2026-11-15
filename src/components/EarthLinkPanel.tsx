@@ -1,3 +1,4 @@
+import { missionDateForDay } from "../features/synthetic-data";
 import {
   useEffect,
   useMemo,
@@ -27,6 +28,8 @@ interface EarthLinkPanelProps {
   currentTelemetry: EarthTelemetrySnapshot | null;
   onSelectAstronaut: (astronautId: string) => void;
   onSend: (text: string, attachTelemetry: boolean) => void;
+  /** Prepared draft (red status): placed in the composer for the astronaut to review and send. */
+  draftText?: string | null;
 }
 
 function displayStatus(status: Status): string {
@@ -58,13 +61,14 @@ export function cleanRuleSource(source: string): string {
     .trim();
 }
 
-function formatMessageDate(timestamp: number): string {
-  return new Intl.DateTimeFormat("en", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(timestamp));
+// Mission date (from the mission day) + time of day, so messages never contradict "Day N".
+function formatMessageDate(timestamp: number, missionDay: number): string {
+  const [year, month, day] = missionDateForDay(missionDay).split("-").map(Number);
+  const date = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", timeZone: "UTC" }).format(
+    new Date(Date.UTC(year, month - 1, day)),
+  );
+  const time = new Intl.DateTimeFormat("en", { hour: "numeric", minute: "2-digit" }).format(new Date(timestamp));
+  return `${date}, ${time}`;
 }
 
 function messageState(
@@ -205,8 +209,9 @@ function EarthLinkPanel({
   currentTelemetry,
   onSelectAstronaut,
   onSend,
+  draftText,
 }: EarthLinkPanelProps) {
-  const [composer, setComposer] = useState("");
+  const [composer, setComposer] = useState(() => draftText ?? "");
   const [attachTelemetry, setAttachTelemetry] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerTelemetry, setDrawerTelemetry] = useState<EarthTelemetrySnapshot | null>(null);
@@ -325,7 +330,7 @@ function EarthLinkPanel({
                   <span className="earth-chat-sender">{senderName}</span>
                   <span className="earth-chat-role">{isCrewMessage ? "Astronaut" : "Flight Surgeon"}</span>
                   <span className="earth-chat-time">
-                    {formatMessageDate(message.createdAtMs)} · Mission Day {message.missionDay}
+                    {formatMessageDate(message.createdAtMs, message.missionDay)} · Mission Day {message.missionDay}
                   </span>
                 </header>
                 <div className="earth-chat-bubble">

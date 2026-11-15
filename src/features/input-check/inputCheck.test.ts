@@ -124,7 +124,8 @@ describe("input check", () => {
   });
 
   it("criterion 7: checks glucose bounds", () => {
-    expect(okOf(checkEntry({ metric: "glucose", raw: "0" }, date, rules)).reading.value).toBe(0);
+    expect(errorOf(checkEntry({ metric: "glucose", raw: "0" }, date, rules)).code).toBe("out_of_range");
+    expect(okOf(checkEntry({ metric: "glucose", raw: "20" }, date, rules)).reading.value).toBe(20);
     expect(okOf(checkEntry({ metric: "glucose", raw: "600" }, date, rules)).reading.value).toBe(600);
     expect(errorOf(checkEntry({ metric: "glucose", raw: "601" }, date, rules)).code).toBe(
       "out_of_range",
@@ -254,5 +255,19 @@ describe("radiation dose-rate input range (15 Nov 2026)", () => {
     const r = loadRules(rulesJson);
     expect(checkEntry({ metric: "radiation_dose_rate", raw: "100000" }, "2026-11-14", r).ok).toBe(true);
     expect(checkEntry({ metric: "radiation_dose_rate", raw: "100001" }, "2026-11-14", r).ok).toBe(false);
+  });
+});
+
+describe("unit trap and impossible values (audit 15 Nov 2026)", () => {
+  it("glucose 5.4 is rejected with an mmol/L hint; body mass 0 is rejected", async () => {
+    const { checkEntry } = await import("./inputCheck");
+    const { loadRules } = await import("../../rules/loadRules");
+    const r = loadRules((await import("../../data/rules.json")).default);
+    const g = checkEntry({ metric: "glucose", raw: "5.4" }, "2026-11-14", r);
+    expect(g.ok).toBe(false);
+    if (!g.ok) expect(g.message).toMatch(/mmol\/L/);
+    expect(checkEntry({ metric: "glucose", raw: "97" }, "2026-11-14", r).ok).toBe(true);
+    expect(checkEntry({ metric: "body_mass", raw: "0" }, "2026-11-14", r).ok).toBe(false);
+    expect(checkEntry({ metric: "body_mass", raw: "69.1" }, "2026-11-14", r).ok).toBe(true);
   });
 });

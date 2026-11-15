@@ -57,6 +57,15 @@ export interface SkippedRule {
   reason: SkipReason;
 }
 
+/** A rule whose condition is met today but has not yet lasted its required number of days.
+ *  Informational only: it never changes the indicator's status. */
+export interface PendingRule {
+  rule_id: string;
+  level: "yellow" | "red";
+  title: string;
+  days_needed: number;
+}
+
 export interface IndicatorResult {
   indicator_id: string;
   status: Status;
@@ -64,6 +73,8 @@ export interface IndicatorResult {
   triggered: TriggeredRule[];
   skipped: SkippedRule[];
   baseline_forming: boolean;
+  /** Rules met today that need more consecutive days before they count (see PendingRule). */
+  pending?: PendingRule[];
 }
 
 export interface EvaluationResult {

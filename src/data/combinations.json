@@ -1,4 +1,415 @@
 {
   "schema_version": "1.0",
-  "combinations": []
+  "combinations": [
+    {
+      "id": "combo_bp_high_chest_pain",
+      "title": "High blood pressure with chest pain",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "blood_pressure",
+          "min_level": "red"
+        },
+        {
+          "type": "flag",
+          "flag_id": "chest_pain"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to a severe blood-pressure rise that needs urgent medical assessment."
+      ],
+      "actions": [
+        "Start the approved medical emergency protocol.",
+        "Contact the ground flight surgeon now."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Blood pressure, RED: 'severe blood pressure elevation occurs with chest pain, shortness of breath, severe headache, visual disturbances, confusion' | https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_bp_high_breathing",
+      "title": "High blood pressure with breathing difficulty",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "blood_pressure",
+          "min_level": "red"
+        },
+        {
+          "type": "flag",
+          "flag_id": "breathing_difficulty"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to a severe blood-pressure rise that needs urgent medical assessment."
+      ],
+      "actions": [
+        "Start the approved medical emergency protocol.",
+        "Contact the ground flight surgeon now."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Blood pressure, RED: 'severe blood pressure elevation occurs with chest pain, shortness of breath' | https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_bp_low_fainting",
+      "title": "Low blood pressure with fainting",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "blood_pressure",
+          "min_level": "yellow"
+        },
+        {
+          "type": "flag",
+          "flag_id": "fainting"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to circulatory instability; fluid shifts in microgravity can lower blood pressure."
+      ],
+      "actions": [
+        "Lie down and repeat the measurement when safe.",
+        "Contact the ground flight surgeon."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Blood pressure, RED: 'very low blood pressure is accompanied by fainting, severe dizziness, or signs of circulatory instability' | https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_hr_chest_pain",
+      "title": "Unusual heart rate with chest pain",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "heart_rate",
+          "min_level": "yellow"
+        },
+        {
+          "type": "flag",
+          "flag_id": "chest_pain"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to a heart-rhythm or circulation problem that needs immediate assessment."
+      ],
+      "actions": [
+        "Stop activity and rest.",
+        "Contact the ground flight surgeon now."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Heart rate, RED: 'abnormal heart rate is accompanied by chest pain, fainting, severe dizziness, or shortness of breath' | https://www.nasa.gov/missions/station/iss-research/nasa-shares-station-research-today-supporting-moon-mars-tomorrow/; https://pubmed.ncbi.nlm.nih.gov/41027905/; https://www.jacc.org/doi/10.1016/j.jacc.2023.05.058",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_hr_fainting",
+      "title": "Unusual heart rate with fainting or severe dizziness",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "heart_rate",
+          "min_level": "yellow"
+        },
+        {
+          "type": "flag",
+          "flag_id": "fainting"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to a heart-rhythm problem that needs immediate assessment."
+      ],
+      "actions": [
+        "Lie down and stay with a crewmate.",
+        "Contact the ground flight surgeon now."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Heart rate, RED: 'abnormal heart rate is accompanied by chest pain, fainting, severe dizziness' | https://www.nasa.gov/missions/station/iss-research/nasa-shares-station-research-today-supporting-moon-mars-tomorrow/; https://pubmed.ncbi.nlm.nih.gov/41027905/; https://www.jacc.org/doi/10.1016/j.jacc.2023.05.058",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_hr_breathing",
+      "title": "Unusual heart rate with breathing difficulty",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "heart_rate",
+          "min_level": "yellow"
+        },
+        {
+          "type": "flag",
+          "flag_id": "breathing_difficulty"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to a heart or lung problem that needs immediate assessment."
+      ],
+      "actions": [
+        "Stop activity and rest.",
+        "Contact the ground flight surgeon now."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Heart rate, RED: 'abnormal heart rate is accompanied by ... shortness of breath' | https://www.nasa.gov/missions/station/iss-research/nasa-shares-station-research-today-supporting-moon-mars-tomorrow/; https://pubmed.ncbi.nlm.nih.gov/41027905/; https://www.jacc.org/doi/10.1016/j.jacc.2023.05.058",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_glucose_low_symptoms",
+      "title": "Low blood sugar with symptoms",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "blood_sugar",
+          "min_level": "yellow"
+        },
+        {
+          "type": "flag",
+          "flag_id": "low_sugar_symptoms"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to low blood sugar (hypoglycaemia)."
+      ],
+      "actions": [
+        "Stop strenuous activity.",
+        "If conscious and able to swallow, take fast-acting glucose per protocol.",
+        "Recheck in 15 minutes."
+      ],
+      "discuss_with": "crew_medical_officer",
+      "source": "Health_Indicators_Research table v5 — Blood sugar, YELLOW: 'below 70 mg/dL ... symptoms such as sweating, shakiness, hunger, unusual fatigue, or dizziness' | https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_glucose_high_ketones",
+      "title": "High blood sugar with suspected ketones",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "blood_sugar",
+          "min_level": "yellow"
+        },
+        {
+          "type": "flag",
+          "flag_id": "ketones_suspected"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to a possible hyperglycaemic crisis."
+      ],
+      "actions": [
+        "Check blood or urine ketones if available.",
+        "Contact the ground flight surgeon now."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Blood sugar, RED: 'persistently elevated above 200 mg/dL together with symptoms or suspected ketones' | https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_glucose_high_crisis",
+      "title": "High blood sugar with vomiting, thirst or dehydration",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "blood_sugar",
+          "min_level": "yellow"
+        },
+        {
+          "type": "flag",
+          "flag_id": "high_sugar_crisis_signs"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to a possible hyperglycaemic crisis."
+      ],
+      "actions": [
+        "Start the approved emergency protocol.",
+        "Contact the ground flight surgeon now."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Blood sugar, RED: 'vomiting, dehydration, abdominal pain, excessive thirst, or altered mental status suggest a possible hyperglycemic crisis' | https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_fever_chills",
+      "title": "Raised temperature with chills",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "body_temperature",
+          "min_level": "yellow"
+        },
+        {
+          "type": "flag",
+          "flag_id": "chills"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to an infection or another cause of fever."
+      ],
+      "actions": [
+        "Rest and drink fluids.",
+        "Measure temperature again in 1 hour.",
+        "Contact the ground flight surgeon."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Body temperature, RED: 'fever with chills, confusion, severe headache, rash or breathing difficulty' | https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_fever_infection_signs",
+      "title": "Raised temperature with infection symptoms",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "body_temperature",
+          "min_level": "yellow"
+        },
+        {
+          "type": "indicator",
+          "indicator_id": "immune_signs",
+          "min_level": "yellow"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to an infection; latent viruses can reactivate in spaceflight."
+      ],
+      "actions": [
+        "Record symptoms and temperature.",
+        "Follow hygiene precautions.",
+        "Tell your crew medical officer."
+      ],
+      "discuss_with": "crew_medical_officer",
+      "source": "Health_Indicators_Research table v5 — Immune signs / symptoms, RED: 'temperature reaches higher, particularly with other infection symptoms' | https://www.nasa.gov/directorates/esdmd/hhp/immune-risk/; https://www.nasa.gov/humans-in-space/nasa-investigates-how-dormant-viruses-behave-during-spaceflight/; https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_mass_loss_weakness",
+      "title": "Body-mass loss with weakness",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "body_mass",
+          "min_level": "yellow"
+        },
+        {
+          "type": "flag",
+          "flag_id": "unusual_weakness"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to too little food or fluid intake, or to muscle loss in microgravity."
+      ],
+      "actions": [
+        "Review food and fluid intake and exercise.",
+        "Tell your crew medical officer."
+      ],
+      "discuss_with": "crew_medical_officer",
+      "source": "Health_Indicators_Research table v5 — Body mass, RED: 'body-mass loss of approximately 5% or more accompanied by continued decline, weakness, dizziness' | https://pubmed.ncbi.nlm.nih.gov/25197887/; https://www.nasa.gov/directorates/esdmd/hhp/food-and-nutrition-risk/; https://www.nasa.gov/wp-content/uploads/2024/08/human-adaptation-2021-final-b.pdf",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_sleep_mood",
+      "title": "Short sleep and lower mood",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "sleep_hours",
+          "min_level": "yellow"
+        },
+        {
+          "type": "indicator",
+          "indicator_id": "mood",
+          "min_level": "yellow"
+        }
+      ],
+      "possible_explanations": [
+        "Sleep loss may be related to lower mood, anxiety and morale."
+      ],
+      "actions": [
+        "Protect the sleep window.",
+        "Keep social contact with the crew and family.",
+        "Tell your crew medical officer if it continues."
+      ],
+      "discuss_with": "crew_medical_officer",
+      "source": "Health_Indicators_Research table v5 — Sleep hours, hazards: 'sleep loss can lead to depressive symptoms, anxiety and lower mood and morale'; Mood, hazards: 'disrupted sleep can negatively affect emotional well-being' | https://doi.org/10.1016/S1474-4422(14)70122-X; https://www.nasa.gov/wp-content/uploads/2023/03/sleep-accomodations-technical-brief-ochmo.pdf; https://pmc.ncbi.nlm.nih.gov/articles/PMC4434546/; https://www.nasa.gov/reference/6-0-medical-operations/; https://ntrs.nasa.gov/citations/20250001454; https://www.nature.com/articles/s41586-024-07648-x",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_sleep_immune",
+      "title": "Short sleep and immune symptoms",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "sleep_hours",
+          "min_level": "yellow"
+        },
+        {
+          "type": "indicator",
+          "indicator_id": "immune_signs",
+          "min_level": "yellow"
+        }
+      ],
+      "possible_explanations": [
+        "Disrupted sleep and stress may be related to weaker immune function."
+      ],
+      "actions": [
+        "Protect the sleep window.",
+        "Record symptoms and temperature.",
+        "Tell your crew medical officer."
+      ],
+      "discuss_with": "crew_medical_officer",
+      "source": "Health_Indicators_Research table v5 — Immune signs / symptoms, hazards: 'psychological stress and disrupted sleep can affect immune function' | https://www.nasa.gov/directorates/esdmd/hhp/immune-risk/; https://www.nasa.gov/humans-in-space/nasa-investigates-how-dormant-viruses-behave-during-spaceflight/; https://doi.org/10.1016/S1474-4422(14)70122-X; https://www.nasa.gov/wp-content/uploads/2023/03/sleep-accomodations-technical-brief-ochmo.pdf; https://pmc.ncbi.nlm.nih.gov/articles/PMC4434546/",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_radiation_event_skin",
+      "title": "Radiation event with skin changes",
+      "all_of": [
+        {
+          "type": "indicator",
+          "indicator_id": "radiation_dose",
+          "min_level": "red"
+        },
+        {
+          "type": "indicator",
+          "indicator_id": "skin_health",
+          "min_level": "yellow"
+        }
+      ],
+      "possible_explanations": [
+        "Skin redness after a radiation event may be related to the exposure and needs medical evaluation."
+      ],
+      "actions": [
+        "Follow radiation protection instructions.",
+        "Photograph the skin area.",
+        "Contact the ground flight surgeon."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Radiation dose, RED: 'assess possible exposure-related symptoms and arrange medical evaluation' | https://www.nasa.gov/hrp/hazard-space-radiation/; https://www.nasa.gov/reference/4-0-human-performance/; https://srag.jsc.nasa.gov/spaceradiation/faq/faq.cfm; https://www.nasa.gov/wp-content/uploads/2020/10/2022-01-05_nasa-std-3001_vol.1_rev._b_final_draft_with_signature_010522.pdf; https://pubmed.ncbi.nlm.nih.gov/34058745/; https://pmc.ncbi.nlm.nih.gov/articles/PMC9604750/; https://www.sciencedirect.com/science/article/pii/S0738081X25002858",
+      "confidence": "verified"
+    },
+    {
+      "id": "combo_skin_infection_fever",
+      "title": "Spreading skin redness with raised temperature",
+      "all_of": [
+        {
+          "type": "flag",
+          "flag_id": "skin_spreading_redness"
+        },
+        {
+          "type": "indicator",
+          "indicator_id": "body_temperature",
+          "min_level": "yellow"
+        }
+      ],
+      "possible_explanations": [
+        "May be related to a potentially serious skin infection."
+      ],
+      "actions": [
+        "Mark the edge of the redness and photograph it.",
+        "Contact the ground flight surgeon."
+      ],
+      "discuss_with": "ground_flight_surgeon",
+      "source": "Health_Indicators_Research table v5 — Skin health, RED: 'rapidly spreading redness, increasing warmth or swelling, pus, red streaks around a wound, fever' | https://pubmed.ncbi.nlm.nih.gov/34058745/; https://pmc.ncbi.nlm.nih.gov/articles/PMC9604750/; https://www.sciencedirect.com/science/article/pii/S0738081X25002858",
+      "confidence": "verified"
+    }
+  ]
 }

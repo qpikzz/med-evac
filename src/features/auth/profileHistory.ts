@@ -178,7 +178,8 @@ export function createProfileHistoryStore(
 ): HistoryStore {
   const useSynthetic = profile.history_seed === "synthetic";
   const base = createHistoryStore(useSynthetic ? syntheticDataset : EMPTY_DATASET, {
-    includeDay40: useSynthetic,
+    // Day 40 is NOT pre-filled: the demo starts at the daily check-up form (story steps 2–3).
+    includeDay40: false,
   });
   const key = historyStorageKey(profile.profile_id);
   const storage = safeStorage();
