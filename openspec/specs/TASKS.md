@@ -51,6 +51,7 @@
 - [x] **Task 4.4 — Layered 2D Body Map & Dark Space Theme:** Build `BodyMap` (`Skin` · `Organs` · `Skeleton` tabs with worst-status badges, status hotspots, radiation aura, monitoring-only style, tooltips, keyboard access, zone list) and `src/styles/theme.css`, per `FEATURES/body-map.md`. Logs: `openspec/tasks/TASK-15-11-26-15-body-map.md`, `TASK-15-11-26-16-charts-motion-radiation.md`.
 - [x] **Task 4.5 — Daily Radiation Check & Radiation Alert:** "Radiation check" block in the check-up form (dose rate, accumulated dose, 3 radiation event toggles) and the animated `RadiationAlert` on the dashboard, driven only by the engine's `radiation_dose` result.
 - [x] **Task 4.6 — Radiation Limits & Dose Budget (Mars transit):** illustrative Q-RAD thresholds in `rules.json`, 180-day transit, Dose budget meter vs NASA 600 mSv career limit, sources in `SOURCE.md` §4. Log: `TASK-15-11-26-18-radiation-limits.md`.
+- [x] **Task 4.7 — Orbit Control visual pass:** bundled fonts, larger type, space backdrop, equal columns, indicator icons, animated alerts for every indicator, 4-layer coloured anatomy, larger comms emblems, login brand. Log: `TASK-15-11-26-19-orbit-control-visual-pass.md`.
 - **Block 4 Checkpoint:** Run `npm run build` and end-to-end manual walkthrough of the Day-40 demo story (enter `920` $\rightarrow$ validation error $\rightarrow$ enter `80` + sleep `6.5` $\rightarrow$ yellow Heart & Sleep on cards and body map).
 
 ---
