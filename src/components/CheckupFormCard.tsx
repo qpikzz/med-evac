@@ -604,8 +604,8 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
               <div className="radiation-check-heading">
                 <h3>Radiation check</h3>
                 <p>
-                  Read your personal dosimeter. Dose limits are set by mission flight surgeons; any
-                  radiation event you mark here is checked by the rules.
+                  Read your personal dosimeter every day. The rules check the dose rate, your total dose
+                  and any radiation event you mark here.
                 </p>
               </div>
               <div className="metric-input-grid">{radiationMetrics.map(renderMetricField)}</div>

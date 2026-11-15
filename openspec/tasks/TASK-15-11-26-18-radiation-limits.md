@@ -11,7 +11,7 @@ The app models only the Earth→Mars transit. Close Q-RAD for the demo with illu
 - [x] `doseBudget()` (display only) + tests: Day 40 → 72 mSv = 12 %, ≈ 324 mSv (54 %) at arrival.
 - [x] `DoseBudgetMeter` in the radiation card; threshold ticks read from `rules.json`.
 - [x] Engine tests: nominal values → no alert; 160 µSv/h → yellow; 480 mSv → yellow; 600 mSv → red.
-- [x] `SOURCE.md` §4 sources (NASA-STD-3001 Rev. C, OCHMO brief, Zeitlin 2013, SwRI release, NASA PIA17601, PDS); specs synced.
+- [x] `SOURCE.md` §4 sources (NASA-STD-3001 Rev. C, OCHMO brief, SwRI release, Zeitlin 2013 (paywalled, abstract only), NASA DRA 5.0); specs synced.
 
 ## Task Report
 

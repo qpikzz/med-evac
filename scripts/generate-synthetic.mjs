@@ -23,7 +23,7 @@ const METRIC_ORDER = [
 ];
 
 // Radiation (illustrative, synthetic): deep-space cruise GCR dose equivalent ≈ 1.8 mSv/day ≈ 75 µSv/h,
-// as measured by MSL/RAD in transit to Mars (Zeitlin et al., Science 340:1080, 2013).
+// as measured by MSL/RAD in transit to Mars (SwRI press release, 30 May 2013; study: Zeitlin et al., Science 340:1080, 2013).
 // Accumulated dose = 1.8 mSv × mission day. Not a threshold — no rule uses these numbers.
 const RAD_MSV_PER_DAY = 1.8;
 

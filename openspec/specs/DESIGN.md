@@ -93,7 +93,7 @@ The `Main` screen implements a progressive two-state layout so the astronaut com
        * Subjective Mood (`mood` 0–10 slider/stepper)
        * Body Mass (`body_mass` kg)
        * Skin Symptom Score (`skin_symptom_score` 0–10)
-       * **Radiation check** — a separate dashed block under the measurements: `radiation_dose_rate` µSv/h, `radiation_accumulated` mSv, plus the three radiation event toggles from `rules.json` (`spe_warning`, `dosimeter_unexpected_high`, `acute_radiation_event`). Text: *"Read your personal dosimeter. Dose limits are set by mission flight surgeons; any radiation event you mark here is checked by the rules."* The same flags also stay in the symptom list.
+       * **Radiation check** — a separate dashed block under the measurements: `radiation_dose_rate` µSv/h, `radiation_accumulated` mSv, plus the three radiation event toggles from `rules.json` (`spe_warning`, `dosimeter_unexpected_high`, `acute_radiation_event`). Text: *"Read your personal dosimeter every day. The rules check the dose rate, your total dose and any radiation event you mark here."* The same flags also stay in the symptom list.
    * **Right Column — Symptoms, Tags & Free-Text Notes:**
      * **Quick Symptom Tags (42 Flags from `rules.json`):** Searchable/categorized compact multi-select pill tags (e.g., `Dizziness`, `Fainting`, `Face/Throat Swelling`, `Skin Rash`, `Fatigue`). Selected tags turn highlighted blue/amber and pass directly to `EvaluationInput.flags`.
      * **Free-Text Concern Box:** Textarea (`"Tell us if anything else is bothering you..."`). Any free-text notes not covered by structured tags are forwarded as context to the **Local AI Helper (Ollama)** for personalized explanation alongside triggered rules.
@@ -109,7 +109,7 @@ Once the check-up is submitted, the top form collapses into a compact confirmati
 1. **Top Confirmation Banner:**
    * Full-width sleek pill banner: *"Thank you for taking care of yourself!"* with a secondary action button **`Edit Check-up`** (re-expands State A form if needed).
 2. **Radiation Alert (only when the engine reports `radiation_dose` yellow or red):**
-   * Full-width card with a status-coloured border, a radiation trefoil icon in a status-coloured circle with expanding rings (yellow 2.4 s, red 1.2 s) and slow rotation, spring entrance (Motion).
+   * Full-width card (text column max 72ch) with a status-coloured border, a faint status-coloured wash from the left, a radiation trefoil icon in a status-coloured circle with expanding rings (yellow 2.4 s, red 1.2 s) and slow rotation, spring entrance (Motion).
    * Eyebrow `! RADIATION WARNING · WATCH` (yellow) or `!! RADIATION ALERT · ALERT` (red); then, for every triggered radiation rule (red first): `title`, `explanation`, `actions`, `recheck` — all text straight from the engine / `rules.json`.
    * "You reported: …" (flag labels), escalation text from `rules.json` `ui_text`, buttons **`Show on body map`** (switches the map to the Skin layer and selects the radiation aura) and, for red, **`Contact Earth`**.
 3. **Summary Status Row (Two Equal Cards):**
@@ -129,7 +129,7 @@ Once the check-up is submitted, the top form collapses into a compact confirmati
      * Flat 2D line-art figure (SVG viewBox `0 0 400 800`). Optional art per layer from `src/assets/body/` (`skin.*`, `organs.*`, `skeleton.*`); if missing, a minimal placeholder silhouette is drawn. Layers cross-fade in `200ms`.
      * **Zones (hotspots):** Brain · Sleep & mood, Heart · Rate & pressure, Blood · Glucose, Immune system (Organs layer); Skin · Temperature and Radiation dose — drawn as a soft aura around the whole body (Skin layer); Bones & muscle · Body mass (Skeleton layer). Positions live in `src/components/BodyMap/zones.ts` and can be moved without touching code.
      * Hotspot = status-coloured circle with icon. Yellow pulses slowly (2.5 s), red faster (1.2 s), green static, `no_data` dim, monitoring-only = neutral dashed outline. The radiation aura additionally sends out expanding waves when yellow/red.
-     * The radiation zone carries a note: *"Read your dosimeter at every check-up. Dose limits are set by mission flight surgeons; alerts come from the radiation events you report."*
+     * The radiation zone carries a note: *"Read your dosimeter at every check-up. Alerts come from radiation events you report and from the dose-rate and total-dose limits in the rules."*
      * Hover/focus → tooltip (label, status word, hazard line). Click / Enter / Space → selects the zone (white 2 px ring) and highlights + scrolls to the matching indicator card on the left.
      * Below the figure: a list of **all 7 zones** with status word, so every zone is reachable without switching layers.
 

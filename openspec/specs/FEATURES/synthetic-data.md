@@ -65,7 +65,7 @@ export interface SyntheticDataset {
   astronaut: { id: "SYN-01"; display_name: "Astronaut A (synthetic)" };
   mission: {
     name: "Mars transit (synthetic)";
-    transit_days: 180;                     // v1.1: illustrative one-way transit length (NASA PIA17601 ≈ 180 days)
+    transit_days: 180;                     // v1.1: illustrative one-way transit length (NASA DRA 5.0, NASA/SP-2009-566: ≈ 180 days)
     day1_date: "2026-10-06";
     demo_day: 40;
   };
@@ -115,7 +115,7 @@ All readings: `context: "rest"`, `valid: true`. Readings sorted by date, then by
 
 Days 1–39 go to `history`; day 40 goes to `day40_checkup` (same rule). Day 40 therefore \= heart\_rate 80, bp 117/78, glucose 97, body\_temp 37.0, sleep 6.5, mood 6, body\_mass 69.1, skin 0, radiation dose rate 77 µSv/h, accumulated 72.0 mSv\.
 
-**Radiation numbers (illustrative, not thresholds):** deep-space cruise galactic-cosmic-ray dose equivalent ≈ 1.8 mSv/day (≈ 75 µSv/h), measured by MSL/RAD in transit to Mars \[Zeitlin et al., *Science* 340:1080–1084, 2013\]. The 7-value pattern adds a small ±2 µSv/h day-to-day variation (invented, synthetic); accumulated dose is 1.8 mSv × mission day. The mission is a **180-day one-way Mars transit** (`TRANSIT_DAYS` in `missionClock.ts`), so arrival ≈ 324 mSv. Shielding, solar cycle and spacecraft differ, so these are demo values only.
+**Radiation numbers (illustrative, not thresholds):** deep-space cruise galactic-cosmic-ray dose equivalent ≈ 1.8 mSv/day (≈ 75 µSv/h), measured by MSL/RAD in transit to Mars \[SwRI press release, 30 May 2013; original study Zeitlin et al., *Science* 340:1080–1084, 2013 — paywalled, abstract only\]. The 7-value pattern adds a small ±2 µSv/h day-to-day variation (invented, synthetic); accumulated dose is 1.8 mSv × mission day. The mission is a **180-day one-way Mars transit** (`TRANSIT_DAYS` in `missionClock.ts`), so arrival ≈ 324 mSv. Shielding, solar cycle and spacecraft differ, so these are demo values only.
 
 **Why these numbers (checked against shipped `rules.json`):**
 
@@ -324,7 +324,7 @@ export interface SyntheticDataset {
   astronaut: { id: "SYN-01"; display_name: "Astronaut A (synthetic)" };
   mission: {
     name: "Mars transit (synthetic)";
-    transit_days: 180;                     // v1.1: illustrative one-way transit length (NASA PIA17601 ≈ 180 days)
+    transit_days: 180;                     // v1.1: illustrative one-way transit length (NASA DRA 5.0, NASA/SP-2009-566: ≈ 180 days)
     day1_date: "2026-10-06";
     demo_day: 40;
   };
@@ -374,7 +374,7 @@ All readings: `context: "rest"`, `valid: true`. Readings sorted by date, then by
 
 Days 1–39 go to `history`; day 40 goes to `day40_checkup` (same rule). Day 40 therefore \= heart\_rate 80, bp 117/78, glucose 97, body\_temp 37.0, sleep 6.5, mood 6, body\_mass 69.1, skin 0, radiation dose rate 77 µSv/h, accumulated 72.0 mSv\.
 
-**Radiation numbers (illustrative, not thresholds):** deep-space cruise galactic-cosmic-ray dose equivalent ≈ 1.8 mSv/day (≈ 75 µSv/h), measured by MSL/RAD in transit to Mars \[Zeitlin et al., *Science* 340:1080–1084, 2013\]. The 7-value pattern adds a small ±2 µSv/h day-to-day variation (invented, synthetic); accumulated dose is 1.8 mSv × mission day. The mission is a **180-day one-way Mars transit** (`TRANSIT_DAYS` in `missionClock.ts`), so arrival ≈ 324 mSv. Shielding, solar cycle and spacecraft differ, so these are demo values only.
+**Radiation numbers (illustrative, not thresholds):** deep-space cruise galactic-cosmic-ray dose equivalent ≈ 1.8 mSv/day (≈ 75 µSv/h), measured by MSL/RAD in transit to Mars \[SwRI press release, 30 May 2013; original study Zeitlin et al., *Science* 340:1080–1084, 2013 — paywalled, abstract only\]. The 7-value pattern adds a small ±2 µSv/h day-to-day variation (invented, synthetic); accumulated dose is 1.8 mSv × mission day. The mission is a **180-day one-way Mars transit** (`TRANSIT_DAYS` in `missionClock.ts`), so arrival ≈ 324 mSv. Shielding, solar cycle and spacecraft differ, so these are demo values only.
 
 **Why these numbers (checked against shipped `rules.json`):**
 

@@ -1539,7 +1539,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, YELLOW ('dose rate rises above the expected mission baseline'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): expected cruise rate ≈ 75 µSv/h (MSL/RAD, Zeitlin et al., Science 2013: ≈ 1.8 mSv/day); yellow above 2 × expected = 150 µSv/h. Not a medical limit.",
+          "source": "TABLE: Radiation dose, YELLOW ('dose rate rises above the expected mission baseline'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): expected cruise rate ≈ 75 µSv/h (≈ 1.8 mSv/day measured by MSL/RAD; SwRI press release 30 May 2013 / Zeitlin et al., Science 2013); yellow above 2 × expected = 150 µSv/h. Not a medical limit.",
           "title": "Radiation higher than expected",
           "explanation": "The dose rate is above what is expected for this mission.",
           "actions": [
