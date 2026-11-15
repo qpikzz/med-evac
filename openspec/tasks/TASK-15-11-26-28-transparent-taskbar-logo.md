@@ -7,10 +7,10 @@ Remove opaque SVG layers, crop the artwork tightly while preserving its original
 ## ToDo Plan
 
 - [x] Inspect the logo component, SVG favicon, UI sizing styles, Tauri icon configuration, and icon-generation CLI.
-- [ ] Make the React logo and favicon transparent with a tight viewBox; resize the login and header emblems.
+- [x] Make the React logo and favicon transparent with a tight viewBox; resize the login and header emblems.
 - [x] Regenerate the native Tauri icon assets from the transparent SVG.
-- [ ] Run TypeScript, Vite build, and `cargo check` verification.
+- [x] Run TypeScript, Vite build, and `cargo check` verification.
 
 ## Task Report
 
-Pending implementation and verification.
+Removed the dark SVG background and mask fills, cropped the transparent emblem to its artwork bounds, increased the login and header sizes, and regenerated Tauri icons from the transparent SVG. `npx tsc --noEmit`, `npm run build`, and `cargo check` passed; the build retains Vite's advisory about the large JavaScript chunk.
