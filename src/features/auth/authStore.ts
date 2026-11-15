@@ -6,6 +6,7 @@ import {
   PROFILE_ID_PAD_LENGTH,
 } from "./constants";
 import { hashPin, isValidPin, randomSalt, verifyPinHash } from "./pinCrypto";
+import { historyStorageKey } from "./profileHistory";
 import { cloneSeedProfiles } from "./seed";
 import type {
   AuthProfile,
@@ -37,6 +38,8 @@ export interface AuthStore {
   getProfiles(): AuthProfile[];
   getProfile(credentialId: string): AuthProfile | undefined;
   getProfileById(profileId: string): AuthProfile | undefined;
+  forgetProfile(profileId: string): void;
+  resetDemoProfiles(): void;
   verifyPin(credentialId: string, pin: string, now?: number): Promise<VerifyPinResult>;
   enroll(input: EnrollmentInput, now?: number): Promise<AuthProfile>;
   getLockoutRemainingMs(credentialId: string, now?: number): number;
@@ -76,19 +79,19 @@ function resolveStorage(options: AuthStoreOptions): StorageLike | null {
   return null;
 }
 
-function readStoredProfiles(storage: StorageLike | null): AuthProfile[] {
+function readStoredProfiles(storage: StorageLike | null): AuthProfile[] | null {
   if (!storage) {
-    return [];
+    return null;
   }
   try {
     const raw = storage.getItem(AUTH_PROFILES_STORAGE_KEY);
-    if (!raw) {
-      return [];
+    if (raw === null) {
+      return null;
     }
     const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.filter(isStoredProfile) : [];
+    return Array.isArray(parsed) ? parsed.filter(isStoredProfile) : null;
   } catch {
-    return [];
+    return null;
   }
 }
 
@@ -103,18 +106,9 @@ export function createAuthStore(options: AuthStoreOptions = {}): AuthStore {
   const failedAttempts = new Map<string, number>();
   const lockoutUntil = new Map<string, number>();
 
-  for (const seed of cloneSeedProfiles()) {
-    profiles.set(seed.profile_id, seed);
-  }
-
-  for (const stored of readStoredProfiles(storage)) {
-    const existingById = profiles.get(stored.profile_id);
-    const existingByCredential = Array.from(profiles.values()).find(
-      (profile) => profile.credential_id === stored.credential_id,
-    );
-    if (!existingById && !existingByCredential) {
-      profiles.set(stored.profile_id, stored);
-    }
+  const storedProfiles = readStoredProfiles(storage);
+  for (const profile of storedProfiles ?? cloneSeedProfiles()) {
+    profiles.set(profile.profile_id, profile);
   }
 
   function persist(): void {
@@ -145,6 +139,36 @@ export function createAuthStore(options: AuthStoreOptions = {}): AuthStore {
   function getProfileById(profileId: string): AuthProfile | undefined {
     const found = profiles.get(profileId);
     return found ? { ...found } : undefined;
+  }
+
+  function forgetProfile(profileId: string): void {
+    const profile = profiles.get(profileId);
+    if (!profile) {
+      return;
+    }
+
+    const remainingProfiles = Array.from(profiles.values()).filter(
+      (savedProfile) => savedProfile.profile_id !== profileId,
+    );
+    if (storage) {
+      storage.setItem(AUTH_PROFILES_STORAGE_KEY, JSON.stringify(remainingProfiles));
+    }
+
+    profiles.delete(profileId);
+    clearAttempts(profile.credential_id);
+  }
+
+  function resetDemoProfiles(): void {
+    const demoProfiles = cloneSeedProfiles();
+    if (storage) {
+      storage.setItem(AUTH_PROFILES_STORAGE_KEY, JSON.stringify(demoProfiles));
+    }
+    profiles.clear();
+    failedAttempts.clear();
+    lockoutUntil.clear();
+    for (const profile of demoProfiles) {
+      profiles.set(profile.profile_id, profile);
+    }
   }
 
   function getLockoutRemainingMs(credentialId: string, at: number = now()): number {
@@ -212,12 +236,14 @@ export function createAuthStore(options: AuthStoreOptions = {}): AuthStore {
   function nextProfileId(role: UserRole): string {
     const prefix = profilePrefix(role);
     let index = 1;
-    while (
-      profiles.has(`${prefix}-${String(index).padStart(PROFILE_ID_PAD_LENGTH, "0")}`)
-    ) {
+    while (true) {
+      const profileId = `${prefix}-${String(index).padStart(PROFILE_ID_PAD_LENGTH, "0")}`;
+      const hasHistory = storage !== null && storage.getItem(historyStorageKey(profileId)) !== null;
+      if (!profiles.has(profileId) && !hasHistory) {
+        return profileId;
+      }
       index += 1;
     }
-    return `${prefix}-${String(index).padStart(PROFILE_ID_PAD_LENGTH, "0")}`;
   }
 
   async function enroll(input: EnrollmentInput, at: number = now()): Promise<AuthProfile> {
@@ -259,6 +285,8 @@ export function createAuthStore(options: AuthStoreOptions = {}): AuthStore {
     getProfiles,
     getProfile,
     getProfileById,
+    forgetProfile,
+    resetDemoProfiles,
     verifyPin,
     enroll,
     getLockoutRemainingMs,

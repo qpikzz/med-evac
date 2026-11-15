@@ -31,7 +31,7 @@ function upsertMessage(messages: EarthMessage[], message: EarthMessage): EarthMe
 }
 
 function App() {
-  const { profiles, activeSession, activeProfile, logout } = useAuth();
+  const { profiles, activeSession, activeProfile, forgetProfile, logout } = useAuth();
   const { today, missionDay, rules, flagsToday, evaluation, store } = useAppState();
   const [activeView, setActiveView] = useState<AppView>("main");
   const [commsChannel, setCommsChannel] = useState<"local" | "earth">("local");
@@ -224,6 +224,7 @@ function App() {
         onSelectAccount={selectAccount}
         onAddAccount={addAccount}
         onLogout={signOut}
+        onForgetProfile={forgetProfile}
       />
       {role === "astronaut" && shouldAutoDraft(evaluation) && (
         <div className="red-auto-draft-banner" role="status">

@@ -7,6 +7,8 @@ export const SCAN_COPY = {
   cancel: "Cancel",
   demoBadges: "Demo crew badges",
   newBadge: "+ Tap New Unregistered Badge",
+  resetDemoBadges: "Reset Demo Badges",
+  resetFailed: "Unable to reset demo badges. Please try again.",
 } as const;
 
 export const PIN_COPY = {
@@ -46,4 +48,5 @@ export const HEADER_COPY = {
   savedProfiles: "Saved profiles",
   addAccount: "Add Account",
   logout: "Sign Out",
+  forgetFailed: "Unable to forget this account. Please try again.",
 } as const;

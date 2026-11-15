@@ -2,7 +2,7 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import Header from "../../components/Header";
-import { AuthProvider } from "./AuthContext";
+import { AuthProvider, sessionAfterForgettingProfile } from "./AuthContext";
 import LoginScreen from "./LoginScreen";
 import { PinDots } from "./PinDots";
 import { PinKeypad } from "./PinKeypad";
@@ -226,6 +226,66 @@ describe("AuthStore seed registry and PIN verification", () => {
     }
     profile.display_name = "Tampered";
     expect(store.getProfileById("astro-01")?.display_name).toBe("Cmdr. Alex Vance");
+  });
+});
+
+describe("forgetting saved profiles", () => {
+  it("removes a profile but preserves its isolated history after reload", () => {
+    const storage = createMemoryStorage();
+    const store = createAuthStore({ storage });
+    const historyKey = historyStorageKey("astro-02");
+    const history = JSON.stringify({ readings: [], flags: {} });
+    storage.setItem(historyKey, history);
+
+    store.forgetProfile("astro-02");
+
+    expect(store.getProfileById("astro-02")).toBeUndefined();
+    expect(storage.getItem(historyKey)).toBe(history);
+    const savedProfiles = JSON.parse(
+      storage.getItem(AUTH_PROFILES_STORAGE_KEY) ?? "[]",
+    ) as Array<{ profile_id: string }>;
+    expect(savedProfiles.some((profile) => profile.profile_id === "astro-02")).toBe(false);
+    expect(createAuthStore({ storage }).getProfileById("astro-02")).toBeUndefined();
+  });
+
+  it("does not reuse a forgotten profile ID while its history is retained", async () => {
+    const storage = createMemoryStorage();
+    const store = createAuthStore({ storage });
+    storage.setItem(historyStorageKey("astro-02"), JSON.stringify({ readings: [], flags: {} }));
+
+    store.forgetProfile("astro-02");
+    const newProfile = await store.enroll({
+      credential_id: "orbita-nfc-demo-new",
+      pin: "654321",
+    });
+
+    expect(newProfile.profile_id).toBe("astro-03");
+  });
+
+  it("does not reseed an empty registry and restores demo profiles only on request", () => {
+    const storage = createMemoryStorage();
+    const store = createAuthStore({ storage });
+
+    for (const profileId of ["astro-01", "astro-02", "ground-01"]) {
+      store.forgetProfile(profileId);
+    }
+
+    expect(createAuthStore({ storage }).getProfiles()).toEqual([]);
+
+    const reloaded = createAuthStore({ storage });
+    reloaded.resetDemoProfiles();
+    expect(reloaded.getProfiles().map((profile) => profile.profile_id)).toEqual([
+      "astro-01",
+      "astro-02",
+      "ground-01",
+    ]);
+  });
+
+  it("clears the session only when the forgotten profile is active", () => {
+    const activeSession = createSession("astro-01", "persistent", 42);
+
+    expect(sessionAfterForgettingProfile(activeSession, "astro-01")).toBeNull();
+    expect(sessionAfterForgettingProfile(activeSession, "astro-02")).toEqual(activeSession);
   });
 });
 
@@ -572,12 +632,16 @@ describe("ORBITA access gate and header UI contracts", () => {
         onSelectAccount: () => undefined,
         onAddAccount: () => undefined,
         onLogout: () => undefined,
+        onForgetProfile: () => undefined,
       }),
     );
 
     expect(html).toContain("profile-switcher");
     expect(html).toContain("profile-trigger");
     expect(html).toContain("profile-chevron");
+    expect(html).toContain('aria-label="Forget account"');
+    expect(html).toContain('title="Forget account"');
+    expect(html).toContain("profile-option-select");
     expect(html).toContain('width="14"');
     expect(html).toContain('height="14"');
     expect(html).toContain("Cmdr. Alex Vance");
@@ -609,6 +673,7 @@ describe("ORBITA access gate and header UI contracts", () => {
         onSelectAccount: () => undefined,
         onAddAccount: () => undefined,
         onLogout: () => undefined,
+        onForgetProfile: () => undefined,
       }),
     );
 
@@ -635,6 +700,20 @@ describe("ORBITA access gate and header UI contracts", () => {
     expect(html).toContain("Ground Operator");
     expect(html).toContain("NFC · PIN: 333333");
     expect(html).toContain("+ Tap New Unregistered Badge");
+    expect(html).not.toContain("Reset Demo Badges");
+  });
+
+  it("shows Reset Demo Badges only when the saved profile registry is empty", () => {
+    const storage = createMemoryStorage();
+    storage.setItem(AUTH_PROFILES_STORAGE_KEY, "[]");
+    vi.stubGlobal("localStorage", storage);
+
+    const html = renderToStaticMarkup(
+      React.createElement(AuthProvider, null, React.createElement(LoginScreen)),
+    );
+
+    expect(html).toContain("Reset Demo Badges");
+    expect(html).not.toContain("Cmdr. Alex Vance");
   });
 
   it("criterion 2A: a pre-focused saved badge opens the six-digit PIN keypad", () => {

@@ -163,3 +163,7 @@ export function getProfileHistoryStore(
 export function resetProfileHistoryRegistry(): void {
   registry.clear();
 }
+
+export function forgetProfileHistory(profileId: string): void {
+  registry.delete(profileId);
+}

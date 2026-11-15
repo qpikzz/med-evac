@@ -9,6 +9,7 @@ import {
 } from "react";
 import { createAuthStore } from "./authStore";
 import { ACTIVITY_EVENTS, EPHEMERAL_TIMEOUT_MS } from "./constants";
+import { forgetProfileHistory } from "./profileHistory";
 import { createSession, shouldUseInactivityWatchdog } from "./session";
 import { createInactivityTimer } from "./sessionTimer";
 import type {
@@ -25,6 +26,8 @@ interface AuthContextValue {
   activeProfile: AuthProfile | null;
   verifyPin: (credentialId: string, pin: string) => Promise<VerifyPinResult>;
   enroll: (input: EnrollmentInput) => Promise<AuthProfile>;
+  forgetProfile: (profileId: string) => void;
+  resetDemoProfiles: () => void;
   startSession: (profileId: string, mode: SessionMode) => void;
   logout: () => void;
   refreshProfiles: () => void;
@@ -32,6 +35,13 @@ interface AuthContextValue {
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+export function sessionAfterForgettingProfile(
+  activeSession: AuthSession | null,
+  profileId: string,
+): AuthSession | null {
+  return activeSession?.profile_id === profileId ? null : activeSession;
+}
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -63,6 +73,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     },
     [refreshProfiles, store],
   );
+
+  const forgetProfile = useCallback(
+    (profileId: string) => {
+      store.forgetProfile(profileId);
+      forgetProfileHistory(profileId);
+      refreshProfiles();
+      setActiveSession((session) => sessionAfterForgettingProfile(session, profileId));
+    },
+    [refreshProfiles, store],
+  );
+
+  const resetDemoProfiles = useCallback(() => {
+    store.resetDemoProfiles();
+    refreshProfiles();
+  }, [refreshProfiles, store]);
 
   const startSession = useCallback((profileId: string, mode: SessionMode) => {
     setActiveSession(createSession(profileId, mode));
@@ -105,6 +130,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       activeProfile,
       verifyPin,
       enroll,
+      forgetProfile,
+      resetDemoProfiles,
       startSession,
       logout,
       refreshProfiles,
@@ -116,6 +143,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       activeProfile,
       verifyPin,
       enroll,
+      forgetProfile,
+      resetDemoProfiles,
       startSession,
       logout,
       refreshProfiles,

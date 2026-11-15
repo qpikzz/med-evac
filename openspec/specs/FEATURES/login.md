@@ -1,7 +1,7 @@
 # Feature Specification: Mission Access Gate (`login`) — ORBITA
 
 - **Status:** Approved
-- **Version:** 1.1
+- **Version:** 1.3
 - **Brand:** ORBITA
 - **Applies to:** `src/features/auth/*`, `src/components/Header.tsx`, `src/state/AppStateProvider.tsx`
 
@@ -82,7 +82,8 @@ Immediately after valid PIN entry (or new badge enrollment), prompt the user:
 The top-right Profile Switcher in `Header.tsx` must remain anchored strictly on the far right in all roles and states, and its visual styling and interaction must be upgraded:
 
 1. **Trigger Pill Alignment & Fixed Chevron:**
-   - Compact pill (`height: 40px`, `padding: 4px 12px 4px 5px`, `gap: 10px`), left circular avatar (`30x30px` with initials/role icon), two-line label stack (`Display Name` in `13px font-semibold` + `Role` in `11px text-slate-500`).
+   - Compact pill (`height: 40px`, `padding: 4px 12px 4px 5px`, `gap: 10px`), left circular geometric mission emblem (`30x30px`), two-line label stack (`Display Name` in `13px font-semibold` + `Role` in `11px text-slate-500`).
+   - Seeded profile emblems are distinct: blue orbital compass for `astro-01`, cyan-blue biometric pulse for `astro-02`, and indigo telemetry radar for `ground-01`. Custom profile IDs deterministically map to one of these emblems.
    - Replace the jumping ASCII `^`/`v` character with a fixed `14x14px` SVG chevron icon (`lucide-react` `ChevronDown`) that rotates smoothly (`rotate-180`, `transition-transform duration-150`) around its center so it never shifts vertically.
 2. **Dropdown Popover Menu (`right: 0`, `min-width: 230px`, `mt-2`):**
    - **Section 1 — Saved Profiles:** Lists available accounts (`Cmdr. Alex Vance`, `Dr. Maya Lin`, `Flight Surgeon (Houston)`, plus any newly enrolled badges) with a checkmark on the active user. Clicking another saved account switches to `LoginScreen` pre-focused on that badge's PIN prompt (or switches immediately if already unlocked in current session).
@@ -90,6 +91,12 @@ The top-right Profile Switcher in `Header.tsx` must remain anchored strictly on 
    - **Section 2 — Account Actions:**
      - **`"Add Account"`** — Opens `LoginScreen` in new-badge scan / enrollment mode while preserving existing accounts.
      - **`"Sign Out"`** — Clears the active session (`activeSession = null`) and returns immediately to `LoginScreen` Step 1.
+     - **`"Forget account"`** — Opens a confirmation dialog with the title `"Are you sure you want to forget this account?"`, the description `"Your data will not be deleted; the account will only be removed from the displayed account list."`, and `"No"` / `"Yes"` actions. Escape cancels without deleting. Confirmation removes the selected profile only from the saved profile registry and preserves `orbita_history_<profile_id>`. Forgetting the active profile immediately clears its session and returns to `LoginScreen`. Profile IDs with retained history are not reused for new enrollments.
+
+### 4.1 Profile Registry Recovery
+
+- The persisted profile registry is authoritative after its first write. Deleted demo profiles are not automatically reseeded on normal reload.
+- If no profiles remain, `LoginScreen` shows a subtle **`Reset Demo Badges`** link. Selecting it explicitly restores the three seeded demo profiles.
 
 ---
 
@@ -128,3 +135,6 @@ When physical NFC cards are provisioned for flight hardware, each badge stores a
 5. After PIN verification, `"Remember this session?"` appears with `"No — log out after 5 min of inactivity"` (auto-logout after 5 minutes of inactivity) and `"Yes — keep me signed in"` (persistent until manual logout).
 6. Top-right Profile Switcher uses a centered rotating SVG chevron (zero vertical jump), stays pinned to the far right in all roles, and includes `"Add Account"` and `"Sign Out"` in its dropdown.
 7. Each seeded demo badge card displays the crew name, role, history state, and a visible `NFC · PIN: {pin}` pill (`111111`, `222222`, `333333`).
+8. The Header uses the three geometric mission emblems; custom profile IDs map deterministically to an emblem variant.
+9. Forgetting a profile requires confirmation and removes it from the saved registry without deleting its isolated history. Escape or `"No"` cancels; `"Yes"` confirms. Forgetting the active profile returns to `LoginScreen`; deleted profiles remain removed after reload, and IDs with retained history are not reused.
+10. `Reset Demo Badges` is visible only when the profile registry is empty and explicitly restores the seeded demo profiles.

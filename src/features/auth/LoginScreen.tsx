@@ -15,11 +15,12 @@ import {
   SESSION_COPY,
 } from "./copy";
 import { demoBadgeSummary } from "./demoBadges";
-import { createUnknownBadgeId, initials } from "./identity";
+import { createUnknownBadgeId } from "./identity";
 import { PinDots } from "./PinDots";
 import { PinKeypad } from "./PinKeypad";
 import { isValidPin } from "./pinCrypto";
 import type { AuthProfile, SessionMode, UserRole } from "./types";
+import CrewAvatar from "../../components/CrewAvatar";
 import "./LoginScreen.css";
 
 type LoginStep = "scan" | "pin" | "enroll" | "session";
@@ -43,6 +44,7 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
     profiles,
     verifyPin,
     enroll,
+    resetDemoProfiles,
     startSession,
     getLockoutRemainingMs,
   } = useAuth();
@@ -158,6 +160,15 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
     setError(null);
     setVerifiedProfile(null);
     setStep("enroll");
+  }
+
+  function resetDemoBadges(): void {
+    setError(null);
+    try {
+      resetDemoProfiles();
+    } catch {
+      setError(SCAN_COPY.resetFailed);
+    }
   }
 
   function pressDigit(digit: string): void {
@@ -281,9 +292,11 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
                       key={profile.profile_id}
                       onClick={() => selectBadge(profile)}
                     >
-                      <span className="badge-avatar" aria-hidden="true">
-                        {initials(profile.display_name)}
-                      </span>
+                      <CrewAvatar
+                        className="badge-avatar"
+                        profileId={profile.profile_id}
+                        size={40}
+                      />
                       <span className="badge-copy">
                         <span className="badge-name">{profile.display_name}</span>
                         <span className="badge-role">{summary.subtitle}</span>
@@ -293,6 +306,15 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
                   );
                 })}
               </div>
+              {profiles.length === 0 && (
+                <>
+                  <p className="badge-empty">No saved crew badges.</p>
+                  <button className="badge-reset" type="button" onClick={resetDemoBadges}>
+                    {SCAN_COPY.resetDemoBadges}
+                  </button>
+                  {error && <p className="gate-error" role="alert">{error}</p>}
+                </>
+              )}
               <button className="badge-new" type="button" onClick={selectUnknownBadge}>
                 {SCAN_COPY.newBadge}
               </button>
@@ -307,9 +329,11 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
               {PIN_COPY.back}
             </button>
             <div className="recognized-profile">
-              <span className="badge-avatar badge-avatar-large" aria-hidden="true">
-                {initials(selectedProfile.display_name)}
-              </span>
+              <CrewAvatar
+                className="badge-avatar badge-avatar-large"
+                profileId={selectedProfile.profile_id}
+                size={48}
+              />
               <div>
                 <h1 id="pin-title" className="gate-title gate-title-small">
                   {selectedProfile.display_name}
@@ -408,9 +432,11 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
         {step === "session" && verifiedProfile && (
           <section className="gate-step" aria-labelledby="session-title">
             <div className="recognized-profile">
-              <span className="badge-avatar badge-avatar-large" aria-hidden="true">
-                {initials(verifiedProfile.display_name)}
-              </span>
+              <CrewAvatar
+                className="badge-avatar badge-avatar-large"
+                profileId={verifiedProfile.profile_id}
+                size={48}
+              />
               <div>
                 <h1 id="session-title" className="gate-title gate-title-small">
                   {SESSION_COPY.question}
