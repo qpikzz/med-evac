@@ -1,5 +1,4 @@
 import { useMemo, useState, type FormEvent } from "react";
-import syntheticHistory from "../data/synthetic_history.json";
 import type { RawEntry } from "../features/input-check/inputCheck";
 import { useAppState } from "../features/app-state/AppStateContext";
 import type { MeasurementContext, RulesFile } from "../rules/types";
@@ -13,7 +12,6 @@ interface CheckupFormCardProps {
 type FieldValues = Record<string, string>;
 export type UnitSystem = "metric" | "imperial";
 
-const EMPTY_VALUES: FieldValues = {};
 const UNIT_SYSTEM_STORAGE_KEY = "orbita_unit_system";
 
 function getStoredUnitSystem(): UnitSystem {
@@ -244,12 +242,6 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
   const validation = useMemo(
     () => validateCheckup(entries),
     [entries, validateCheckup],
-  );
-  const radiationMetrics = rules.metrics.filter((metric) => metric.indicator_id === "radiation_dose");
-  const otherMetrics = rules.metrics.filter((metric) => metric.indicator_id !== "radiation_dose");
-  const radiationFlags = rules.flags.filter((flag) => flag.indicator_ids.includes("radiation_dose"));
-  const filteredFlags = rules.flags.filter((flag) =>
-    flag.label.toLowerCase().includes(symptomSearch.trim().toLowerCase()),
   );
   const errors = new Map(
     validation.results
@@ -514,181 +506,159 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     );
   }
 
-  function loadDay40Demo(): void {
-    const demoValues: FieldValues = { ...EMPTY_VALUES };
-    for (const reading of syntheticHistory.day40_checkup.readings) {
-      demoValues[reading.metric] = String(reading.value);
-      if (reading.metric === "body_temp") {
-        setTemperatureContext(reading.context === "exercise" ? "exercise" : "rest");
-      }
-    }
-    for (const metric of rules.metrics) {
-      demoValues[metric.id] ??= "";
-    }
-    setValues(demoValues);
-    setDisplayDrafts({});
-    setSelectedFlags(syntheticHistory.day40_checkup.flags);
-    setClinicalNotes("");
-  }
-
-  function renderMetricField(metric: (typeof rules.metrics)[number]) {
-    const error = errors.get(metric.id);
-    const isTemperature = metric.id === "body_temp";
-    return (
-      <div className="metric-field" key={metric.id}>
-        <label htmlFor={`metric-${metric.id}`}>{metric.label}</label>
-        {isTemperature && (
-          <div className="segmented-control context-toggle" aria-label="Temperature context">
-            {(["rest", "exercise"] as const).map((context) => (
-              <button
-                key={context}
-                className={temperatureContext === context ? "is-selected" : ""}
-                type="button"
-                aria-pressed={temperatureContext === context}
-                onClick={() => setTemperatureContext(context)}
-              >
-                {context === "rest" ? "Rest" : "Exercise"}
-              </button>
-            ))}
-          </div>
-        )}
-        <div className="input-with-unit">
-          <input
-            id={`metric-${metric.id}`}
-            type="text"
-            inputMode="decimal"
-            autoComplete="off"
-            value={values[metric.id] ?? ""}
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? `error-${metric.id}` : undefined}
-            onChange={(event) => updateValue(metric.id, event.currentTarget.value)}
-          />
-          <span>{metric.unit}</span>
-        </div>
-        {error && (
-          <p className="field-error" id={`error-${metric.id}`} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
-    );
-  }
-
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-    const result = submitCheckup(entries, selectedFlags);
+    const result = submitCheckup(entries, selectedFlags, clinicalNotes);
     if (result.allOk) {
       onSubmitted();
     }
   }
 
   return (
-    <form className="checkup-card dashboard-card" onSubmit={handleSubmit} noValidate>
-      <div className="section-heading">
-        <div>
-          <p className="section-eyebrow">Daily check-up</p>
-          <h2>How are you feeling today?</h2>
+    <form className="checkup-form" onSubmit={handleSubmit} noValidate>
+      <div className="checkup-content">
+        <div className="section-heading">
+          <div>
+            <p className="section-eyebrow">Daily check-up</p>
+            <h2>How are you feeling today?</h2>
+          </div>
+          <div className="unit-system-toggle" role="group" aria-label="Display units">
+            <button
+              type="button"
+              aria-pressed={unitSystem === "metric"}
+              className={unitSystem === "metric" ? "is-selected" : ""}
+              onClick={() => changeUnitSystem("metric")}
+            >
+              Metric (°C, kg)
+            </button>
+            <button
+              type="button"
+              aria-pressed={unitSystem === "imperial"}
+              className={unitSystem === "imperial" ? "is-selected" : ""}
+              onClick={() => changeUnitSystem("imperial")}
+            >
+              Imperial (°F, lbs)
+            </button>
+          </div>
         </div>
-        <span className="synthetic-badge">Synthetic data</span>
-      </div>
 
-      <div className="checkup-grid">
         <section className="metric-form-column" aria-label="Measurements">
           <h3>Measurements</h3>
-          <div className="metric-input-grid">
-            {otherMetrics.map(renderMetricField)}
-          </div>
-
-          {radiationMetrics.length > 0 && (
-            <section className="radiation-check" aria-label="Radiation check">
-              <div className="radiation-check-heading">
-                <h3>Radiation check</h3>
-                <p>
-                  Read your personal dosimeter. Dose limits are set by mission flight surgeons; any
-                  radiation event you mark here is checked by the rules.
-                </p>
-              </div>
-              <div className="metric-input-grid">{radiationMetrics.map(renderMetricField)}</div>
-              <div className="radiation-flag-list" aria-label="Radiation events">
-                {radiationFlags.map((flag) => {
-                  const selected = selectedFlags.includes(flag.id);
-                  return (
-                    <button
-                      className={`symptom-pill radiation-pill${selected ? " is-selected" : ""}`}
-                      type="button"
-                      key={flag.id}
-                      aria-pressed={selected}
-                      onClick={() => toggleFlag(flag.id)}
-                    >
-                      {flag.label}
-                    </button>
-                  );
-                })}
+          <div className="measurement-groups">
+            <section className="measurement-group" aria-labelledby="vitals-heading">
+              <h4 id="vitals-heading">Vitals</h4>
+              {renderBloodPressureField()}
+              <div className="vitals-row">
+                {renderMetricField("heart_rate")}
+                {renderTemperatureField()}
+                {renderMetricField("glucose")}
               </div>
             </section>
-          )}
+
+            <section className="measurement-group" aria-labelledby="recovery-heading">
+              <h4 id="recovery-heading">Recovery &amp; Wellbeing</h4>
+              <div className="measurement-row">
+                {renderMetricField("sleep_hours")}
+                {renderMetricField("body_mass")}
+              </div>
+              <div className="measurement-row">
+                {renderScoreField("mood")}
+                {renderScoreField("skin_symptom_score")}
+              </div>
+            </section>
+
+            <section className="measurement-group" aria-labelledby="radiation-heading">
+              <h4 id="radiation-heading">Radiation telemetry</h4>
+              <div className="radiation-strip">
+                {renderMetricField("radiation_dose_rate")}
+                {renderMetricField("radiation_accumulated")}
+              </div>
+            </section>
+          </div>
         </section>
 
-        <section className="symptoms-column" aria-label="Symptoms and notes">
-          <div className="symptom-heading">
-            <div>
-              <h3>Symptoms and events</h3>
-              <p>Select any that apply. You can choose more than one.</p>
-            </div>
-            <span className="selection-count">{selectedFlags.length} selected</span>
-          </div>
-          <label className="visually-hidden" htmlFor="symptom-search">Search symptoms and events</label>
-          <input
-            className="symptom-search"
-            id="symptom-search"
-            type="search"
-            placeholder="Search symptoms and events"
-            value={symptomSearch}
-            onChange={(event) => setSymptomSearch(event.currentTarget.value)}
+        <div className="composer-divider">
+          <SymptomNotesComposer
+            flags={rules.flags}
+            selectedFlags={selectedFlags}
+            onToggleFlag={toggleFlag}
+            notes={clinicalNotes}
+            onNotesChange={setClinicalNotes}
           />
-          <div className="symptom-pill-list">
-            {filteredFlags.map((flag) => {
-              const selected = selectedFlags.includes(flag.id);
-              return (
-                <button
-                  className={`symptom-pill${selected ? " is-selected" : ""}`}
-                  type="button"
-                  key={flag.id}
-                  aria-pressed={selected}
-                  onClick={() => toggleFlag(flag.id)}
-                >
-                  {flag.label}
-                </button>
-              );
-            })}
-            {filteredFlags.length === 0 && <p className="empty-search">No matching symptoms or events.</p>}
-          </div>
-          <label className="notes-label" htmlFor="checkup-notes">Anything else?</label>
-          <textarea
-            id="checkup-notes"
-            rows={4}
-            placeholder="Tell us if anything else is bothering you..."
-            value={freeText}
-            onChange={(event) => setFreeText(event.currentTarget.value)}
-          />
-        </section>
-      </div>
+        </div>
 
-        <div className="form-actions">
-          <div className="secondary-actions">
-            <button className="button button-secondary" type="button" onClick={onContactEarth}>
-              Contact Earth
-            </button>
-            {import.meta.env.DEV && (
-              <button className="button button-quiet" type="button" onClick={loadDay40Demo}>
-                Fill day-40 check-up
-              </button>
-            )}
-          </div>
-          <button className="button button-primary" type="submit" disabled={!validation.allOk}>
-            Submit Check-up
+      <div className="form-actions">
+        <div className="secondary-actions">
+          <button
+            className="button contact-earth-button"
+            type="button"
+            onClick={onContactEarth}
+          >
+            <svg className="earth-horizon" viewBox="0 0 72 72" aria-hidden="true">
+              <defs>
+                <radialGradient id="earth-ocean" cx="35%" cy="30%" r="75%">
+                  <stop offset="0%" stopColor="#2563EB" />
+                  <stop offset="100%" stopColor="#1D4ED8" />
+                </radialGradient>
+                <filter id="earth-atmosphere" x="-40%" y="-40%" width="180%" height="180%">
+                  <feGaussianBlur stdDeviation="2.2" />
+                </filter>
+                <clipPath id="earth-sphere">
+                  <circle cx="37" cy="39" r="29" />
+                </clipPath>
+              </defs>
+              <circle
+                cx="37"
+                cy="39"
+                r="30"
+                fill="none"
+                stroke="#38BDF8"
+                strokeOpacity="0.8"
+                strokeWidth="3"
+                filter="url(#earth-atmosphere)"
+              />
+              <circle cx="37" cy="39" r="29" fill="url(#earth-ocean)" />
+              <g clipPath="url(#earth-sphere)" fill="#22C55E">
+                <path d="M12 27 19 24 24 17 31 16 34 21 31 25 34 30 29 34 28 41 23 43 21 51 15 48 13 40 9 36Z" />
+                <path d="m31 43 6-3 6 3 2 7-4 5-2 9-5-3-2-9-4-4Z" />
+                <path d="m42 19 7-3 8 3 5 7-4 5-7-2-3 4-5-3-5-6Z" />
+                <path d="m50 37 8-2 6 4-2 7-6 2-4 8-5-5 2-7-4-3Z" />
+              </g>
+              <circle
+                cx="37"
+                cy="39"
+                r="28.5"
+                fill="none"
+                stroke="#38BDF8"
+                strokeOpacity="0.9"
+                strokeWidth="1.2"
+              />
+            </svg>
+            <span className="contact-starfield" aria-hidden="true">
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+              <span className="contact-star" />
+            </span>
+            <span className="contact-earth-label">Contact to Earth</span>
           </button>
         </div>
+        <button
+          className="button button-primary checkup-submit-button"
+          type="submit"
+          disabled={!validation.allOk}
+        >
+          Submit Check-up
+        </button>
+      </div>
       </div>
     </form>
   );

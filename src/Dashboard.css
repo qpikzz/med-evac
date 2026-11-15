@@ -644,6 +644,131 @@
   gap: 8px;
 }
 
+.button.contact-earth-button {
+  position: relative;
+  width: auto;
+  min-width: 230px;
+  height: 48px;
+  padding: 0 24px 0 64px;
+  overflow: hidden;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  color: #e0f2fe;
+  background: #0b1120;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-align: left;
+  transition: border-color 180ms ease-out, background-color 180ms ease-out;
+}
+
+.button.contact-earth-button:hover {
+  border-color: rgba(56, 189, 248, 0.7);
+  background: #0b1120;
+}
+
+.earth-horizon {
+  position: absolute;
+  z-index: 0;
+  bottom: -16px;
+  left: -12px;
+  width: 64px;
+  height: 64px;
+  pointer-events: none;
+}
+
+.contact-starfield {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.contact-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  box-shadow: 0 0 5px rgba(125, 211, 252, 0.9);
+  animation: contact-star-drift 4s ease-out infinite both;
+}
+
+.contact-star:nth-child(1) { top: 28px; left: 42px; width: 2px; height: 2px; animation-duration: 3.4s; animation-delay: 0s; }
+.contact-star:nth-child(2) { top: 23px; left: 48px; width: 1.5px; height: 1.5px; animation-duration: 4.7s; animation-delay: 0.7s; }
+.contact-star:nth-child(3) { top: 31px; left: 51px; width: 2.5px; height: 2.5px; animation-duration: 5.2s; animation-delay: 1.4s; }
+.contact-star:nth-child(4) { top: 25px; left: 57px; width: 1.5px; height: 1.5px; animation-duration: 3.8s; animation-delay: 2.1s; }
+.contact-star:nth-child(5) { top: 34px; left: 45px; width: 2px; height: 2px; animation-duration: 5.5s; animation-delay: 0.4s; }
+.contact-star:nth-child(6) { top: 20px; left: 54px; width: 2.5px; height: 2.5px; animation-duration: 4.3s; animation-delay: 1.1s; }
+.contact-star:nth-child(7) { top: 30px; left: 60px; width: 1.5px; height: 1.5px; animation-duration: 3.2s; animation-delay: 1.8s; }
+.contact-star:nth-child(8) { top: 24px; left: 43px; width: 2px; height: 2px; animation-duration: 4.9s; animation-delay: 2.5s; }
+.contact-star:nth-child(9) { top: 36px; left: 56px; width: 1.5px; height: 1.5px; animation-duration: 3.6s; animation-delay: 0.9s; }
+.contact-star:nth-child(10) { top: 19px; left: 49px; width: 2px; height: 2px; animation-duration: 5.1s; animation-delay: 1.6s; }
+.contact-star:nth-child(11) { top: 32px; left: 53px; width: 2.5px; height: 2.5px; animation-duration: 4.1s; animation-delay: 2.3s; }
+.contact-star:nth-child(12) { top: 22px; left: 61px; width: 2px; height: 2px; animation-duration: 5.4s; animation-delay: 0.2s; }
+
+.contact-earth-label {
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+@keyframes contact-star-drift {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.7);
+  }
+  12% {
+    opacity: 0.9;
+  }
+  55% {
+    opacity: 0.45;
+  }
+  68% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(26px, -20px, 0) scale(1);
+  }
+}
+
+.button.button-primary.checkup-submit-button {
+  min-width: 0;
+  height: 48px;
+  padding: 0 32px;
+  border-radius: 12px;
+  color: #020617;
+  background: #6096fd;
+  box-shadow: 0 10px 18px -8px rgba(59, 130, 246, 0.35);
+  font-size: 15px;
+  font-weight: 600;
+  transition: background-color 180ms ease-out, transform 180ms ease-out;
+}
+
+.button.button-primary.checkup-submit-button:hover:not(:disabled) {
+  background: #3b82f6;
+}
+
+.button.button-primary.checkup-submit-button:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.button.button-primary.checkup-submit-button:disabled {
+  color: var(--text-muted);
+  background: var(--surface-2);
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-star {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 .button {
   min-height: 38px;
   padding: 8px 14px;
@@ -2088,6 +2213,11 @@
 
   .secondary-actions .button {
     flex: 1;
+  }
+
+  .button.contact-earth-button,
+  .form-actions .button.button-primary.checkup-submit-button {
+    width: 100%;
   }
 
   .symptom-pick-row {
