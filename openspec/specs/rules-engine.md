@@ -352,6 +352,13 @@ Test runner: whatever Nikita's React template already has (if the project uses V
 | A8 | ASSUMPTION: a submitted check-up with no ticked flags means "none of these symptoms" → flag-only indicators are green. | Lana |
 | A9 | Baseline sources: preflight for heart rate, mood, body mass and BP \[TABLE: each row, Normal range\]; rolling 7-day for temperature \[TABLE: Body temperature, YELLOW\]. Synthetic data MUST include a preflight mean/sd per metric. | Lana (synthetic data format) |
 
+**Radiation measurement note (Q-RAD, 15 Nov 2026).** Both radiation fields are read every day from the crew member's personal active dosimeter, and both are needed:
+
+- `radiation_dose_rate` (µSv/h) — the dose rate *right now*. It catches sudden spikes (a solar particle event can raise it many times within hours). Nominal Mars-transit cruise ≈ 75 µSv/h. Rule: `rad_y_rate` (> 150 µSv/h → yellow).
+- `radiation_accumulated` (mSv) — the total since mission start, read from the dosimeter. It is compared with the 600 mSv NASA career limit. It grows slowly (≈ 1.8 mSv/day). Rules: `rad_y_accum` (≥ 480 → yellow), `rad_r_accum` (≥ 600 → red); also feeds the Dose budget meter.
+- One cannot replace the other: a once-a-day rate reading is a snapshot and cannot be integrated into a total (an event at night between check-ups would be missed), and the slow-growing total hides short spikes.
+- **Units (simplification):** a dosimeter physically measures *absorbed dose* in grays (mGy, µGy/h). *Dose equivalent* in sieverts adds a weighting for the biological effect of the particle type (in deep space the heavy ions make it roughly 3–4 × the absorbed dose). NASA's limit and the MSL/RAD cruise figures are in sieverts, so the app uses µSv/h and mSv and assumes the dosimeter software has already converted Gy → Sv. Suggested answer if asked: "Values are dose equivalent; on a real instrument the conversion from grays is done by its software."
+
 ## **13\. Self-check**
 
 | Check |  |
