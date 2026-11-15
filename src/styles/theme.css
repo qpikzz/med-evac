@@ -335,3 +335,42 @@ select {
   font-family: var(--font-mono);
   color: var(--accent-2) !important;
 }
+
+/* ---- Header tabs: tinted, not white ---- */
+.nav-tab:hover {
+  color: var(--text) !important;
+  background: rgba(127, 168, 255, 0.08) !important;
+}
+
+.nav-tab.is-active {
+  border-color: rgba(127, 168, 255, 0.45) !important;
+  color: #cfe0ff !important;
+  background: linear-gradient(180deg, rgba(127, 168, 255, 0.28), rgba(127, 168, 255, 0.12)) !important;
+  box-shadow: 0 0 18px -4px rgba(127, 168, 255, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* ---- Login NFC reader: softer core, more visible waves ---- */
+.nfc-pulse {
+  width: 168px !important;
+  height: 168px !important;
+}
+
+.nfc-ring {
+  border: 2px solid rgba(127, 168, 255, 0.75) !important;
+  box-shadow: 0 0 18px rgba(127, 168, 255, 0.45), inset 0 0 12px rgba(127, 168, 255, 0.25);
+}
+
+.nfc-core {
+  width: 72px !important;
+  height: 72px !important;
+  border: 1px solid rgba(127, 168, 255, 0.55) !important;
+  color: #dbe7ff !important;
+  background: radial-gradient(circle at 35% 30%, #3d5fb8, #142650 75%) !important;
+  box-shadow: 0 0 34px rgba(127, 168, 255, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+
+@keyframes nfc-pulse {
+  0% { opacity: 0.95; transform: scale(0.42); }
+  70% { opacity: 0; transform: scale(1.05); }
+  100% { opacity: 0; transform: scale(1.05); }
+}

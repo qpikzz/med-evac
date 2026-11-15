@@ -9,7 +9,7 @@
 ## 1. Visual Direction & Aesthetic Philosophy
 
 * **Style (v3.0, "Orbit Control"):** Mission-Control precision — teal/amber/coral status colours, monospace technical labels, corner brackets on alerts, a faint grid — combined with Deep-Orbit depth — deep navy (never pure black), blue nebula glows, soft gradients and glowing illustrations. Dark theme only.
-* **Atmosphere:** calm, expensive, technical. A fixed animated space backdrop (`SpaceBackdrop`) sits behind every screen: faint teal grid fading to the edges, drifting blue/violet/teal nebulae, ~110 twinkling stars, a slowly turning orbit with a satellite and an occasional shooting star. Pure SVG/CSS, no images.
+* **Atmosphere:** calm, expensive, technical. A fixed animated space backdrop (`SpaceBackdrop`) sits behind every screen: faint teal grid fading to the edges, drifting blue/violet/teal nebulae, ~110 twinkling stars, a slowly turning orbit with a satellite and six shooting stars in different parts of the sky (own position, direction, length, 11–23 s period and start delay). Pure SVG/CSS, no images.
 * **Key Principles:**
   1. **Readable first:** 16 px base text, 20–28 px titles, large numbers; nothing below 11 px.
   2. **Deterministic Status Clarity:** colours (`green`, `yellow`, `red`, `no_data`) only reflect the `Rules Engine`; the UI never computes, softens or recomputes a status.

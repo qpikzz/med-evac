@@ -65,3 +65,23 @@ describe("radiation thresholds (illustrative mission settings, Q-RAD)", () => {
     expect(red?.rules[0].rule_id).toBe("rad_r_accum");
   });
 });
+
+describe("radiation dose-rate red threshold (rad_r_rate, illustrative)", () => {
+  function rate(value: number) {
+    return evaluate({
+      today: "2026-11-14",
+      readings: [{ date: "2026-11-14", metric: "radiation_dose_rate", value, context: "rest", valid: true }],
+      flags: [],
+      baselines: {},
+      rules,
+    });
+  }
+
+  it("150 µSv/h → no alert, 151–999 → yellow, ≥ 1000 → red", () => {
+    expect(radiationAlertView(rate(150), rules)).toBeNull();
+    expect(radiationAlertView(rate(500), rules)?.level).toBe("yellow");
+    const red = radiationAlertView(rate(5000), rules);
+    expect(red?.level).toBe("red");
+    expect(red?.rules[0].rule_id).toBe("rad_r_rate");
+  });
+});

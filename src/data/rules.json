@@ -101,7 +101,7 @@
       "label": "Radiation dose rate",
       "unit": "µSv/h",
       "plausible_min": 0,
-      "plausible_max": null
+      "plausible_max": 100000
     },
     {
       "id": "radiation_accumulated",
@@ -1547,6 +1547,28 @@
             "Follow radiation alerts and move to the shielded area when instructed."
           ],
           "recheck": "Check the dosimeter again in 1 hour."
+        },
+        {
+          "id": "rad_r_rate",
+          "level": "red",
+          "enabled": true,
+          "trigger": {
+            "type": "threshold",
+            "metric": "radiation_dose_rate",
+            "op": ">=",
+            "value": 1000
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE: Radiation dose, RED ('a dosimeter indicates an unexpectedly high exposure'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): red at >= 1000 µSv/h (1 mSv/h). That is ≈ 13 × the ≈ 75 µSv/h cruise rate (MSL/RAD; SwRI press release 2013) and, if it lasted a day, ≈ 24 mSv ≈ 10 % of NASA's 250 mSv solar-particle-event design limit per day (NASA OCHMO radiation technical brief, NASA-STD-3001). Not a medical limit.",
+          "title": "Radiation dose rate very high",
+          "explanation": "The dose rate is many times higher than normal for this flight. This is what a strong solar particle event looks like inside the spacecraft.",
+          "actions": [
+            "Move to the shielded area now.",
+            "Notify mission control and the flight surgeon on Earth now.",
+            "Keep your personal dosimeter on and note the readings."
+          ],
+          "recheck": "Check the dose rate again in 15 minutes."
         },
         {
           "id": "rad_y_spe",

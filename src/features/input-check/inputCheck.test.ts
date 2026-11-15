@@ -245,3 +245,14 @@ describe("input check", () => {
     expect(() => loadRules(rulesJson)).not.toThrow();
   });
 });
+
+describe("radiation dose-rate input range (15 Nov 2026)", () => {
+  it("accepts up to 100000 µSv/h and rejects more", async () => {
+    const { checkEntry } = await import("./inputCheck");
+    const { loadRules } = await import("../../rules/loadRules");
+    const rulesJson = (await import("../../data/rules.json")).default;
+    const r = loadRules(rulesJson);
+    expect(checkEntry({ metric: "radiation_dose_rate", raw: "100000" }, "2026-11-14", r).ok).toBe(true);
+    expect(checkEntry({ metric: "radiation_dose_rate", raw: "100001" }, "2026-11-14", r).ok).toBe(false);
+  });
+});

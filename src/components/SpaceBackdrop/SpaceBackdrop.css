@@ -95,22 +95,23 @@
 }
 
 .space-shooting {
+  --angle: 150deg;
   position: absolute;
-  top: 12%;
-  left: 70%;
-  width: 140px;
   height: 1.5px;
   border-radius: 2px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent);
+  /* bright head on the leading (right) end, tail fading behind it */
+  background: linear-gradient(90deg, transparent, rgba(190, 215, 255, 0.5) 60%, #ffffff);
+  box-shadow: 0 0 6px rgba(190, 215, 255, 0.8);
   opacity: 0;
-  transform: rotate(-30deg);
-  animation: space-shoot 11s ease-in 3s infinite;
+  transform-origin: right center;
+  transform: rotate(var(--angle)) translateX(0);
+  animation: space-shoot 11s ease-in infinite;
 }
 
 @keyframes space-shoot {
-  0%, 92% { opacity: 0; transform: translate(0, 0) rotate(-30deg); }
-  93% { opacity: 1; }
-  100% { opacity: 0; transform: translate(-360px, 210px) rotate(-30deg); }
+  0%, 93% { opacity: 0; transform: rotate(var(--angle)) translateX(0); }
+  94% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--angle)) translateX(420px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

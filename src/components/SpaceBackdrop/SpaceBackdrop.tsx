@@ -1,6 +1,7 @@
 // Fixed decorative space background for every screen: faint grid, blue/violet/teal nebula glows,
 // twinkling stars, a slowly turning orbit with a satellite and an occasional shooting star.
 // Pure SVG/CSS, no images, no network. Hidden from assistive tech; motion off with reduced motion.
+import type React from "react";
 import "./SpaceBackdrop.css";
 
 // Deterministic pseudo-random stars (same layout every load).
@@ -21,6 +22,17 @@ function makeStars(count: number) {
 }
 
 const STARS = makeStars(110);
+
+// Shooting stars in different parts of the sky: position, travel angle, length, period and start delay
+// all differ, so they never fall in the same place or rhythm.
+const SHOOTING = [
+  { top: "12%", left: "72%", angle: 150, len: 140, dur: 11, delay: 3 },
+  { top: "8%", left: "22%", angle: 35, len: 110, dur: 14, delay: 8 },
+  { top: "46%", left: "92%", angle: 160, len: 170, dur: 17, delay: 12 },
+  { top: "64%", left: "6%", angle: 20, len: 120, dur: 19, delay: 6 },
+  { top: "30%", left: "48%", angle: 135, len: 90, dur: 23, delay: 16 },
+  { top: "82%", left: "60%", angle: 165, len: 130, dur: 21, delay: 10 },
+];
 
 function SpaceBackdrop() {
   return (
@@ -49,7 +61,22 @@ function SpaceBackdrop() {
           <circle className="space-satellite" cx="1700" cy="500" r="4" />
         </g>
       </svg>
-      <span className="space-shooting" />
+      {SHOOTING.map((s, i) => (
+        <span
+          key={i}
+          className="space-shooting"
+          style={
+            {
+              top: s.top,
+              left: s.left,
+              width: `${s.len}px`,
+              "--angle": `${s.angle}deg`,
+              animationDuration: `${s.dur}s`,
+              animationDelay: `${s.delay}s`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
     </div>
   );
 }

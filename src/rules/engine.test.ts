@@ -347,7 +347,7 @@ describe("rules engine", () => {
     expect(JSON.stringify(testInput)).toBe(before);
   });
 
-  it("criterion 20: loads the shipped file (51 rules in shipped data)", () => {
+  it("criterion 20: loads the shipped file (52 rules in shipped data)", () => {
     const shipped = loadRules(rulesJson);
     const ruleCount = shipped.indicators.reduce(
       (count, indicatorEntry) => count + indicatorEntry.rules.length,
@@ -356,6 +356,6 @@ describe("rules engine", () => {
 
     expect(shipped.indicators).toHaveLength(10);
     expect(shipped.flags).toHaveLength(42);
-    expect(ruleCount).toBe(51);
+    expect(ruleCount).toBe(52);
   });
 });
