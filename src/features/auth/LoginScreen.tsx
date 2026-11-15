@@ -247,7 +247,7 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
       <div className="orbita-gate-card">
         <header className="orbita-gate-header">
           <div className="orbita-brand" aria-label="ORBITA">
-            <OrbitaLogo size={40} />
+            <OrbitaLogo size={104} />
             <span className="orbita-brand-copy">
               <span className="orbita-brand-name">ORBITA</span>
               <span className="orbita-brand-tagline">

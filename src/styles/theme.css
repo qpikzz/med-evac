@@ -304,8 +304,9 @@ select {
 }
 
 .orbita-brand > svg {
-  width: 72px !important;
-  height: 72px !important;
+  width: 142px !important;
+  height: 104px !important;
+  flex-basis: 104px;
   filter: drop-shadow(0 0 24px rgba(127, 168, 255, 0.6));
 }
 

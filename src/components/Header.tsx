@@ -134,7 +134,7 @@ function Header({
       <header className="app-header">
         <div className="header-brand">
           <div className="brand-lockup" aria-label="ORBITA">
-            <OrbitaLogo size={36} />
+            <OrbitaLogo size={42} />
           </div>
           <div className="mission-context">
             <span className="mission-day">Day 40</span>
