@@ -1,6 +1,6 @@
 # DESIGN.md — Design System & UI/UX Specification (ORBITA)
 
-> **Version:** 2.1 · 15 Nov 2026 — dark space theme, layered 2D body map (`FEATURES/body-map.md`), Recharts sparklines, Motion animations, daily radiation check + animated radiation alert.
+> **Version:** 2.2 · 15 Nov 2026 — dark space theme, layered 2D body map (`FEATURES/body-map.md`), Recharts sparklines, Motion animations, daily radiation check + animated radiation alert.
 >
 > **Scope:** Visual design system, color tokens, typography, layout architecture, and screen specifications for **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*) (NASA Space Apps Challenge 2026, ORBITA project team). All UI text rendered in the application must be in **English** per `RULES.md`.
 
@@ -120,7 +120,7 @@ Once the check-up is submitted, the top form collapses into a compact confirmati
      * Vertical scrollable list of the 10 tracked indicators (`rules.json`).
      * Each card displays:
        * Indicator name & current measured value + unit (e.g., `Heart Rate · 84 bpm`).
-       * **7-day trend sparkline (Recharts `AreaChart`, 56 px high):** smooth line in the indicator's status colour with a soft gradient fill below, "your normal" baseline as a solid faint line and rule thresholds as dashed lines in their level colour; hover tooltip shows date + value + unit; the line draws in over 0.9 s (off with reduced motion).
+       * **7-day trend sparkline (Recharts `AreaChart`, 76 px plot + date row):** one smooth 2.5 px line in the indicator's status colour with a soft glow under it, a gradient "volume" fill (≈32 % → 0 %), and a haloed end dot for today (halo breathes slowly; off with reduced motion). The y-scale fits the data with a minimum span of 10 % of the level, so day-to-day noise is not drawn as a dramatic swing. Only one reference is drawn: "your normal" as a solid faint 1 px hairline, named in the row under the chart (`Nov 8 · — your normal 62 bpm · Today`). **No threshold or dashed lines in the background** — `getReferenceLines()` still returns them, but the sparkline does not draw them; the status badge and rule details carry the thresholds. Hover → crosshair + tooltip (date, value, unit). Line draws in over 1.1 s.
        * Semantic status pill (`Green` / `Yellow` / `Red` / `No Data`) + `baseline_forming` subtle badge if applicable.
        * Clicking a card expands its triggered rule details: `title`, `explanation`, `actions` checklist, `recheck` timer, an `(i)` info icon revealing `Source: TABLE: ...`, and an **`Ask AI Helper`** button that opens `Comms` pre-loaded with that rule.
    * **Right Column (~58% width) — Layered 2D Body Map (`BodyMap`, full spec in `FEATURES/body-map.md`):**

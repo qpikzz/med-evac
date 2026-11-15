@@ -155,7 +155,7 @@ MVP (the body map is part of the Day-40 story). Agent ~1–1.5 h, Nikita review/
 ## 11. Implementation Notes (15 Nov 2026)
 - **Radiation — decided:** `radiation_dose` is **not** monitoring-only. Its numeric dose limits stay disabled in `rules.json` (`value: null`, set by mission flight surgeons — open question Q-RAD), but two event rules are enabled and must stay on: `rad_y_spe` (solar particle event warning → yellow) and `rad_r_event` (dosimeter unexpectedly high / acute radiation event → red). Switching them off would hide a red. So:
   - the astronaut checks radiation **every day** in the check-up's "Radiation check" block (dose rate, accumulated dose, 3 event toggles);
-  - the radiation zone shows the engine's status (`No data` until a dose is entered, `OK` with a dose and no event, `Watch` / `Alert` on an event);
+  - the radiation zone shows the engine's status (`OK` when a dose is recorded and no event is reported — the Day-40 demo now includes illustrative synthetic dose readings; `No data` if no dose is entered; `Watch` / `Alert` on an event);
   - the zone carries a note: "Read your dosimeter at every check-up. Dose limits are set by mission flight surgeons; alerts come from the radiation events you report.";
   - on yellow/red the aura sends out waves and the dashboard shows the animated `RadiationAlert` (see `DESIGN.md` §5.2).
   The AC1 mock still uses a rules copy with all radiation rules disabled, to test the monitoring-only style itself.
