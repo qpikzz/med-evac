@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, Nfc } from "lucide-react";
+import OrbitaLogo from "../../components/OrbitaLogo";
 import { useAuth } from "./AuthContext";
 import {
   DISPLAY_NAME_MAX_LENGTH,
@@ -235,10 +236,13 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
       <div className="orbita-gate-card">
         <header className="orbita-gate-header">
           <div className="orbita-brand" aria-label="ORBITA">
-            <span className="orbita-brand-mark" aria-hidden="true">
-              O
+            <OrbitaLogo size={44} />
+            <span className="orbita-brand-copy">
+              <span className="orbita-brand-name">ORBITA</span>
+              <span className="orbita-brand-tagline">
+                Onboard Remote Biometric &amp; Integrated Telemetry Assistant
+              </span>
             </span>
-            <span className="orbita-brand-name">ORBITA</span>
           </div>
           <span className="orbita-gate-tag">{SCAN_COPY.gateTag}</span>
           {allowCancel && (

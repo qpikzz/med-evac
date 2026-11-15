@@ -1,6 +1,6 @@
-# TASKS.md — Master Implementation Plan & Milestones (MED-EVAC)
+# TASKS.md — Master Implementation Plan & Milestones (ORBITA)
 
-> **Scope:** Phased implementation roadmap for **MED-EVAC** (NASA Space Apps Challenge 2026). Tasks are grouped into cohesive, single-concern blocks (**Core/Logic** vs. **Frontend/UI** — never mixed within the same block).
+> **Scope:** Phased implementation roadmap for **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*) (NASA Space Apps Challenge 2026). Tasks are grouped into cohesive, single-concern blocks (**Core/Logic** vs. **Frontend/UI** — never mixed within the same block).
 > **Workflow Rules (`RULES.md`):**
 > - Create `openspec/tasks/TASK-[DD]-[MM]-[YY]-[N]-[two-word-description].md` for every task.
 > - Log every newly added dependency, font, icon set, or dataset in `SOURCES.md`.
@@ -36,7 +36,7 @@
 *Goal: Establish the clinical light-tech visual system, global layout shell, and role switcher.*
 
 - [ ] **Task 3.1 — Design Tokens, Typography & UI Packages:** Install approved OSI UI dependencies (Tailwind CSS / CSS tokens, `lucide-react`, `motion`, `Recharts` or `Apache ECharts`), configure `DESIGN.md` color/elevation variables, and log all libraries in `SOURCES.md`.
-- [ ] **Task 3.2 — Persistent Top Navigation Header & Role Switcher:** Implement the glass top bar displaying `MED-EVAC`, Mission Day (`Day 40`), date (`2026-11-14`), `OFFLINE · AUTONOMOUS` badge, `Main` / `Comms` tab switcher, and top-right avatar switcher (`Astronaut` vs. `Ground Operator`).
+- [ ] **Task 3.2 — Persistent Top Navigation Header & Role Switcher:** Implement the glass top bar displaying `ORBITA`, Mission Day (`Day 40`), date (`2026-11-14`), `OFFLINE · AUTONOMOUS` badge, `Main` / `Comms` tab switcher, and top-right avatar switcher (`Astronaut` vs. `Ground Operator`).
 - [ ] **Task 3.3 — App State Context & Pipeline Binding:** Connect `historyStore`, `missionClock`, `checkCheckup`, `computeBaselines`, and `evaluate` in a centralized reactive store provider (marking temporary UI session helpers with `#TODO` per `FRONTEND.md` §4).
 - **Block 3 Checkpoint:** Verify TypeScript compilation (`tsc --noEmit`) and visual rendering of the header and role switcher.
 

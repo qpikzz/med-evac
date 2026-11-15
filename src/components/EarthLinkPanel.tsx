@@ -162,7 +162,7 @@ function EarthLinkPanel({
       <section className="earth-link-panel dashboard-card" aria-label="Ground Operator Earth console">
         <header className="earth-panel-header">
           <div>
-            <p className="section-eyebrow">Ground Operator console</p>
+              <p className="section-eyebrow">ORBITA · Ground Operator console</p>
             <h2>Earth — Flight Surgeon (simulated)</h2>
           </div>
           {visibleMessage?.kind === "private_behavioral" && (
@@ -207,7 +207,7 @@ function EarthLinkPanel({
         <>
           <header className="earth-panel-header">
             <div>
-              <p className="section-eyebrow">Delayed one-way communication</p>
+                <p className="section-eyebrow">ORBITA · Delayed one-way communication</p>
               <h2>Message to Earth — {message.recipient_label}</h2>
             </div>
             {message.kind === "private_behavioral" && (

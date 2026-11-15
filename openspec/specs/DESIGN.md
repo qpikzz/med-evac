@@ -1,6 +1,6 @@
-# DESIGN.md — Design System & UI/UX Specification (MED-EVAC)
+# DESIGN.md — Design System & UI/UX Specification (ORBITA)
 
-> **Scope:** Visual design system, color tokens, typography, layout architecture, and screen specifications for **MED-EVAC** (NASA Space Apps Challenge 2026, Team CyberAstro). All UI text rendered in the application must be in **English** per `RULES.md`.
+> **Scope:** Visual design system, color tokens, typography, layout architecture, and screen specifications for **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*) (NASA Space Apps Challenge 2026, Team CyberAstro). All UI text rendered in the application must be in **English** per `RULES.md`.
 
 ---
 
@@ -76,7 +76,7 @@
 
 Displayed across all screens (`height: 64px`, transparent/glass bar):
 1. **Left — Mission Context & Brand:**
-   * Minimalist **MED-EVAC** emblem + Mission Day badge (`Day 40`) + Mission Date (`2026-11-21` / `YYYY-MM-DD`).
+   * Minimalist **ORBITA** emblem + Mission Day badge (`Day 40`) + Mission Date (`2026-11-21` / `YYYY-MM-DD`).
    * Offline autonomous badge (`OFFLINE READY` subtle indicator).
 2. **Center — Primary Navigation Tabs (Pill / Underline Switcher):**
    * **`Main`** (`Главная` — Check-up & Health Summary Dashboard)

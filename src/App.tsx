@@ -240,8 +240,11 @@ function App() {
         <main className="comms-view dashboard-card">
           <div className="section-heading">
             <div>
-              <p className="section-eyebrow">Communication</p>
+              <p className="section-eyebrow">ORBITA · Communication</p>
               <h1>Comms</h1>
+              <p className="comms-brand-expansion">
+                Onboard Remote Biometric &amp; Integrated Telemetry Assistant
+              </p>
             </div>
           </div>
           {role === "astronaut" && (

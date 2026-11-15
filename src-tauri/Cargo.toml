@@ -1,7 +1,7 @@
 [package]
-name = "med-evac"
+name = "orbita"
 version = "0.1.0"
-description = "Autonomous offline spaceflight medical monitoring and consultation system"
+description = "ORBITA - Onboard Remote Biometric & Integrated Telemetry Assistant"
 authors = ["Team CyberAstro"]
 license = "Apache-2.0"
 edition = "2024"
@@ -12,7 +12,7 @@ edition = "2024"
 # The `_lib` suffix may seem redundant but it is necessary
 # to make the lib name unique and wouldn't conflict with the bin name.
 # This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
-name = "med_evac_lib"
+name = "orbita_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

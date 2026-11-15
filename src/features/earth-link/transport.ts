@@ -24,7 +24,7 @@ export function createInMemoryTransport(): EarthLinkTransport {
   };
 }
 
-const EVENT_NAME = "earth-link:message";
+const EVENT_NAME = "orbita:earth-link:message";
 
 export function createTauriTransport(): EarthLinkTransport {
   const listeners = new Set<(msg: EarthMessage) => void>();

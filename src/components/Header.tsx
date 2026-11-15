@@ -4,6 +4,7 @@ import { ROLE_LABELS } from "../features/auth/constants";
 import { HEADER_COPY } from "../features/auth/copy";
 import { initials } from "../features/auth/identity";
 import type { AuthProfile } from "../features/auth/types";
+import OrbitaLogo from "./OrbitaLogo";
 
 export type { UserRole } from "../features/auth/types";
 export type AppView = "main" | "comms";
@@ -71,9 +72,9 @@ function Header({
   return (
     <header className="app-header">
       <div className="header-brand">
-        <div className="brand-lockup" aria-label="MED-EVAC">
-          <span className="brand-mark" aria-hidden="true">M</span>
-          <span className="brand-name">MED-EVAC</span>
+        <div className="brand-lockup" aria-label="ORBITA">
+          <OrbitaLogo size={32} />
+          <span className="brand-name">ORBITA</span>
         </div>
         <div className="mission-context">
           <span className="mission-day">Day 40</span>

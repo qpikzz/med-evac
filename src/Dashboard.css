@@ -1076,6 +1076,14 @@
   padding: 22px;
 }
 
+.comms-brand-expansion {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
 .comms-channel-switcher {
   width: fit-content;
   gap: 4px;

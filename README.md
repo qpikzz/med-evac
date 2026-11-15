@@ -1,7 +1,7 @@
 <div align="center">
 
-  # 🚀 MED-EVAC
-  **Medical Evaluation, Vitals & Autonomous Care**
+  # 🚀 ORBITA
+  **Onboard Remote Biometric & Integrated Telemetry Assistant**
 
   *A project by **Team CyberAstro** for the **NASA Space Apps Challenge***
 
@@ -20,7 +20,7 @@
 
 ### 📖 About the Project
 
-**MED-EVAC** is an interactive desktop application intended to help astronauts monitor vital signs, assess physical and mental health risks, and receive autonomous medical guidance during long-duration space missions.
+**ORBITA** is an interactive desktop application intended to help astronauts monitor vital signs, assess physical and mental health risks, and receive autonomous medical guidance during long-duration space missions.
 
 The design goal is **100% offline autonomy** powered by local AI analytics and an interactive SVG body map, so self-diagnosis and treatment protocols remain available during deep-space communication blackouts with Earth.
 

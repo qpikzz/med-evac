@@ -272,6 +272,7 @@ function summaryBody(content: EarthMessageContent): string {
 function deliveredText(msg: EarthMessage): string {
   const content = msg.content;
   const lines: string[] = ["SYNTHETIC"];
+  lines.push("ORBITA - Onboard Remote Biometric & Integrated Telemetry Assistant");
   if (msg.kind === "private_behavioral") {
     lines.push("Private");
   }

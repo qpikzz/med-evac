@@ -1,6 +1,6 @@
-# API_CONTRACT.md — Internal Module Contracts & Local HTTP APIs (MED-EVAC)
+# API_CONTRACT.md — Internal Module Contracts & Local HTTP APIs (ORBITA)
 
-> **Scope:** Single source of truth for all TypeScript data structures, module interfaces, static JSON schemas, and local Ollama HTTP endpoints across `MED-EVAC`. All frontend components and domain modules must strictly adhere to these contracts without redefining types.
+> **Scope:** Single source of truth for all TypeScript data structures, module interfaces, static JSON schemas, and local Ollama HTTP endpoints across **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*). All frontend components and domain modules must strictly adhere to these contracts without redefining types.
 
 ---
 

@@ -1,8 +1,8 @@
 {
-  "name": "med-evac",
+  "name": "orbita",
   "private": true,
   "version": "0.1.0",
-  "description": "Autonomous offline spaceflight medical monitoring and consultation system by Team CyberAstro",
+  "description": "ORBITA - Onboard Remote Biometric & Integrated Telemetry Assistant by Team CyberAstro",
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {

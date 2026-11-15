@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: med-evac:latest
-    container_name: med-evac
+    image: orbita:latest
+    container_name: orbita
     ports:
       - "8080:80"
     restart: unless-stopped
