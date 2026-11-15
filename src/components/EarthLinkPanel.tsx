@@ -9,6 +9,7 @@ import {
 import CrewAvatar from "./CrewAvatar";
 import type { AuthProfile } from "../features/auth/types";
 import {
+  earthChatActivity,
   earthMessageDelivery,
   type EarthChatMessage,
   type EarthTelemetrySnapshot,
@@ -258,14 +259,7 @@ function EarthLinkPanel({
   }
 
   const currentSender = side === "astronaut" ? "astronaut" : "flight_surgeon";
-  const latestMessage = thread[thread.length - 1];
-  const activity = !latestMessage
-    ? "No messages yet"
-    : earthMessageDelivery(latestMessage, nowMs) === "transmitting"
-      ? "Transmitting"
-      : latestMessage.sender !== currentSender
-        ? "Unread reply"
-        : `${thread.length} messages`;
+  const activity = earthChatActivity(thread, nowMs, currentSender);
 
   return (
     <section className="earth-chat-panel" aria-label="Earth Mission Control chat">

@@ -168,7 +168,7 @@ describe("Comms views", () => {
     expect(markup).toContain('disabled=""');
   });
 
-  it("renders seeded Earth messages as plain chat bubbles without debug source annotations", () => {
+  it("renders the clean Day 39 Earth exchange as plain chat bubbles", () => {
     const astronautProfiles = [
       { profile_id: "astro-01", display_name: "Cmdr. Alex Vance" },
     ];
@@ -188,9 +188,11 @@ describe("Comms views", () => {
     );
 
     expect(markup).toContain("Flight Surgeon (Houston)");
-    expect(markup).toContain("Day 38 check-in complete");
+    expect(markup).toContain("Day 39");
+    expect(markup).toContain("resting heart rate has been slightly elevated");
+    expect(markup).toContain("prioritize steady hydration");
+    expect(markup).not.toContain("Unread reply");
     expect(markup).toContain("Check-up Telemetry");
-    expect(markup).not.toContain("Draft ready for review and send");
     expect(markup).not.toContain("SYNTHETIC");
     expect(markup).not.toContain("[ANSWER:");
     expect(markup).toContain("<svg");

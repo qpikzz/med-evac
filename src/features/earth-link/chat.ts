@@ -38,6 +38,7 @@ export interface EarthChatMessage {
   missionDay: number;
   createdAtMs: number;
   arrivesAtMs: number;
+  read?: boolean;
   telemetry?: EarthTelemetrySnapshot;
 }
 
@@ -46,9 +47,11 @@ export type EarthMessageDelivery = "transmitting" | "delivered";
 export interface EarthChatStorage {
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
+  removeItem?(key: string): void;
 }
 
-const STORAGE_PREFIX = "orbita_earth_chat_v1_";
+const STORAGE_PREFIX = "orbita_earth_chat_v2_";
+const LEGACY_STORAGE_PREFIX = "orbita_earth_chat_v1_";
 const STATUSES = new Set<Status>(["green", "yellow", "red", "no_data"]);
 const ESCALATIONS = new Set<Escalation>([
   "self",
@@ -58,40 +61,23 @@ const ESCALATIONS = new Set<Escalation>([
 
 const SEED_MESSAGES: EarthChatMessage[] = [
   {
-    id: "astro-01-day-38-crew",
-    astronautId: "astro-01",
-    sender: "astronaut",
-    text: "Day 38 check-in complete. Sleep was short after the maintenance shift, but I feel steady today.",
-    missionDay: 38,
-    createdAtMs: Date.parse("2026-11-12T09:10:00.000Z"),
-    arrivesAtMs: Date.parse("2026-11-12T09:10:20.000Z"),
-  },
-  {
-    id: "astro-01-day-38-surgeon",
-    astronautId: "astro-01",
-    sender: "flight_surgeon",
-    text: "Copy, Alex. Keep to the planned rest period and include any new symptoms in your next check-in.",
-    missionDay: 38,
-    createdAtMs: Date.parse("2026-11-12T09:14:00.000Z"),
-    arrivesAtMs: Date.parse("2026-11-12T09:14:20.000Z"),
-  },
-  {
     id: "astro-01-day-39-crew",
     astronautId: "astro-01",
     sender: "astronaut",
-    text: "Day 39 check-in sent. No new symptoms to report; continuing the usual sleep schedule.",
+    text: "Flight Surgeon, my resting heart rate has been slightly elevated over the past couple of days. What could be causing this, and should I adjust today's exercise protocol?",
     missionDay: 39,
-    createdAtMs: Date.parse("2026-11-13T09:12:00.000Z"),
-    arrivesAtMs: Date.parse("2026-11-13T09:12:20.000Z"),
+    createdAtMs: Date.parse("2026-11-13T08:15:00.000Z"),
+    arrivesAtMs: Date.parse("2026-11-13T08:35:00.000Z"),
   },
   {
     id: "astro-01-day-39-surgeon",
     astronautId: "astro-01",
     sender: "flight_surgeon",
-    text: "Received. Thanks for the update. Please send another note if anything changes.",
+    text: "Copy, Crew. Mild resting heart rate elevation in microgravity is commonly linked to fluid shifts, dehydration, accumulated sleep debt, or recent high-intensity resistive training. For today, prioritize steady hydration (2.5–3 L), shift to light aerobic recovery instead of heavy resistive loads, and re-check resting vitals tomorrow morning. Ping us if it rises above +15 bpm over your 7-day baseline or is accompanied by dizziness.",
     missionDay: 39,
-    createdAtMs: Date.parse("2026-11-13T09:17:00.000Z"),
-    arrivesAtMs: Date.parse("2026-11-13T09:17:20.000Z"),
+    createdAtMs: Date.parse("2026-11-13T08:35:00.000Z"),
+    arrivesAtMs: Date.parse("2026-11-13T08:55:00.000Z"),
+    read: true,
   },
 ];
 
@@ -172,6 +158,7 @@ function isEarthChatMessage(value: unknown, astronautId: string): value is Earth
     Number.isFinite(value.createdAtMs) &&
     typeof value.arrivesAtMs === "number" &&
     Number.isFinite(value.arrivesAtMs) &&
+    (value.read === undefined || typeof value.read === "boolean") &&
     (value.telemetry === undefined || isTelemetrySnapshot(value.telemetry))
   );
 }
@@ -187,6 +174,10 @@ export function earthChatStorageKey(astronautId: string): string {
   return `${STORAGE_PREFIX}${encodeURIComponent(astronautId)}`;
 }
 
+function legacyEarthChatStorageKey(astronautId: string): string {
+  return `${LEGACY_STORAGE_PREFIX}${encodeURIComponent(astronautId)}`;
+}
+
 export function seedEarthChatThread(astronautId: string): EarthChatMessage[] {
   return astronautId === "astro-01" ? SEED_MESSAGES.map((message) => ({ ...message })) : [];
 }
@@ -199,9 +190,17 @@ export function loadEarthChatThread(
   if (!resolvedStorage) {
     return seedEarthChatThread(astronautId);
   }
+
+  const legacyKey = legacyEarthChatStorageKey(astronautId);
+  if (resolvedStorage.getItem(legacyKey) !== null) {
+    resolvedStorage.removeItem?.(legacyKey);
+  }
+
   const raw = resolvedStorage.getItem(earthChatStorageKey(astronautId));
   if (raw === null) {
-    return seedEarthChatThread(astronautId);
+    const seededThread = seedEarthChatThread(astronautId);
+    resolvedStorage.setItem(earthChatStorageKey(astronautId), JSON.stringify(seededThread));
+    return seededThread;
   }
 
   let parsed: unknown;
@@ -214,6 +213,24 @@ export function loadEarthChatThread(
     throw new Error(`Saved Earth chat for ${astronautId} has an invalid message format.`);
   }
   return parsed;
+}
+
+export function earthChatActivity(
+  thread: EarthChatMessage[],
+  nowMs: number,
+  viewer: EarthChatSender,
+): string {
+  const latestMessage = thread[thread.length - 1];
+  if (!latestMessage) {
+    return "No messages yet";
+  }
+  if (earthMessageDelivery(latestMessage, nowMs) === "transmitting") {
+    return "Transmitting";
+  }
+  if (latestMessage.sender !== viewer && latestMessage.read !== true) {
+    return "Unread reply";
+  }
+  return `${thread.length} messages`;
 }
 
 export function saveEarthChatThread(

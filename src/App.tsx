@@ -12,7 +12,7 @@ import { useAppState } from "./features/app-state/AppStateContext";
 import {
   buildEarthTelemetrySnapshot,
   createEarthChatMessage,
-  earthMessageDelivery,
+  earthChatActivity,
   loadEarthChatThread,
   saveEarthChatThread,
   seedEarthChatThread,
@@ -123,15 +123,11 @@ function App() {
     },
     [clinicalNotesToday, evaluation, flagsToday, hasCheckup, missionDay, readings, rules],
   );
-  const latestEarthMessage = earthThread[earthThread.length - 1];
-  const earthActivity = !latestEarthMessage
-    ? "No messages yet"
-    : earthMessageDelivery(latestEarthMessage, nowMs) === "transmitting"
-      ? "Transmitting"
-      : latestEarthMessage.sender !==
-          (role === "astronaut" ? "astronaut" : "flight_surgeon")
-        ? "Unread reply"
-        : `${earthThread.length} messages`;
+  const earthActivity = earthChatActivity(
+    earthThread,
+    nowMs,
+    role === "astronaut" ? "astronaut" : "flight_surgeon",
+  );
 
   function contactEarth(): void {
     setCommsChannel("earth");
