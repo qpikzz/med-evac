@@ -35,7 +35,7 @@
 | **JetBrains Mono** (`@fontsource/jetbrains-mono`) | `5.3.0` · `https://github.com/JetBrains/JetBrainsMono` | **SIL OFL 1.1** | Technical labels (eyebrows, status words, mission day/date), bundled locally |
 | **Recharts** | `3.10.1` · `https://github.com/recharts/recharts` | **MIT** | 7-day trend sparklines in the indicator cards (`src/components/charts/TrendSparkline.tsx`) |
 | **Motion** (`motion`) | `14.9.0` · `https://github.com/motiondivision/motion` | **MIT** | Screen transitions, indicator-card entrance, animated radiation alert (`src/components/RadiationAlert/`); respects `prefers-reduced-motion` |
-| **Custom Interactive Body Map SVG** (`src/components/BodyMap/AnatomyArt.tsx`: stylised coloured vector anatomy — skin, muscles, organs, skeleton) and the animated space backdrop (`src/components/SpaceBackdrop/`) | Original work by the ORBITA project contributors (no third-party or AI-generated images) | **Apache-2.0** | Interactive anatomical figure for health status visualization |
+| **Custom Interactive Body Map SVG** (`src/components/BodyMap/AnatomyArt.tsx`: stylised coloured vector anatomy — skin, muscles, organs, skeleton), the animated space backdrop (`src/components/SpaceBackdrop/`) and the alert animations (`src/components/HealthAlerts/AlertArt.tsx`) | Drawn as SVG/CSS code by the ORBITA team **with SI assistance (Claude Code, Anthropic)**; no third-party images. Marked in the app with a visible "SI-assisted illustration / animation" label and a global "SI-assisted illustrations · Synthetic data" watermark on every screen | **Apache-2.0** | Interactive anatomical figure for health status visualization |
 <!-- Template for new UI packages:
 | **Library Name** | `https://github.com/...` | **MIT / Apache-2.0** | Brief role description |
 -->
@@ -120,7 +120,7 @@ Cite every NASA, ESA, JAXA, or open scientific standard used in the RAG knowledg
 
 ## 5. Media, Fonts & Branding
 * **Application Icons & UI Graphics:** Original artwork created by the ORBITA project contributors (**Apache-2.0**). Default starter template icons/logos (`tauri.svg`, `vite.svg`, default `src-tauri/icons/`) are replaced before submission to comply with third-party trademark and CC-BY-NC-ND restrictions.
-* **Body map figure (`src/components/BodyMap/BodyMap.tsx`):** Placeholder line-art silhouettes (skin, organs, skeleton) drawn as inline SVG by the ORBITA project contributors (**Apache-2.0**). Optional layer art from Rəna goes in `src/assets/body/` and must be listed here with its licence; AI-generated art also needs an "AI-generated illustration" note in About/Credits.
+* **Body map figure, space backdrop, alert animations:** stylised vector anatomy (skin, muscles, organs, skeleton), starfield/nebula/orbit backdrop and per-indicator alert animations, drawn as SVG/CSS code with SI assistance (Claude Code). Visible in-app marks: "SI-assisted illustration", "SI-assisted animation" and a global watermark. Optional hand-drawn layer art can be added in `src/assets/body/` and must be listed here with its licence.
 * **Dark space theme (`src/styles/theme.css`):** Original; starfield is pure CSS radial-gradients, no image files.
 * **Typography:** Inter (body), Space Grotesk (headings, numbers) and JetBrains Mono (technical labels), all **SIL OFL 1.1**, bundled locally through `@fontsource` packages (see §2) — no Google Fonts or CDN requests; system sans-serif stack as fallback.
 * **Demo Video & Screenshots:** Original screen recordings and narration produced by the ORBITA project team with full written consent of all adult participants and zero third-party copyrighted audio/video.
@@ -129,3 +129,22 @@ Cite every NASA, ESA, JAXA, or open scientific standard used in the RAG knowledg
 
 ## 6. Third-Party Open-Source License Notices
 This software incorporates unmodified open-source components governed by **MIT**, **Apache-2.0**, **BSD-2-Clause**, **BSD-3-Clause**, **ISC**, and **MPL-2.0** (build-time CSS tooling via `lightningcss` and Rust CSS crates). Full lockfiles (`package-lock.json` and `Cargo.lock`) remain in the repository as the complete transitive dependency manifest.
+
+---
+
+## 7. Super Intelligence (SI) Use — disclosure
+
+Following the NASA Space Apps Challenge SI rules, we disclose where SI tools were used. No NASA logos, flags or mission identifiers were generated or modified.
+
+| Area | SI tools | How they were used | Where it is marked |
+| :--- | :--- | :--- | :--- |
+| **In the product** | IBM Granite 3.3 8B via Ollama (local, optional) | Explains the rules engine's results in plain language; cannot change status, urgency or escalation; answers are auto-checked for diagnoses and contradictions | In-app label "Local Neural Engine · granite3.3:8b"; specs `ai-helper.md` |
+| **Code** | GitHub Copilot (GPT-6 Luna), DeepSeek, Claude Code (Anthropic), Google Gemini | Full-stack TypeScript/React/Tauri code, tests, refactoring, debugging, design implementation, project audit | This section; README; git commit trailers (`Co-Authored-By: Claude …`) as metadata |
+| **Specifications & prompts** | Google Gemini, DeepSeek, Claude Code, GitHub Copilot | Feature specs in `openspec/`, the assistant's system prompt | This section; spec headers |
+| **Data** | ChatGPT, Claude | Analysis of research papers; converting the team's research table into `rules.json`, `knowledge_base.json`, `combinations.json`; synthetic dataset generator | This section; `rules-engine.md`; every rule cites the human-curated table and its NASA/PubMed sources. SI did not invent medical thresholds — team decisions and illustrative settings are labelled |
+| **Images & animations** | Claude Code | Body-map anatomy, space backdrop, alert animations — drawn as SVG/CSS code | Visible in-app marks (see §5) |
+| **Video & audio** | SI video/voice tools | Demo-video editing and SI-generated voice-over | Visible "SI-generated" watermark in the video; voice-over acknowledged in the video description and file metadata |
+| **Writing** | Claude, ChatGPT | Documentation, README, submission text | This section |
+
+All SI output was reviewed by the team; the code is covered by automated tests (Vitest).
+
