@@ -9,7 +9,7 @@
   border: 1px solid var(--rad-color);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at 56px 56px, color-mix(in srgb, var(--rad-color) 18%, transparent), transparent 220px),
+    linear-gradient(100deg, color-mix(in srgb, var(--rad-color) 10%, transparent) 0%, transparent 45%),
     var(--surface);
   color: var(--text);
   overflow: hidden;
@@ -53,6 +53,7 @@
   display: grid;
   gap: var(--space-1);
   min-width: 0;
+  max-width: 72ch;
 }
 
 .rad-body p,

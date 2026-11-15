@@ -142,13 +142,25 @@ select {
   font-size: var(--fs-sm);
 }
 
+.radiation-hint {
+  margin: 0 0 8px;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
 .radiation-flag-list {
+  margin-top: 8px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-.symptom-pill.radiation-pill.is-selected {
+.radiation-pill {
+  font-size: var(--fs-sm) !important;
+}
+
+.radiation-pill.is-selected,
+.radiation-pill.is-selected:hover {
   border-color: var(--status-yellow);
   color: var(--status-yellow);
   background: rgba(255, 200, 87, 0.12);

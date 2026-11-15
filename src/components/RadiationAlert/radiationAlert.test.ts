@@ -32,3 +32,36 @@ describe("radiation alert (driven only by the rules engine)", () => {
     expect(view?.reportedFlags.length).toBeGreaterThan(0);
   });
 });
+
+describe("radiation thresholds (illustrative mission settings, Q-RAD)", () => {
+  function withReadings(readings: { metric: string; value: number }[]) {
+    return evaluate({
+      today: "2026-11-14",
+      readings: readings.map((r) => ({ date: "2026-11-14", context: "rest" as const, valid: true, ...r })),
+      flags: [],
+      baselines: {},
+      rules,
+    });
+  }
+
+  it("nominal transit values (77 µSv/h, 72 mSv) → no alert", () => {
+    const result = withReadings([
+      { metric: "radiation_dose_rate", value: 77 },
+      { metric: "radiation_accumulated", value: 72 },
+    ]);
+    expect(radiationAlertView(result, rules)).toBeNull();
+  });
+
+  it("dose rate above 150 µSv/h → yellow (rad_y_rate)", () => {
+    const view = radiationAlertView(withReadings([{ metric: "radiation_dose_rate", value: 160 }]), rules);
+    expect(view?.level).toBe("yellow");
+    expect(view?.rules.map((r) => r.rule_id)).toContain("rad_y_rate");
+  });
+
+  it("accumulated ≥ 480 mSv → yellow, ≥ 600 mSv → red", () => {
+    expect(radiationAlertView(withReadings([{ metric: "radiation_accumulated", value: 480 }]), rules)?.level).toBe("yellow");
+    const red = radiationAlertView(withReadings([{ metric: "radiation_accumulated", value: 600 }]), rules);
+    expect(red?.level).toBe("red");
+    expect(red?.rules[0].rule_id).toBe("rad_r_accum");
+  });
+});

@@ -53,6 +53,7 @@ Clicking the circular profile avatar in the top-right header opens a clean dropd
 - **Top Acknowledgment Banner (`CheckupCompleteBar`):**
   - Compact glass card displaying *"Thank you for taking care of yourself!"* alongside a secondary **`Edit Check-up`** button (reopens the form for today's check-up).
 - **Radiation Alert (`RadiationAlert`):** shown above the summary row only when the engine reports `radiation_dose` as `yellow` or `red` (`src/components/RadiationAlert/`). Renders the triggered radiation rules' `title`, `explanation`, `actions`, `recheck`, the reported flags and the escalation text — no own logic. `Show on body map` selects the radiation zone (map switches to the Skin layer).
+- **Radiation Dose Budget:** the radiation indicator card shows `DoseBudgetMeter` (`src/components/charts/`), fed by `doseBudget()` (`src/features/radiation/doseBudget.ts`): accumulated dose vs the 600 mSv NASA career limit and a projection to Mars arrival (`TRANSIT_DAYS = 180`). Display only.
 - **Status Summary Row (2 Equal Cards):**
   - **Card 1 — `Overall Status`:** Displays `overall_status` (`Green` / `Yellow` / `Red` / `No Data`) with semantic pill styling and status subtitle.
   - **Card 2 — `Escalation Level`:** Displays `overall_escalation` (`Self` / `Crew Medical Officer` / `Flight Surgeon on Earth`) with clear action priority indicator.

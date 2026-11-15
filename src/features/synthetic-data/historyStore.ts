@@ -6,7 +6,7 @@ export interface SyntheticDataset {
   schema_version: "1.0";
   generator: string;
   astronaut: { id: string; display_name: string };
-  mission: { name: string; day1_date: string; demo_day: number };
+  mission: { name: string; day1_date: string; demo_day: number; transit_days?: number };
   preflight: { readings: Reading[] };
   history: {
     readings: Reading[];

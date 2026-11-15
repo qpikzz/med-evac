@@ -10,7 +10,8 @@
   "mission": {
     "name": "Mars transit (synthetic)",
     "day1_date": "2026-10-06",
-    "demo_day": 40
+    "demo_day": 40,
+    "transit_days": 180
   },
   "preflight": {
     "readings": [
@@ -327,6 +328,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-06",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-06",
+        "metric": "radiation_accumulated",
+        "value": 1.8,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-07",
         "metric": "heart_rate",
         "value": 64,
@@ -390,6 +405,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-07",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-07",
+        "metric": "radiation_accumulated",
+        "value": 3.6,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-08",
         "metric": "heart_rate",
         "value": 62,
@@ -453,6 +482,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-08",
+        "metric": "radiation_dose_rate",
+        "value": 75,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-08",
+        "metric": "radiation_accumulated",
+        "value": 5.4,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-09",
         "metric": "heart_rate",
         "value": 63,
@@ -516,6 +559,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-09",
+        "metric": "radiation_dose_rate",
+        "value": 73,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-09",
+        "metric": "radiation_accumulated",
+        "value": 7.2,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-10",
         "metric": "heart_rate",
         "value": 64,
@@ -575,6 +632,20 @@
         "date": "2026-10-10",
         "metric": "skin_symptom_score",
         "value": 0,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-10",
+        "metric": "radiation_dose_rate",
+        "value": 77,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-10",
+        "metric": "radiation_accumulated",
+        "value": 9,
         "context": "rest",
         "valid": true
       },
@@ -642,6 +713,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-11",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-11",
+        "metric": "radiation_accumulated",
+        "value": 10.8,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-12",
         "metric": "heart_rate",
         "value": 63,
@@ -705,6 +790,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-12",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-12",
+        "metric": "radiation_accumulated",
+        "value": 12.6,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-13",
         "metric": "heart_rate",
         "value": 63,
@@ -768,6 +867,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-13",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-13",
+        "metric": "radiation_accumulated",
+        "value": 14.4,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-14",
         "metric": "heart_rate",
         "value": 64,
@@ -827,6 +940,20 @@
         "date": "2026-10-14",
         "metric": "skin_symptom_score",
         "value": 0,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-14",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-14",
+        "metric": "radiation_accumulated",
+        "value": 16.2,
         "context": "rest",
         "valid": true
       },
@@ -894,6 +1021,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-15",
+        "metric": "radiation_dose_rate",
+        "value": 75,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-15",
+        "metric": "radiation_accumulated",
+        "value": 18,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-16",
         "metric": "heart_rate",
         "value": 63,
@@ -953,6 +1094,20 @@
         "date": "2026-10-16",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-16",
+        "metric": "radiation_dose_rate",
+        "value": 73,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-16",
+        "metric": "radiation_accumulated",
+        "value": 19.8,
         "context": "rest",
         "valid": true
       },
@@ -1020,6 +1175,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-17",
+        "metric": "radiation_dose_rate",
+        "value": 77,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-17",
+        "metric": "radiation_accumulated",
+        "value": 21.6,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-18",
         "metric": "heart_rate",
         "value": 62,
@@ -1079,6 +1248,20 @@
         "date": "2026-10-18",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-18",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-18",
+        "metric": "radiation_accumulated",
+        "value": 23.4,
         "context": "rest",
         "valid": true
       },
@@ -1146,6 +1329,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-19",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-19",
+        "metric": "radiation_accumulated",
+        "value": 25.2,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-20",
         "metric": "heart_rate",
         "value": 63,
@@ -1205,6 +1402,20 @@
         "date": "2026-10-20",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-20",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-20",
+        "metric": "radiation_accumulated",
+        "value": 27,
         "context": "rest",
         "valid": true
       },
@@ -1272,6 +1483,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-21",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-21",
+        "metric": "radiation_accumulated",
+        "value": 28.8,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-22",
         "metric": "heart_rate",
         "value": 62,
@@ -1335,6 +1560,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-22",
+        "metric": "radiation_dose_rate",
+        "value": 75,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-22",
+        "metric": "radiation_accumulated",
+        "value": 30.6,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-23",
         "metric": "heart_rate",
         "value": 63,
@@ -1394,6 +1633,20 @@
         "date": "2026-10-23",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-23",
+        "metric": "radiation_dose_rate",
+        "value": 73,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-23",
+        "metric": "radiation_accumulated",
+        "value": 32.4,
         "context": "rest",
         "valid": true
       },
@@ -1461,6 +1714,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-24",
+        "metric": "radiation_dose_rate",
+        "value": 77,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-24",
+        "metric": "radiation_accumulated",
+        "value": 34.2,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-25",
         "metric": "heart_rate",
         "value": 62,
@@ -1520,6 +1787,20 @@
         "date": "2026-10-25",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-25",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-25",
+        "metric": "radiation_accumulated",
+        "value": 36,
         "context": "rest",
         "valid": true
       },
@@ -1587,6 +1868,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-26",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-26",
+        "metric": "radiation_accumulated",
+        "value": 37.8,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-27",
         "metric": "heart_rate",
         "value": 63,
@@ -1646,6 +1941,20 @@
         "date": "2026-10-27",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-27",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-27",
+        "metric": "radiation_accumulated",
+        "value": 39.6,
         "context": "rest",
         "valid": true
       },
@@ -1713,6 +2022,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-28",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-28",
+        "metric": "radiation_accumulated",
+        "value": 41.4,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-29",
         "metric": "heart_rate",
         "value": 62,
@@ -1776,6 +2099,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-29",
+        "metric": "radiation_dose_rate",
+        "value": 75,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-29",
+        "metric": "radiation_accumulated",
+        "value": 43.2,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-10-30",
         "metric": "heart_rate",
         "value": 63,
@@ -1835,6 +2172,20 @@
         "date": "2026-10-30",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-30",
+        "metric": "radiation_dose_rate",
+        "value": 73,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-30",
+        "metric": "radiation_accumulated",
+        "value": 45,
         "context": "rest",
         "valid": true
       },
@@ -1902,6 +2253,20 @@
         "valid": true
       },
       {
+        "date": "2026-10-31",
+        "metric": "radiation_dose_rate",
+        "value": 77,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-10-31",
+        "metric": "radiation_accumulated",
+        "value": 46.8,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-11-01",
         "metric": "heart_rate",
         "value": 62,
@@ -1961,6 +2326,20 @@
         "date": "2026-11-01",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-01",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-01",
+        "metric": "radiation_accumulated",
+        "value": 48.6,
         "context": "rest",
         "valid": true
       },
@@ -2028,6 +2407,20 @@
         "valid": true
       },
       {
+        "date": "2026-11-02",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-02",
+        "metric": "radiation_accumulated",
+        "value": 50.4,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-11-03",
         "metric": "heart_rate",
         "value": 63,
@@ -2087,6 +2480,20 @@
         "date": "2026-11-03",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-03",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-03",
+        "metric": "radiation_accumulated",
+        "value": 52.2,
         "context": "rest",
         "valid": true
       },
@@ -2154,6 +2561,20 @@
         "valid": true
       },
       {
+        "date": "2026-11-04",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-04",
+        "metric": "radiation_accumulated",
+        "value": 54,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-11-05",
         "metric": "heart_rate",
         "value": 62,
@@ -2217,6 +2638,20 @@
         "valid": true
       },
       {
+        "date": "2026-11-05",
+        "metric": "radiation_dose_rate",
+        "value": 75,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-05",
+        "metric": "radiation_accumulated",
+        "value": 55.8,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-11-06",
         "metric": "heart_rate",
         "value": 63,
@@ -2276,6 +2711,20 @@
         "date": "2026-11-06",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-06",
+        "metric": "radiation_dose_rate",
+        "value": 73,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-06",
+        "metric": "radiation_accumulated",
+        "value": 57.6,
         "context": "rest",
         "valid": true
       },
@@ -2343,6 +2792,20 @@
         "valid": true
       },
       {
+        "date": "2026-11-07",
+        "metric": "radiation_dose_rate",
+        "value": 77,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-07",
+        "metric": "radiation_accumulated",
+        "value": 59.4,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-11-08",
         "metric": "heart_rate",
         "value": 62,
@@ -2402,6 +2865,20 @@
         "date": "2026-11-08",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-08",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-08",
+        "metric": "radiation_accumulated",
+        "value": 61.2,
         "context": "rest",
         "valid": true
       },
@@ -2469,6 +2946,20 @@
         "valid": true
       },
       {
+        "date": "2026-11-09",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-09",
+        "metric": "radiation_accumulated",
+        "value": 63,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-11-10",
         "metric": "heart_rate",
         "value": 63,
@@ -2528,6 +3019,20 @@
         "date": "2026-11-10",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-10",
+        "metric": "radiation_dose_rate",
+        "value": 74,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-10",
+        "metric": "radiation_accumulated",
+        "value": 64.8,
         "context": "rest",
         "valid": true
       },
@@ -2595,6 +3100,20 @@
         "valid": true
       },
       {
+        "date": "2026-11-11",
+        "metric": "radiation_dose_rate",
+        "value": 76,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-11",
+        "metric": "radiation_accumulated",
+        "value": 66.6,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-11-12",
         "metric": "heart_rate",
         "value": 62,
@@ -2658,6 +3177,20 @@
         "valid": true
       },
       {
+        "date": "2026-11-12",
+        "metric": "radiation_dose_rate",
+        "value": 75,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-12",
+        "metric": "radiation_accumulated",
+        "value": 68.4,
+        "context": "rest",
+        "valid": true
+      },
+      {
         "date": "2026-11-13",
         "metric": "heart_rate",
         "value": 76,
@@ -2717,6 +3250,20 @@
         "date": "2026-11-13",
         "metric": "skin_symptom_score",
         "value": 1,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-13",
+        "metric": "radiation_dose_rate",
+        "value": 73,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-13",
+        "metric": "radiation_accumulated",
+        "value": 70.2,
         "context": "rest",
         "valid": true
       }
@@ -2826,6 +3373,20 @@
         "date": "2026-11-14",
         "metric": "skin_symptom_score",
         "value": 0,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-14",
+        "metric": "radiation_dose_rate",
+        "value": 77,
+        "context": "rest",
+        "valid": true
+      },
+      {
+        "date": "2026-11-14",
+        "metric": "radiation_accumulated",
+        "value": 72,
         "context": "rest",
         "valid": true
       }

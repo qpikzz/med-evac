@@ -506,8 +506,26 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     );
   }
 
+  function loadDay40Demo(): void {
+    const demoValues: FieldValues = { ...EMPTY_VALUES };
+    for (const reading of syntheticHistory.day40_checkup.readings) {
+      demoValues[reading.metric] = String(reading.value);
+      if (reading.metric === "body_temp") {
+        setTemperatureContext(reading.context === "exercise" ? "exercise" : "rest");
+      }
+    }
+    for (const metric of rules.metrics) {
+      demoValues[metric.id] ??= "";
+    }
+    setValues(demoValues);
+    setDisplayDrafts({});
+    setSelectedFlags(syntheticHistory.day40_checkup.flags);
+    setClinicalNotes("");
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
+    const result = submitCheckup(entries, selectedFlags, clinicalNotes);
     const result = submitCheckup(entries, selectedFlags, clinicalNotes);
     if (result.allOk) {
       onSubmitted();
@@ -515,6 +533,32 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
   }
 
   return (
+    <form className="checkup-form" onSubmit={handleSubmit} noValidate>
+      <div className="checkup-content">
+        <div className="section-heading">
+          <div>
+            <p className="section-eyebrow">Daily check-up</p>
+            <h2>How are you feeling today?</h2>
+          </div>
+          <div className="unit-system-toggle" role="group" aria-label="Display units">
+            <button
+              type="button"
+              aria-pressed={unitSystem === "metric"}
+              className={unitSystem === "metric" ? "is-selected" : ""}
+              onClick={() => changeUnitSystem("metric")}
+            >
+              Metric (°C, kg)
+            </button>
+            <button
+              type="button"
+              aria-pressed={unitSystem === "imperial"}
+              className={unitSystem === "imperial" ? "is-selected" : ""}
+              onClick={() => changeUnitSystem("imperial")}
+            >
+              Imperial (°F, lbs)
+            </button>
+          </div>
+        </div>
     <form className="checkup-form" onSubmit={handleSubmit} noValidate>
       <div className="checkup-content">
         <div className="section-heading">
@@ -567,6 +611,67 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
               </div>
             </section>
 
+            <section className="measurement-group" aria-labelledby="radiation-heading">
+              <h4 id="radiation-heading">Radiation telemetry</h4>
+              <p className="radiation-hint">
+                Read your personal dosimeter every day. The rules check the dose rate, your total dose
+                and any radiation event you mark here.
+              </p>
+              <div className="radiation-strip">
+                {renderMetricField("radiation_dose_rate")}
+                {renderMetricField("radiation_accumulated")}
+          <div className="measurement-groups">
+            <section className="measurement-group" aria-labelledby="vitals-heading">
+              <h4 id="vitals-heading">Vitals</h4>
+              {renderBloodPressureField()}
+              <div className="vitals-row">
+                {renderMetricField("heart_rate")}
+                {renderTemperatureField()}
+                {renderMetricField("glucose")}
+              </div>
+            </section>
+
+            <section className="measurement-group" aria-labelledby="recovery-heading">
+              <h4 id="recovery-heading">Recovery &amp; Wellbeing</h4>
+              <div className="measurement-row">
+                {renderMetricField("sleep_hours")}
+                {renderMetricField("body_mass")}
+              </div>
+              <div className="radiation-flag-list" role="group" aria-label="Radiation events">
+                {rules.flags
+                  .filter((flag) => flag.indicator_ids.includes("radiation_dose"))
+                  .map((flag) => {
+                    const selected = selectedFlags.includes(flag.id);
+                    return (
+                      <button
+                        className={`symptom-quick-pick radiation-pill${selected ? " is-selected" : ""}`}
+                        type="button"
+                        key={flag.id}
+                        aria-pressed={selected}
+                        onClick={() => toggleFlag(flag.id)}
+                      >
+                        {flag.label}
+                      </button>
+                    );
+                  })}
+              <div className="measurement-row">
+                {renderScoreField("mood")}
+                {renderScoreField("skin_symptom_score")}
+              </div>
+            </section>
+          </div>
+        </section>
+            </section>
+
+        <div className="composer-divider">
+          <SymptomNotesComposer
+            flags={rules.flags}
+            selectedFlags={selectedFlags}
+            onToggleFlag={toggleFlag}
+            notes={clinicalNotes}
+            onNotesChange={setClinicalNotes}
+          />
+        </div>
             <section className="measurement-group" aria-labelledby="radiation-heading">
               <h4 id="radiation-heading">Radiation telemetry</h4>
               <div className="radiation-strip">
