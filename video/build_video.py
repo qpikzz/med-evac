@@ -209,6 +209,12 @@ def main():
     ap.add_argument("--preview", action="store_true")
     args = ap.parse_args()
 
+    if not shutil.which("ffmpeg"):
+        try:  # pip3 install static-ffmpeg  (no Homebrew needed)
+            import static_ffmpeg
+            static_ffmpeg.add_paths()
+        except ImportError:
+            pass
     for tool in ("ffmpeg", "ffprobe") + (() if args.skip_tts else ("edge-tts",)):
         if not shutil.which(tool):
             sys.exit(f"'{tool}' not found. See the header of this script.")
