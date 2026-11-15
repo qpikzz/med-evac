@@ -95,7 +95,7 @@ h1, h2, h3, h4,
 
 /* Content sits above the fixed space backdrop */
 .app-shell,
-#root > *:not(.space-backdrop) {
+#root > *:not(.space-backdrop):not(.si-watermark) {
   position: relative;
   z-index: 1;
 }
@@ -521,4 +521,48 @@ select {
   overflow-wrap: anywhere;
   font-family: var(--font-mono);
   font-size: 12px;
+}
+
+/* ---- SI disclosure (NASA Space Apps rule: SI-generated images carry a visible mark) ---- */
+.si-watermark {
+  position: fixed;
+  left: 12px;
+  bottom: 8px;
+  z-index: 2;
+  margin: 0;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: rgba(6, 11, 24, 0.75);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.si-mark {
+  position: absolute;
+  z-index: 1;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: rgba(6, 11, 24, 0.7);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.si-mark-corner {
+  top: 4px;
+  left: 4px;
+}
+
+.si-mark-bottom {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }

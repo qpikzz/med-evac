@@ -76,6 +76,7 @@ function AlertArt({ indicatorId, level }: { indicatorId: string; level: "yellow"
       <div className={`alert-art-icon ${motion}`}>
         <Icon size={112} strokeWidth={1.6} />
       </div>
+      <span className="si-mark si-mark-bottom">SI-assisted animation</span>
     </div>
   );
 }

@@ -133,7 +133,11 @@ npm run build
 └── LICENSE
 ```
 
-## 6. Links & Demo Video
+## 6. Use of Super Intelligence (SI)
+
+This project was built with SI assistance (GitHub Copilot, DeepSeek, Google Gemini, Claude Code, ChatGPT) for code, specifications, data conversion, research analysis, illustrations drawn as code, and the demo video's voice-over. The app's optional onboard assistant is IBM Granite 3.3 8B running locally via Ollama; it only explains, never decides. SI-assisted illustrations carry a visible in-app mark. Full disclosure: [SOURCE.md §7](SOURCE.md).
+
+## 7. Links & Demo Video
 
 **[▶ Watch Demo Video](#demo-video)** — the hosted video link will be added here when available.
 

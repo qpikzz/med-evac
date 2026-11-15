@@ -202,6 +202,7 @@ function BodyMap({ result, rules, selectedZone, onSelect }: BodyMapProps) {
       </header>
 
       <div className="bm-stage">
+        <span className="si-mark si-mark-corner">SI-assisted illustration</span>
         <svg
           className="bm-svg"
           viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}

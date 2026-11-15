@@ -27,6 +27,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
       <MotionConfig reducedMotion="user">
         <SpaceBackdrop />
+        <p className="si-watermark" title="Illustrations and animations drawn as code with SI assistance (Claude). See SOURCE.md §7.">
+          SI-assisted illustrations · Synthetic data
+        </p>
         <AuthProvider>
           <AppStateProvider>
             <App />
