@@ -4,7 +4,7 @@
 
 The assistant puts together the big picture when several indicators turn yellow at once. It’s structured in two layers.
 
-1. **Verified combinations (standard code, without SI).** Ayesha has compiled a list of symptom combinations with their sources (`combinations.json`). The code compares today’s rule results with this list and displays matching combinations: “possible explanations to discuss with a medical professional” and the basis for them. If two or more indicators turn yellow and there’s no matching combination in the list, the message “Unverified picture — discuss with your crew medical officer” appears. This layer is always active.
+1. **Verified combinations (standard code, without SI).** A list of symptom combinations has been compiled with their sources (`combinations.json`). The code compares today’s rule results with this list and displays matching combinations: “possible explanations to discuss with a medical professional” and the basis for them. If two or more indicators turn yellow and there’s no matching combination in the list, the message “Unverified picture — discuss with your crew medical officer” appears. This layer is always active.
 2. **The local Granite 3.3 model via Ollama.** It paraphrases the findings in simple terms and responds if an astronaut types something. The model runs on a laptop; the data stays on the device. The model does not change the color or urgency level, nor does it make a diagnosis. If Ollama is not running, only the first layer and a polite message remain.
    
 If the astronaut’s text contains references to self-harm, the code itself—without the model—displays a support card from the “red mood rule” and does not send this text to the model.
@@ -16,7 +16,7 @@ Show which verified symptom combinations match today's rules-engine result (dete
 ## 2. Context
 
 ```
-EvaluationResult + today's flags ──► matchCombinations() ◄── src/data/combinations.json (Ayesha)
+EvaluationResult + today's flags ──► matchCombinations() ◄── src/data/combinations.json 
             │                               │ MatchedCombination[] + unverified notice
             │                               ▼
             └──────────────► buildPrompt() ──HTTP localhost──► Ollama (granite3.3) ──► plain text
@@ -25,13 +25,13 @@ EvaluationResult + today's flags ──► matchCombinations() ◄── src/dat
 ```
 
 - Inputs: `EvaluationResult` [rules-engine §4.1], today's flags, `rules.json`, `combinations.json`, optional `knowledge_base.json` [rules-engine §2.1].
-- Rules for the helper [BRIEF §6]: only rules decide colour/urgency/whom to call; main job = overall picture → "possible explanations to discuss with the medic", not a diagnosis; relies on Ayesha's verified combinations and shows what it relies on; unlisted combination → "unverified picture, discuss with the crew medical officer"; listens privately, does not call itself a psychologist or doctor; suggests the crew medical officer on worrying signs; plain words.
-- No cloud AI APIs [BRIEF §5].
-- Model: Granite 3.3 [ANSWER: Lana, Q7]. In the Ollama library it is `granite3.3` with sizes `2b` and `8b` and the Apache 2.0 license (checked on ollama.com, 14 Nov).
+- Rules for the helper: only rules decide colour/urgency/whom to call; main job = overall picture → "possible explanations to discuss with the medic", not a diagnosis; relies on verified combinations and shows what it relies on; unlisted combination → "unverified picture, discuss with the crew medical officer"; listens privately, does not call itself a psychologist or doctor; suggests the crew medical officer on worrying signs; plain words.
+- No cloud AI APIs.
+- Model: Granite 3.3. In the Ollama library it is `granite3.3` with sizes `2b` and `8b` and the Apache 2.0 license (checked on ollama.com, 14 Nov).
 
 ## 3. User scenarios
 
-**S1 — Day-40 picture** [BRIEF §4, step 7]. Heart and sleep are yellow. The helper panel shows immediately (layer 1): either matched combinations from Ayesha's list with "Based on: {source}", or "Unverified picture: heart rate and sleep changed together. Discuss with your crew medical officer." A few seconds later (layer 2) a short plain-language explanation from the model appears under the label "AI explanation - not a diagnosis".
+**S1 — Day-40 picture**. Heart and sleep are yellow. The helper panel shows immediately (layer 1): either matched combinations from list with "Based on: {source}", or "Unverified picture: heart rate and sleep changed together. Discuss with your crew medical officer." A few seconds later (layer 2) a short plain-language explanation from the model appears under the label "AI explanation - not a diagnosis".
 
 **S2 — Free text.** "I feel tired and my heart feels fast, what should I watch?" → model answer grounded in today's rules and combinations, ending with whom to talk to.
 
