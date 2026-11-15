@@ -192,6 +192,23 @@ describe("ai helper", () => {
     expect(posted.messages[1].content).toContain("TABLE: Sleep hours, YELLOW");
   });
 
+  it("includes submitted clinical notes in the Local AI context", () => {
+    const { ev } = day40();
+    const picture = matchCombinations(ev, [], fixture);
+    const messages = buildMessages({
+      mode: "explain_today",
+      ev,
+      picture,
+      rules,
+      chat: [],
+      clinicalNotes: "Mild fatigue after exercise.",
+    });
+
+    expect(messages[1].content).toContain(
+      "Clinical notes: Mild fatigue after exercise.",
+    );
+  });
+
   it("criterion 9: the answer text is returned literally", async () => {
     const fetchImpl = vi.fn(async (input: RequestInfo | URL) => {
       const url = String(input);

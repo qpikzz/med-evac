@@ -34,6 +34,8 @@ export interface HistoryStore {
   addReadings(readings: Reading[]): void;
   getFlags(date: string): string[];
   setFlags(date: string, flags: string[]): void;
+  getNotes(date: string): string;
+  setNotes(date: string, notes: string): void;
   hasCheckup(date: string): boolean;
   subscribe(listener: () => void): () => void;
   reset(): void;
@@ -123,6 +125,7 @@ export function createHistoryStore(
 
   let readings = seedReadings.map(cloneReading);
   let flags = cloneFlags(seedFlags);
+  let notes: Record<string, string> = {};
   let flaggedDates = new Set(seedFlaggedDates);
   const listeners = new Set<() => void>();
 
@@ -173,6 +176,19 @@ export function createHistoryStore(
       notify();
     },
 
+    getNotes(date: string): string {
+      return notes[date] ?? "";
+    },
+
+    setNotes(date: string, newNotes: string): void {
+      if (newNotes.length > 0) {
+        notes[date] = newNotes;
+      } else {
+        delete notes[date];
+      }
+      notify();
+    },
+
     hasCheckup(date: string): boolean {
       return readings.some((reading) => reading.date === date) || flaggedDates.has(date);
     },
@@ -187,6 +203,7 @@ export function createHistoryStore(
     reset(): void {
       readings = seedReadings.map(cloneReading);
       flags = cloneFlags(seedFlags);
+      notes = {};
       flaggedDates = new Set(seedFlaggedDates);
       notify();
     },

@@ -12,6 +12,7 @@ import type { AuthProfile } from "./types";
 interface PersistedHistory {
   readings: Reading[];
   flags: Record<string, string[]>;
+  notes: Record<string, string>;
 }
 
 const EMPTY_DATASET: SyntheticDataset = {
@@ -53,6 +54,19 @@ function parseFlags(value: unknown): Record<string, string[]> {
   return flags;
 }
 
+function parseNotes(value: unknown): Record<string, string> {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    return {};
+  }
+  const notes: Record<string, string> = {};
+  for (const [date, note] of Object.entries(value)) {
+    if (typeof note === "string") {
+      notes[date] = note;
+    }
+  }
+  return notes;
+}
+
 function parsePersisted(raw: string | null): PersistedHistory | null {
   if (!raw) {
     return null;
@@ -66,7 +80,11 @@ function parsePersisted(raw: string | null): PersistedHistory | null {
     if (!Array.isArray(record.readings)) {
       return null;
     }
-    return { readings: record.readings, flags: parseFlags(record.flags) };
+    return {
+      readings: record.readings,
+      flags: parseFlags(record.flags),
+      notes: parseNotes(record.notes),
+    };
   } catch {
     return null;
   }
@@ -83,12 +101,16 @@ function withPersistence(
 ): HistoryStore {
   const storage = safeStorage();
   let flags: Record<string, string[]> = persisted ? { ...persisted.flags } : {};
+  let notes: Record<string, string> = persisted ? { ...persisted.notes } : {};
 
   if (persisted && persisted.readings.length > 0) {
     store.addReadings(persisted.readings.filter((reading) => reading.valid === true));
   }
   for (const [date, dateFlags] of Object.entries(flags)) {
     store.setFlags(date, dateFlags);
+  }
+  for (const [date, note] of Object.entries(notes)) {
+    store.setNotes(date, note);
   }
 
   function persist(): void {
@@ -98,7 +120,11 @@ function withPersistence(
     try {
       storage.setItem(
         storageKey,
-        JSON.stringify({ readings: store.getReadings(), flags } satisfies PersistedHistory),
+        JSON.stringify({
+          readings: store.getReadings(),
+          flags,
+          notes,
+        } satisfies PersistedHistory),
       );
     } catch {
       // Persistence is best-effort in restricted webview storage contexts.
@@ -121,12 +147,26 @@ function withPersistence(
       store.setFlags(date, flags[date]);
       persist();
     },
+    getNotes(date) {
+      return notes[date] ?? store.getNotes(date);
+    },
+    setNotes(date, note) {
+      if (note.length > 0) {
+        notes = { ...notes, [date]: note };
+      } else {
+        notes = { ...notes };
+        delete notes[date];
+      }
+      store.setNotes(date, note);
+      persist();
+    },
     hasCheckup(date) {
       return store.hasCheckup(date);
     },
     subscribe: (listener) => store.subscribe(listener),
     reset() {
       flags = {};
+      notes = {};
       store.reset();
       persist();
     },

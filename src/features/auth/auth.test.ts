@@ -362,6 +362,8 @@ describe("per-profile history isolation", () => {
       { date: futureDate, metric: "heart_rate", value: 88, valid: true },
     ]);
     astroTwo.setFlags(futureDate, ["fatigue"]);
+    astroOne.setNotes(futureDate, "Mild fatigue after exercise.");
+    astroTwo.setNotes(futureDate, "Sleep quality was good.");
 
     expect(storage.data.has(historyStorageKey("astro-01"))).toBe(true);
     expect(storage.data.has(historyStorageKey("astro-02"))).toBe(true);
@@ -381,6 +383,8 @@ describe("per-profile history isolation", () => {
         .some((reading) => reading.date === futureDate && reading.value === 88),
     ).toBe(true);
     expect(reloadedTwo.getFlags(futureDate)).toEqual(["fatigue"]);
+    expect(reloadedOne.getNotes(futureDate)).toBe("Mild fatigue after exercise.");
+    expect(reloadedTwo.getNotes(futureDate)).toBe("Sleep quality was good.");
     expect(
       reloadedTwo
         .getReadings()

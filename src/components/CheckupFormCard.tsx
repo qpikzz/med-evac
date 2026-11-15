@@ -2,7 +2,8 @@ import { useMemo, useState, type FormEvent } from "react";
 import syntheticHistory from "../data/synthetic_history.json";
 import type { RawEntry } from "../features/input-check/inputCheck";
 import { useAppState } from "../features/app-state/AppStateContext";
-import type { MeasurementContext } from "../rules/types";
+import type { MeasurementContext, RulesFile } from "../rules/types";
+import SymptomNotesComposer from "./SymptomNotesComposer";
 
 interface CheckupFormCardProps {
   onContactEarth: () => void;
@@ -49,8 +50,87 @@ function formatError(result: ReturnType<ReturnType<typeof useAppState>["validate
   return result.message;
 }
 
+export type ThresholdFeedback = "elevated" | "alert";
+
+function compareThreshold(value: number, op: "<" | "<=" | ">" | ">=", threshold: number): boolean {
+  switch (op) {
+    case "<":
+      return value < threshold;
+    case "<=":
+      return value <= threshold;
+    case ">":
+      return value > threshold;
+    case ">=":
+      return value >= threshold;
+  }
+}
+
+export function getThresholdFeedback(
+  rules: RulesFile,
+  metricId: string,
+  raw: string,
+  context: MeasurementContext,
+  selectedFlags: string[],
+): ThresholdFeedback | null {
+  const normalized = raw.trim().replace(",", ".");
+  if (!/^[+-]?\d+(\.\d+)?$/.test(normalized)) {
+    return null;
+  }
+  const value = Number(normalized);
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+
+  const matchesActiveThreshold = rules.indicators
+    .flatMap((indicator) => indicator.rules)
+    .filter((rule) => {
+      const trigger = rule.trigger;
+      if (
+        !rule.enabled ||
+        trigger.type !== "threshold" ||
+        trigger.metric !== metricId ||
+        trigger.value === null ||
+        (trigger.context !== undefined && trigger.context !== context)
+      ) {
+        return false;
+      }
+      if (
+        rule.requires_flags.length > 0 &&
+        !rule.requires_flags.some((flag) => selectedFlags.includes(flag))
+      ) {
+        return false;
+      }
+      return compareThreshold(value, trigger.op, trigger.value);
+    });
+
+  return matchesActiveThreshold.some((rule) => rule.level === "red")
+    ? "alert"
+    : matchesActiveThreshold.length > 0
+      ? "elevated"
+      : null;
+}
+
+function ThresholdPill({ feedback }: { feedback: ThresholdFeedback | null }) {
+  return (
+    <span
+      className={`threshold-pill${feedback ? ` is-${feedback}` : " is-empty"}`}
+      aria-hidden={!feedback}
+    >
+      {feedback === "alert" ? "Alert" : "Elevated"}
+    </span>
+  );
+}
+
 function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) {
-  const { rules, today, readings, flagsToday, validateCheckup, submitCheckup } = useAppState();
+  const {
+    rules,
+    today,
+    readings,
+    flagsToday,
+    store,
+    validateCheckup,
+    submitCheckup,
+  } = useAppState();
   const [values, setValues] = useState<FieldValues>(() =>
     getTodayValues(rules.metrics, readings, today),
   );
@@ -61,8 +141,7 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     return reading?.context ?? "rest";
   });
   const [selectedFlags, setSelectedFlags] = useState<string[]>(flagsToday);
-  const [symptomSearch, setSymptomSearch] = useState("");
-  const [freeText, setFreeText] = useState("");
+  const [clinicalNotes, setClinicalNotes] = useState(() => store.getNotes(today));
 
   const entries = useMemo<RawEntry[]>(
     () =>
@@ -77,15 +156,221 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     () => validateCheckup(entries),
     [entries, validateCheckup],
   );
-  const filteredFlags = rules.flags.filter((flag) =>
-    flag.label.toLowerCase().includes(symptomSearch.trim().toLowerCase()),
-  );
   const errors = new Map(
     validation.results.filter((result) => !result.ok).map((result) => [result.metric, formatError(result)]),
+  );
+  const metricById = useMemo(
+    () => new Map(rules.metrics.map((metric) => [metric.id, metric])),
+    [rules.metrics],
   );
 
   function updateValue(metric: string, value: string): void {
     setValues((current) => ({ ...current, [metric]: value }));
+  }
+
+  function feedbackFor(metricId: string, context: MeasurementContext = "rest") {
+    if (errors.has(metricId)) {
+      return null;
+    }
+    return getThresholdFeedback(
+      rules,
+      metricId,
+      values[metricId] ?? "",
+      context,
+      selectedFlags,
+    );
+  }
+
+  function renderMetricField(metricId: string) {
+    const metric = metricById.get(metricId);
+    if (!metric) {
+      return null;
+    }
+    const error = errors.get(metricId);
+    const feedback = feedbackFor(
+      metricId,
+      metricId === "body_temp" ? temperatureContext : "rest",
+    );
+    return (
+      <div className="metric-field" key={metricId}>
+        <div className="metric-label-row">
+          <label htmlFor={`metric-${metricId}`}>{metric.label}</label>
+          <ThresholdPill feedback={feedback} />
+        </div>
+        <div className={`metric-input-shell${feedback ? ` is-${feedback}` : ""}`}>
+          <input
+            id={`metric-${metricId}`}
+            type="text"
+            inputMode="decimal"
+            autoComplete="off"
+            value={values[metricId] ?? ""}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? `error-${metricId}` : undefined}
+            onChange={(event) => updateValue(metricId, event.currentTarget.value)}
+          />
+          <span className="metric-unit">{metric.unit}</span>
+        </div>
+        {error && (
+          <p className="field-error" id={`error-${metricId}`} role="alert">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  function renderBloodPressureField() {
+    const systolicError = errors.get("bp_systolic");
+    const diastolicError = errors.get("bp_diastolic");
+    const systolicFeedback = feedbackFor("bp_systolic");
+    const diastolicFeedback = feedbackFor("bp_diastolic");
+    const feedback =
+      systolicError || diastolicError
+        ? null
+        : systolicFeedback === "alert" || diastolicFeedback === "alert"
+          ? "alert"
+          : systolicFeedback || diastolicFeedback;
+    return (
+      <div className="metric-field metric-field-wide">
+        <div className="metric-label-row">
+          <span className="metric-field-title">Blood pressure</span>
+          <ThresholdPill feedback={feedback} />
+        </div>
+        <div
+          className={[
+            "bp-input-shell",
+            systolicError || diastolicError ? "has-error" : "",
+            feedback ? `is-${feedback}` : "",
+          ].filter(Boolean).join(" ")}
+        >
+          <label className="visually-hidden" htmlFor="metric-bp_systolic">
+            Systolic blood pressure
+          </label>
+          <input
+            id="metric-bp_systolic"
+            type="text"
+            inputMode="decimal"
+            autoComplete="off"
+            value={values.bp_systolic ?? ""}
+            aria-invalid={Boolean(systolicError)}
+            aria-describedby={systolicError ? "error-bp_systolic" : undefined}
+            onChange={(event) => updateValue("bp_systolic", event.currentTarget.value)}
+          />
+          <span className="bp-separator" aria-hidden="true">/</span>
+          <label className="visually-hidden" htmlFor="metric-bp_diastolic">
+            Diastolic blood pressure
+          </label>
+          <input
+            id="metric-bp_diastolic"
+            type="text"
+            inputMode="decimal"
+            autoComplete="off"
+            value={values.bp_diastolic ?? ""}
+            aria-invalid={Boolean(diastolicError)}
+            aria-describedby={diastolicError ? "error-bp_diastolic" : undefined}
+            onChange={(event) => updateValue("bp_diastolic", event.currentTarget.value)}
+          />
+          <span className="metric-unit">mmHg</span>
+        </div>
+        {systolicError && (
+          <p className="field-error" id="error-bp_systolic" role="alert">
+            Systolic: {systolicError}
+          </p>
+        )}
+        {diastolicError && (
+          <p className="field-error" id="error-bp_diastolic" role="alert">
+            Diastolic: {diastolicError}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  function renderTemperatureField() {
+    const metric = metricById.get("body_temp");
+    if (!metric) {
+      return null;
+    }
+    const error = errors.get(metric.id);
+    const feedback = feedbackFor(metric.id, temperatureContext);
+    return (
+      <div className="metric-field">
+        <div className="metric-label-row">
+          <label htmlFor="metric-body_temp">{metric.label}</label>
+          <ThresholdPill feedback={feedback} />
+        </div>
+        <div className="temperature-control-row">
+          <div className={`metric-input-shell${feedback ? ` is-${feedback}` : ""}`}>
+            <input
+              id="metric-body_temp"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
+              value={values.body_temp ?? ""}
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? "error-body_temp" : undefined}
+              onChange={(event) => updateValue(metric.id, event.currentTarget.value)}
+            />
+            <span className="metric-unit">{metric.unit}</span>
+          </div>
+          <div className="segmented-control context-toggle" role="group" aria-label="Temperature context">
+            {(["rest", "exercise"] as const).map((context) => (
+              <button
+                key={context}
+                className={temperatureContext === context ? "is-selected" : ""}
+                type="button"
+                aria-pressed={temperatureContext === context}
+                onClick={() => setTemperatureContext(context)}
+              >
+                {context === "rest" ? "Rest" : "Exercise"}
+              </button>
+            ))}
+          </div>
+        </div>
+        {error && (
+          <p className="field-error" id="error-body_temp" role="alert">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  function renderScoreField(metricId: string) {
+    const metric = metricById.get(metricId);
+    if (!metric) {
+      return null;
+    }
+    const value = values[metricId] ?? "";
+    const error = errors.get(metricId);
+    return (
+      <div className="score-field">
+        <div className="metric-label-row">
+          <span className="metric-field-title">{metric.label}</span>
+          <output className="score-readout" aria-live="polite">
+            {value === "" ? "—" : value} <span>/ 10</span>
+          </output>
+        </div>
+        <div className="score-segments" role="group" aria-label={`${metric.label}, 0 to 10`}>
+          {Array.from({ length: 11 }, (_, score) => {
+            const scoreText = String(score);
+            return (
+              <button
+                className={value === scoreText ? "is-selected" : ""}
+                type="button"
+                key={score}
+                aria-label={`${metric.label}: ${score} out of 10`}
+                aria-pressed={value === scoreText}
+                onClick={() => updateValue(metricId, scoreText)}
+              >
+                {score}
+              </button>
+            );
+          })}
+        </div>
+        {error && <p className="field-error" role="alert">{error}</p>}
+      </div>
+    );
   }
 
   function toggleFlag(flagId: string): void {
@@ -109,11 +394,12 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     }
     setValues(demoValues);
     setSelectedFlags(syntheticHistory.day40_checkup.flags);
+    setClinicalNotes("");
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-    const result = submitCheckup(entries, selectedFlags);
+    const result = submitCheckup(entries, selectedFlags, clinicalNotes);
     if (result.allOk) {
       onSubmitted();
     }
@@ -132,95 +418,44 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
       <div className="checkup-grid">
         <section className="metric-form-column" aria-label="Measurements">
           <h3>Measurements</h3>
-          <div className="metric-input-grid">
-            {rules.metrics.map((metric) => {
-              const error = errors.get(metric.id);
-              const isTemperature = metric.id === "body_temp";
-              return (
-                <div className="metric-field" key={metric.id}>
-                  <label htmlFor={`metric-${metric.id}`}>{metric.label}</label>
-                  {isTemperature && (
-                    <div className="segmented-control context-toggle" aria-label="Temperature context">
-                      {(["rest", "exercise"] as const).map((context) => (
-                        <button
-                          key={context}
-                          className={temperatureContext === context ? "is-selected" : ""}
-                          type="button"
-                          aria-pressed={temperatureContext === context}
-                          onClick={() => setTemperatureContext(context)}
-                        >
-                          {context === "rest" ? "Rest" : "Exercise"}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                  <div className="input-with-unit">
-                    <input
-                      id={`metric-${metric.id}`}
-                      type="text"
-                      inputMode="decimal"
-                      autoComplete="off"
-                      value={values[metric.id] ?? ""}
-                      aria-invalid={Boolean(error)}
-                      aria-describedby={error ? `error-${metric.id}` : undefined}
-                      onChange={(event) => updateValue(metric.id, event.currentTarget.value)}
-                    />
-                    <span>{metric.unit}</span>
-                  </div>
-                  {error && (
-                    <p className="field-error" id={`error-${metric.id}`} role="alert">
-                      {error}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
+          <div className="measurement-groups">
+            <section className="measurement-group" aria-labelledby="vitals-heading">
+              <h4 id="vitals-heading">Vitals</h4>
+              <div className="measurement-row">
+                {renderBloodPressureField()}
+                {renderMetricField("heart_rate")}
+                {renderTemperatureField()}
+                {renderMetricField("glucose")}
+              </div>
+            </section>
+
+            <section className="measurement-group" aria-labelledby="recovery-heading">
+              <h4 id="recovery-heading">Recovery &amp; Wellbeing</h4>
+              <div className="measurement-row">
+                {renderMetricField("sleep_hours")}
+                {renderMetricField("body_mass")}
+                {renderScoreField("mood")}
+                {renderScoreField("skin_symptom_score")}
+              </div>
+            </section>
+
+            <section className="measurement-group" aria-labelledby="radiation-heading">
+              <h4 id="radiation-heading">Radiation telemetry</h4>
+              <div className="radiation-strip">
+                {renderMetricField("radiation_dose_rate")}
+                {renderMetricField("radiation_accumulated")}
+              </div>
+            </section>
           </div>
         </section>
 
-        <section className="symptoms-column" aria-label="Symptoms and notes">
-          <div className="symptom-heading">
-            <div>
-              <h3>Symptoms and events</h3>
-              <p>Select any that apply. You can choose more than one.</p>
-            </div>
-            <span className="selection-count">{selectedFlags.length} selected</span>
-          </div>
-          <label className="visually-hidden" htmlFor="symptom-search">Search symptoms and events</label>
-          <input
-            className="symptom-search"
-            id="symptom-search"
-            type="search"
-            placeholder="Search symptoms and events"
-            value={symptomSearch}
-            onChange={(event) => setSymptomSearch(event.currentTarget.value)}
-          />
-          <div className="symptom-pill-list">
-            {filteredFlags.map((flag) => {
-              const selected = selectedFlags.includes(flag.id);
-              return (
-                <button
-                  className={`symptom-pill${selected ? " is-selected" : ""}`}
-                  type="button"
-                  key={flag.id}
-                  aria-pressed={selected}
-                  onClick={() => toggleFlag(flag.id)}
-                >
-                  {flag.label}
-                </button>
-              );
-            })}
-            {filteredFlags.length === 0 && <p className="empty-search">No matching symptoms or events.</p>}
-          </div>
-          <label className="notes-label" htmlFor="checkup-notes">Anything else?</label>
-          <textarea
-            id="checkup-notes"
-            rows={4}
-            placeholder="Tell us if anything else is bothering you..."
-            value={freeText}
-            onChange={(event) => setFreeText(event.currentTarget.value)}
-          />
-        </section>
+        <SymptomNotesComposer
+          flags={rules.flags}
+          selectedFlags={selectedFlags}
+          onToggleFlag={toggleFlag}
+          notes={clinicalNotes}
+          onNotesChange={setClinicalNotes}
+        />
       </div>
 
       <div className="form-actions">

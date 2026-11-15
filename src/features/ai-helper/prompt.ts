@@ -29,6 +29,7 @@ export interface BuildMessagesArgs {
   picture: PictureResult;
   rules: RulesFile;
   chat: { role: "user" | "assistant"; content: string }[];
+  clinicalNotes?: string;
 }
 
 function isNonGreen(status: Status): boolean {
@@ -71,9 +72,13 @@ function serializeContext(
   ev: EvaluationResult,
   picture: PictureResult,
   rules: RulesFile,
+  clinicalNotes: string | undefined,
 ): string {
   const lines: string[] = ["CONTEXT:"];
   lines.push(`Today: ${ev.today}`);
+  if (clinicalNotes?.trim()) {
+    lines.push(`Clinical notes: ${clinicalNotes.trim()}`);
+  }
   lines.push(`Overall status: ${ev.overall_status}`);
   lines.push(`Overall escalation: ${ev.overall_escalation ?? "none"}`);
 
@@ -121,10 +126,10 @@ function serializeContext(
 }
 
 export function buildMessages(args: BuildMessagesArgs): ChatMessage[] {
-  const { mode, ev, picture, rules, chat } = args;
+  const { mode, ev, picture, rules, chat, clinicalNotes } = args;
   const messages: ChatMessage[] = [
     { role: "system", content: SYSTEM_PROMPT },
-    { role: "user", content: serializeContext(ev, picture, rules) },
+    { role: "user", content: serializeContext(ev, picture, rules, clinicalNotes) },
   ];
 
   if (mode === "explain_today") {

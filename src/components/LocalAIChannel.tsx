@@ -47,7 +47,7 @@ function fallbackText(result: Exclude<LlmResult, { status: "ok" }>): string {
 }
 
 function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps) {
-  const { evaluation, flagsToday, rules, missionDay } = useAppState();
+  const { evaluation, flagsToday, clinicalNotesToday, rules, missionDay } = useAppState();
   const combinations = useMemo(() => loadDefaultCombinations(rules), [rules]);
   const picture = useMemo(
     () => matchCombinations(evaluation, flagsToday, combinations),
@@ -97,6 +97,7 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
           picture,
           rules,
           chat: chatTurns,
+          clinicalNotes: clinicalNotesToday,
         });
         const result = await askModel(messages, DEFAULT_HELPER_SETTINGS);
         if (currentRequest !== requestId.current) {
@@ -129,7 +130,7 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
         }
       }
     },
-    [evaluation, picture, rules],
+    [clinicalNotesToday, evaluation, picture, rules],
   );
 
   useEffect(() => {

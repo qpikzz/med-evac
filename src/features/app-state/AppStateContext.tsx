@@ -35,11 +35,12 @@ export interface AppState {
   preflight: Reading[];
   readings: Reading[];
   flagsToday: string[];
+  clinicalNotesToday: string;
   baselines: Record<string, Baseline>;
   evaluation: EvaluationResult;
   hasCheckup: boolean;
   validateCheckup: (entries: RawEntry[]) => CheckupCheck;
-  submitCheckup: (entries: RawEntry[], flags: string[]) => CheckupCheck;
+  submitCheckup: (entries: RawEntry[], flags: string[], notes: string) => CheckupCheck;
 }
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
@@ -71,11 +72,12 @@ export function AppStateProvider({ children }: AppStateProviderProps) {
   );
 
   const submitCheckup = useCallback(
-    (entries: RawEntry[], flags: string[]) => {
+    (entries: RawEntry[], flags: string[], notes: string) => {
       const check = checkCheckup(entries, today, rules);
       if (check.allOk) {
         store.addReadings(check.readings);
         store.setFlags(today, flags);
+        store.setNotes(today, notes);
       }
       return check;
     },
@@ -86,6 +88,7 @@ export function AppStateProvider({ children }: AppStateProviderProps) {
     const preflight = store.getPreflight();
     const readings = store.getReadings();
     const flagsToday = store.getFlags(today);
+    const clinicalNotesToday = store.getNotes(today);
     const baselines = computeBaselines({ today, preflight, history: readings, rules });
     const evaluation = evaluate({ today, readings, flags: flagsToday, baselines, rules });
 
@@ -97,6 +100,7 @@ export function AppStateProvider({ children }: AppStateProviderProps) {
       preflight,
       readings,
       flagsToday,
+      clinicalNotesToday,
       baselines,
       evaluation,
       hasCheckup: store.hasCheckup(today),
