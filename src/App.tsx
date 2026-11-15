@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import Header, { type AppView, type UserRole } from "./components/Header";
+import Header, { type AppView } from "./components/Header";
 import LocalAIChannel from "./components/LocalAIChannel";
 import MainDashboard from "./components/MainDashboard";
 import EarthLinkPanel from "./components/EarthLinkPanel";
+import { useAuth } from "./features/auth/AuthContext";
+import LoginScreen from "./features/auth/LoginScreen";
+import { landingChannelForRole, landingViewForRole } from "./features/auth/session";
+import type { AuthProfile } from "./features/auth/types";
 import { useAppState } from "./features/app-state/AppStateContext";
-import { historyStore } from "./features/synthetic-data";
 import {
   buildDraft,
   send as sendEarthMessage,
@@ -15,6 +18,10 @@ import { createInMemoryTransport } from "./features/earth-link/transport";
 import type { TriggeredRule } from "./rules/types";
 import "./App.css";
 
+interface LoginPrompt {
+  credentialId?: string;
+}
+
 function upsertMessage(messages: EarthMessage[], message: EarthMessage): EarthMessage[] {
   const index = messages.findIndex((item) => item.id === message.id);
   if (index === -1) {
@@ -24,8 +31,8 @@ function upsertMessage(messages: EarthMessage[], message: EarthMessage): EarthMe
 }
 
 function App() {
-  const { today, missionDay, rules, flagsToday, evaluation } = useAppState();
-  const [role, setRole] = useState<UserRole>("astronaut");
+  const { profiles, activeSession, activeProfile, logout } = useAuth();
+  const { today, missionDay, rules, flagsToday, evaluation, store } = useAppState();
   const [activeView, setActiveView] = useState<AppView>("main");
   const [commsChannel, setCommsChannel] = useState<"local" | "earth">("local");
   const [commsContext, setCommsContext] = useState<string | null>(null);
@@ -34,10 +41,34 @@ function App() {
   const [nowMs, setNowMs] = useState(() => Date.now());
   const [transportError, setTransportError] = useState<string | null>(null);
   const [transport] = useState(createInMemoryTransport);
+  const [loginPrompt, setLoginPrompt] = useState<LoginPrompt | null>(null);
+
+  const role = activeProfile?.role ?? "astronaut";
+  const effectiveView: AppView =
+    role === "ground_operator" ? landingViewForRole(role) : activeView;
+  const effectiveChannel =
+    role === "ground_operator" ? landingChannelForRole(role) : commsChannel;
+
   const todayMessages = earthMessages.filter(
     (message) => message.content.mission_date === today,
   );
   const activeEarthMessage = todayMessages[todayMessages.length - 1] ?? null;
+
+  useEffect(() => {
+    setLoginPrompt(null);
+  }, [activeSession]);
+
+  useEffect(() => {
+    if (!activeProfile) {
+      return;
+    }
+    setActiveView(landingViewForRole(activeProfile.role));
+    setCommsChannel(landingChannelForRole(activeProfile.role));
+    setCommsContext(null);
+    setEarthMessages([]);
+    setTransportError(null);
+    setOpenCheckupToken(0);
+  }, [activeProfile]);
 
   useEffect(
     () =>
@@ -48,7 +79,7 @@ function App() {
   );
 
   useEffect(() => {
-    if (!shouldAutoDraft(evaluation)) {
+    if (role !== "astronaut" || !shouldAutoDraft(evaluation)) {
       return;
     }
     setEarthMessages((current) => {
@@ -64,7 +95,7 @@ function App() {
       }
       const draft = buildDraft({
         evaluation,
-        store: historyStore,
+        store,
         rules,
         flagsToday,
         missionDay,
@@ -72,7 +103,7 @@ function App() {
       });
       return [...current, draft];
     });
-  }, [evaluation, flagsToday, missionDay, rules, today]);
+  }, [evaluation, flagsToday, missionDay, role, rules, store, today]);
 
   useEffect(() => {
     if (activeEarthMessage?.state !== "in_transit") {
@@ -81,12 +112,6 @@ function App() {
     const timer = window.setInterval(() => setNowMs(Date.now()), 1000);
     return () => window.clearInterval(timer);
   }, [activeEarthMessage?.id, activeEarthMessage?.state]);
-
-  function changeRole(nextRole: UserRole): void {
-    setRole(nextRole);
-    setActiveView(nextRole === "ground_operator" ? "comms" : "main");
-    setCommsChannel(nextRole === "ground_operator" ? "earth" : "local");
-  }
 
   function contactEarth(): void {
     setCommsChannel("earth");
@@ -116,7 +141,7 @@ function App() {
       }
       const draft = buildDraft({
         evaluation,
-        store: historyStore,
+        store,
         rules,
         flagsToday,
         missionDay,
@@ -136,7 +161,7 @@ function App() {
     }
     const draft = buildDraft({
       evaluation,
-      store: historyStore,
+      store,
       rules,
       flagsToday,
       missionDay,
@@ -156,20 +181,56 @@ function App() {
     }
   }
 
-  return (
-    <div className="app-shell">
-      <Header
-        role={role}
-        activeView={activeView}
-        onRoleChange={changeRole}
-        onViewChange={setActiveView}
+  function selectAccount(profile: AuthProfile): void {
+    if (profile.profile_id === activeProfile?.profile_id) {
+      return;
+    }
+    setLoginPrompt({ credentialId: profile.credential_id });
+  }
+
+  function addAccount(): void {
+    setLoginPrompt({});
+  }
+
+  function signOut(): void {
+    setLoginPrompt(null);
+    setCommsContext(null);
+    setEarthMessages([]);
+    setTransportError(null);
+    logout();
+  }
+
+  if (!activeSession || !activeProfile) {
+    return <LoginScreen />;
+  }
+
+  if (loginPrompt) {
+    return (
+      <LoginScreen
+        initialCredentialId={loginPrompt.credentialId}
+        allowCancel
+        onCancel={() => setLoginPrompt(null)}
       />
-      {shouldAutoDraft(evaluation) && (
+    );
+  }
+
+  return (
+    <div className="app-shell" key={activeProfile.profile_id}>
+      <Header
+        activeView={effectiveView}
+        profiles={profiles}
+        activeProfile={activeProfile}
+        onViewChange={setActiveView}
+        onSelectAccount={selectAccount}
+        onAddAccount={addAccount}
+        onLogout={signOut}
+      />
+      {role === "astronaut" && shouldAutoDraft(evaluation) && (
         <div className="red-auto-draft-banner" role="status">
           A message for the flight surgeon is ready. Review and send.
         </div>
       )}
-      {activeView === "main" ? (
+      {effectiveView === "main" ? (
         <MainDashboard
           onContactEarth={contactEarth}
           onAskLocalAI={askLocalAI}
@@ -203,7 +264,7 @@ function App() {
               </button>
             </div>
           )}
-          {commsChannel === "local" ? (
+          {effectiveChannel === "local" ? (
             <LocalAIChannel
               onOpenCheckup={openTodaysCheckup}
               selectedContext={commsContext}

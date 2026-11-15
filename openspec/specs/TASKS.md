@@ -72,5 +72,3 @@
 - [ ] **Task 6.2 — Ground Operator Channel & Role Console (`#TODO` Sync Stub):** Build the `Ground Operator (Earth)` channel view (and single-screen console when `Ground Operator` profile is selected in the header), displaying `EarthMessage` delayed transit/acknowledgment status and a `#TODO` stub banner for live cross-instance reply sync (`FRONTEND.md` §3.2).
 - **Block 6 Checkpoint:** Run full `vitest` suite + `npm run build` and verify complete offline demo flow (Day-40 yellow evaluation $\rightarrow$ AI explanation $\rightarrow$ red flag auto-draft $\rightarrow$ delayed Earth delivery).
 ```
-
-`openspec/specs/TASKS.md` готов. Осталось составить последние 3 высокоуровневые спеки из твоего списка (`PRODUCT.md`, `FEATURES.md`, `SI.md`), чтобы у агента была 100% закрытая документация. Переходим к `PRODUCT.md`?

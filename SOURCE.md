@@ -29,6 +29,7 @@
 
 | Package / Asset | Source Repository | License | Role |
 | :--- | :--- | :--- | :--- |
+| **lucide-react** | `1.73.0` · `https://github.com/lucide-icons/lucide` | **ISC** | Offline SVG icon set; used for the fixed header `ChevronDown`, profile-menu actions, and access-gate controls |
 | **Custom Interactive Body Map SVG** | Original work by Team CyberAstro | **Apache-2.0** | Interactive anatomical figure for health status visualization |
 <!-- Template for new UI packages:
 | **Library Name** | `https://github.com/...` | **MIT / Apache-2.0** | Brief role description |

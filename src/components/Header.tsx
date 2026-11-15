@@ -1,26 +1,71 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Check, ChevronDown, LogOut, UserPlus } from "lucide-react";
+import { ROLE_LABELS } from "../features/auth/constants";
+import { HEADER_COPY } from "../features/auth/copy";
+import { initials } from "../features/auth/identity";
+import type { AuthProfile } from "../features/auth/types";
 
-export type UserRole = "astronaut" | "ground_operator";
+export type { UserRole } from "../features/auth/types";
 export type AppView = "main" | "comms";
 
 interface HeaderProps {
-  role: UserRole;
   activeView: AppView;
-  onRoleChange: (role: UserRole) => void;
+  profiles: AuthProfile[];
+  activeProfile: AuthProfile;
   onViewChange: (view: AppView) => void;
+  onSelectAccount: (profile: AuthProfile) => void;
+  onAddAccount: () => void;
+  onLogout: () => void;
 }
 
-const ROLE_LABELS: Record<UserRole, string> = {
-  astronaut: "Astronaut",
-  ground_operator: "Ground Operator",
-};
-
-function Header({ role, activeView, onRoleChange, onViewChange }: HeaderProps) {
+function Header({
+  activeView,
+  profiles,
+  activeProfile,
+  onViewChange,
+  onSelectAccount,
+  onAddAccount,
+  onLogout,
+}: HeaderProps) {
   const [profileOpen, setProfileOpen] = useState(false);
+  const switcherRef = useRef<HTMLDivElement | null>(null);
+  const role = activeProfile.role;
 
-  function selectRole(nextRole: UserRole): void {
-    onRoleChange(nextRole);
+  useEffect(() => {
+    if (!profileOpen) {
+      return;
+    }
+    const onPointerDown = (event: MouseEvent) => {
+      if (switcherRef.current && !switcherRef.current.contains(event.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [profileOpen]);
+
+  function selectAccount(profile: AuthProfile): void {
     setProfileOpen(false);
+    onSelectAccount(profile);
+  }
+
+  function addAccount(): void {
+    setProfileOpen(false);
+    onAddAccount();
+  }
+
+  function logout(): void {
+    setProfileOpen(false);
+    onLogout();
   }
 
   return (
@@ -52,7 +97,7 @@ function Header({ role, activeView, onRoleChange, onViewChange }: HeaderProps) {
         </nav>
       )}
 
-      <div className="profile-switcher">
+      <div className="profile-switcher" ref={switcherRef}>
         <button
           className="profile-trigger"
           type="button"
@@ -62,30 +107,63 @@ function Header({ role, activeView, onRoleChange, onViewChange }: HeaderProps) {
           onClick={() => setProfileOpen((open) => !open)}
         >
           <span className="profile-avatar" aria-hidden="true">
-            {role === "astronaut" ? "A" : "G"}
+            {initials(activeProfile.display_name)}
           </span>
           <span className="profile-copy">
-            <span className="profile-name">{ROLE_LABELS[role]}</span>
-            <span className="profile-caption">Profile</span>
+            <span className="profile-name">{activeProfile.display_name}</span>
+            <span className="profile-caption">{ROLE_LABELS[role]}</span>
           </span>
-          <span className="profile-chevron" aria-hidden="true">{profileOpen ? "⌃" : "⌄"}</span>
+          <ChevronDown
+            className={`profile-chevron${profileOpen ? " is-open" : ""}`}
+            size={14}
+            strokeWidth={2}
+            aria-hidden="true"
+          />
         </button>
-        {profileOpen && (
-          <div className="profile-menu" id="profile-menu" aria-label="Choose profile">
-            {(["astronaut", "ground_operator"] as const).map((option) => (
-              <button
-                className="profile-option"
-                type="button"
-                key={option}
-                aria-pressed={role === option}
-                onClick={() => selectRole(option)}
-              >
-                <span>{ROLE_LABELS[option]}</span>
-                {role === option && <span className="profile-check" aria-hidden="true">✓</span>}
-              </button>
-            ))}
+
+        <div className="profile-menu" id="profile-menu" aria-label="Account menu" hidden={!profileOpen}>
+          <p className="profile-menu-label">{HEADER_COPY.savedProfiles}</p>
+          <div className="profile-menu-section">
+            {profiles.map((profile) => {
+              const isActive = profile.profile_id === activeProfile.profile_id;
+              return (
+                <button
+                  className={`profile-option${isActive ? " is-active" : ""}`}
+                  type="button"
+                  key={profile.profile_id}
+                  aria-pressed={isActive}
+                  onClick={() => selectAccount(profile)}
+                >
+                  <span className="profile-option-avatar" aria-hidden="true">
+                    {initials(profile.display_name)}
+                  </span>
+                  <span className="profile-option-copy">
+                    <span className="profile-option-name">{profile.display_name}</span>
+                    <span className="profile-option-role">{ROLE_LABELS[profile.role]}</span>
+                  </span>
+                  {isActive && <Check className="profile-check" size={15} aria-hidden="true" />}
+                </button>
+              );
+            })}
           </div>
-        )}
+
+          <div className="profile-menu-divider" role="separator" />
+
+          <div className="profile-menu-section">
+            <button className="profile-action" type="button" onClick={addAccount}>
+              <UserPlus size={15} aria-hidden="true" />
+              {HEADER_COPY.addAccount}
+            </button>
+            <button
+              className="profile-action profile-action-danger"
+              type="button"
+              onClick={logout}
+            >
+              <LogOut size={15} aria-hidden="true" />
+              {HEADER_COPY.logout}
+            </button>
+          </div>
+        </div>
       </div>
     </header>
   );
