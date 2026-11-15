@@ -77,6 +77,9 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     () => validateCheckup(entries),
     [entries, validateCheckup],
   );
+  const radiationMetrics = rules.metrics.filter((metric) => metric.indicator_id === "radiation_dose");
+  const otherMetrics = rules.metrics.filter((metric) => metric.indicator_id !== "radiation_dose");
+  const radiationFlags = rules.flags.filter((flag) => flag.indicator_ids.includes("radiation_dose"));
   const filteredFlags = rules.flags.filter((flag) =>
     flag.label.toLowerCase().includes(symptomSearch.trim().toLowerCase()),
   );
@@ -111,6 +114,49 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     setSelectedFlags(syntheticHistory.day40_checkup.flags);
   }
 
+  function renderMetricField(metric: (typeof rules.metrics)[number]) {
+    const error = errors.get(metric.id);
+    const isTemperature = metric.id === "body_temp";
+    return (
+      <div className="metric-field" key={metric.id}>
+        <label htmlFor={`metric-${metric.id}`}>{metric.label}</label>
+        {isTemperature && (
+          <div className="segmented-control context-toggle" aria-label="Temperature context">
+            {(["rest", "exercise"] as const).map((context) => (
+              <button
+                key={context}
+                className={temperatureContext === context ? "is-selected" : ""}
+                type="button"
+                aria-pressed={temperatureContext === context}
+                onClick={() => setTemperatureContext(context)}
+              >
+                {context === "rest" ? "Rest" : "Exercise"}
+              </button>
+            ))}
+          </div>
+        )}
+        <div className="input-with-unit">
+          <input
+            id={`metric-${metric.id}`}
+            type="text"
+            inputMode="decimal"
+            autoComplete="off"
+            value={values[metric.id] ?? ""}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? `error-${metric.id}` : undefined}
+            onChange={(event) => updateValue(metric.id, event.currentTarget.value)}
+          />
+          <span>{metric.unit}</span>
+        </div>
+        {error && (
+          <p className="field-error" id={`error-${metric.id}`} role="alert">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     const result = submitCheckup(entries, selectedFlags);
@@ -133,49 +179,37 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
         <section className="metric-form-column" aria-label="Measurements">
           <h3>Measurements</h3>
           <div className="metric-input-grid">
-            {rules.metrics.map((metric) => {
-              const error = errors.get(metric.id);
-              const isTemperature = metric.id === "body_temp";
-              return (
-                <div className="metric-field" key={metric.id}>
-                  <label htmlFor={`metric-${metric.id}`}>{metric.label}</label>
-                  {isTemperature && (
-                    <div className="segmented-control context-toggle" aria-label="Temperature context">
-                      {(["rest", "exercise"] as const).map((context) => (
-                        <button
-                          key={context}
-                          className={temperatureContext === context ? "is-selected" : ""}
-                          type="button"
-                          aria-pressed={temperatureContext === context}
-                          onClick={() => setTemperatureContext(context)}
-                        >
-                          {context === "rest" ? "Rest" : "Exercise"}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                  <div className="input-with-unit">
-                    <input
-                      id={`metric-${metric.id}`}
-                      type="text"
-                      inputMode="decimal"
-                      autoComplete="off"
-                      value={values[metric.id] ?? ""}
-                      aria-invalid={Boolean(error)}
-                      aria-describedby={error ? `error-${metric.id}` : undefined}
-                      onChange={(event) => updateValue(metric.id, event.currentTarget.value)}
-                    />
-                    <span>{metric.unit}</span>
-                  </div>
-                  {error && (
-                    <p className="field-error" id={`error-${metric.id}`} role="alert">
-                      {error}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
+            {otherMetrics.map(renderMetricField)}
           </div>
+
+          {radiationMetrics.length > 0 && (
+            <section className="radiation-check" aria-label="Radiation check">
+              <div className="radiation-check-heading">
+                <h3>Radiation check</h3>
+                <p>
+                  Read your personal dosimeter. Dose limits are set by mission flight surgeons; any
+                  radiation event you mark here is checked by the rules.
+                </p>
+              </div>
+              <div className="metric-input-grid">{radiationMetrics.map(renderMetricField)}</div>
+              <div className="radiation-flag-list" aria-label="Radiation events">
+                {radiationFlags.map((flag) => {
+                  const selected = selectedFlags.includes(flag.id);
+                  return (
+                    <button
+                      className={`symptom-pill radiation-pill${selected ? " is-selected" : ""}`}
+                      type="button"
+                      key={flag.id}
+                      aria-pressed={selected}
+                      onClick={() => toggleFlag(flag.id)}
+                    >
+                      {flag.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          )}
         </section>
 
         <section className="symptoms-column" aria-label="Symptoms and notes">

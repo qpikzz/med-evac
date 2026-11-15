@@ -1,4 +1,4 @@
-# TASK-15-11-26-10 — Body Map (2D, layered) + Dark Space Theme
+# TASK-15-11-26-15 — Body Map (2D, layered) + Dark Space Theme
 
 ## Solution Idea
 
@@ -16,4 +16,4 @@ Replace the light "3D" body map with the layered 2D `BodyMap` from `FEATURES/bod
 
 ## Task Report
 
-Body map and dark theme shipped in qpikzz/med-evac#1. Verification: `tsc --noEmit` clean, `npm test` 9 files / 129 tests passing, `npm run build` OK; browser walkthrough (login as Alex Vance → Day-40 check-up) shows heart and brain `Watch`, other zones `OK`, tabs/zones reachable by keyboard, no external network requests. Open item: `radiation_dose` is not monitoring-only while `rad_y_spe` and `rad_r_event` are enabled in `rules.json` (see `FEATURES/body-map.md` §11).
+Body map and dark theme shipped in qpikzz/med-evac#1. Verification: `tsc --noEmit` clean, `npm test` 9 files / 129 tests passing, `npm run build` OK; browser walkthrough (login as Alex Vance → Day-40 check-up) shows heart and brain `Watch`, other zones `OK`, tabs/zones reachable by keyboard, no external network requests. Radiation follow-up resolved in `TASK-15-11-26-16-charts-motion-radiation.md`.

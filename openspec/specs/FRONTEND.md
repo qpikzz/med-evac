@@ -9,8 +9,8 @@
 - **Core Runtime:** Tauri v2, React 19, TypeScript (strict mode), Vite.
 - **Approved UI Libraries (OSI-compliant, offline-capable):**
   - **Styling:** Tailwind CSS (or CSS Modules + CSS custom properties matching `DESIGN.md` tokens).
-  - **Charts & Sparklines:** `Recharts` (MIT) or `Apache ECharts` (Apache-2.0) — bundled locally, zero CDN calls.
-  - **Animations:** `motion` (MIT, formerly Framer Motion) for smooth layout transitions (`Pre-Checkup` $\rightarrow$ `Post-Checkup`) and drawer animations.
+  - **Charts & Sparklines:** `recharts@3.10.1` (MIT) — used for the indicator sparklines (`src/components/charts/TrendSparkline.tsx`); bundled locally, zero CDN calls.
+  - **Animations:** `motion@14.9.0` (MIT, formerly Framer Motion) for the `Pre-Checkup` $\rightarrow$ `Post-Checkup` transition, card entrance and the radiation alert; app wrapped in `<MotionConfig reducedMotion="user">`.
   - **Icons:** `lucide-react` (ISC) or `phosphor-react` (MIT).
   - **Typography:** Self-hosted `Fira Sans` / `Overpass` / `Inter` (SIL OFL-1.1) or system UI fallback stack.
 - **Compliance Rule (`RULES.md`):** Any newly installed npm package, icon set, or font **MUST** be immediately recorded in `SOURCES.md` with its version, repository URL, and OSI license.
@@ -52,6 +52,7 @@ Clicking the circular profile avatar in the top-right header opens a clean dropd
 #### State B: `Post-Checkup` (Active Health Summary Dashboard)
 - **Top Acknowledgment Banner (`CheckupCompleteBar`):**
   - Compact glass card displaying *"Thank you for taking care of yourself!"* alongside a secondary **`Edit Check-up`** button (reopens the form for today's check-up).
+- **Radiation Alert (`RadiationAlert`):** shown above the summary row only when the engine reports `radiation_dose` as `yellow` or `red` (`src/components/RadiationAlert/`). Renders the triggered radiation rules' `title`, `explanation`, `actions`, `recheck`, the reported flags and the escalation text — no own logic. `Show on body map` selects the radiation zone (map switches to the Skin layer).
 - **Status Summary Row (2 Equal Cards):**
   - **Card 1 — `Overall Status`:** Displays `overall_status` (`Green` / `Yellow` / `Red` / `No Data`) with semantic pill styling and status subtitle.
   - **Card 2 — `Escalation Level`:** Displays `overall_escalation` (`Self` / `Crew Medical Officer` / `Flight Surgeon on Earth`) with clear action priority indicator.

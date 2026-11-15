@@ -68,7 +68,8 @@ Radiation is drawn as a soft outline/aura around the whole body, not as a point.
 ### 4.2 Zone status
 1. Collect `IndicatorResult` for the zone's indicator ids.
 2. **Monitoring-only:** an indicator whose rules in `rules.json` are ALL `enabled: false` is excluded from the colour
-   and shown as "Monitoring only — limits are set by mission flight surgeons." (Today: radiation_dose.)
+   and shown as "Monitoring only — limits are set by mission flight surgeons." (Today: none — see §11; radiation_dose
+   has enabled event rules, so it is coloured by the engine like any other zone.)
    If all indicators of a zone are monitoring-only → zone style `monitoring` (neutral, dashed outline).
 3. Zone status = worst of the remaining: red > yellow > green > no_data.
 4. Layer tab badge = worst zone status on that layer.
@@ -96,7 +97,8 @@ Use Rəna's palette if `src/styles/palette` or her values exist; otherwise these
 - Cards: `--surface`, radius 12 px, 1 px `--border`, spacing on an 8 px scale.
 - Typography: system font stack or a locally bundled open-licence (OFL) font. No Google Fonts / CDN.
   Max 3 text sizes. Small uppercase muted labels for section titles.
-- Header shows "Day 40 · Mars transit" and a visible "SYNTHETIC DATA" badge.
+- ~~Header shows "Day 40 · Mars transit" and a visible "SYNTHETIC DATA" badge.~~ Superseded by the header-polish task:
+  header shows `Day 40 · <date>`; the "SYNTHETIC DATA" badge is on the daily check-up card.
 - Status is never colour-only: every zone/tab/card also shows a text word (OK / Watch / Alert / No data /
   Monitoring) and a simple icon (✓ / ! / !! / – / ◌).
 - Glow: yellow zones pulse slowly (2.5 s), red faster (1.2 s), green static, no_data dim.
@@ -111,7 +113,7 @@ Use Rəna's palette if `src/styles/palette` or her values exist; otherwise these
 
 ## 6. Security and honesty
 - No network requests of any kind (no CDN fonts, images, scripts).
-- No new npm dependencies. Use React + CSS/SVG only.
+- No new npm dependencies **inside the BodyMap module** (React + CSS/SVG only). The app elsewhere uses `recharts` and `motion` (see `SOURCE.md`).
 - No `dangerouslySetInnerHTML`; all texts rendered as plain text.
 - No NASA logo or NASA branding in the art or UI. Space Apps branding only, per brand guidelines.
 - Images: own drawings or open-licence (CC0 / CC-BY) only → add to SOURCES.md. AI-generated images → add a
@@ -151,10 +153,14 @@ Mocks go to `src/components/BodyMap/mocks.ts`.
 MVP (the body map is part of the Day-40 story). Agent ~1–1.5 h, Nikita review/integration ~20 min.
 
 ## 11. Implementation Notes (15 Nov 2026)
-- **Radiation is not monitoring-only with today's `rules.json`.** §4.2 says an indicator is monitoring-only when *all* its rules are `enabled: false`. `radiation_dose` still has two enabled flag rules (`rad_y_spe` — solar particle event warning, `rad_r_event` — unexpected dosimeter / acute radiation event). The code follows the rule literally, so a possible red is never hidden; the radiation zone shows the engine's status (`No data` on Day 40). To get "Monitoring only", switch those two rules off in `rules.json` (owner of rules decides). The AC1 mock uses a rules copy with all radiation rules disabled.
-- **Existing component kept:** `InteractiveBody3DMap.tsx` keeps its path and exports and wraps `BodyMap`, so `MainDashboard` is unchanged. Its `LayerSwitcher` export renders nothing; the dashboard grid is now 2 columns.
-- **Added:** a list of all 7 zones under the figure (status word + icon), so every zone is keyboard-reachable without switching layers.
-- **Header:** mission day comes from the mission clock (`Day N · Mars transit`), plus a `SYNTHETIC DATA` badge.
-- **Theme:** `theme.css` remaps the older tokens from `App.css` / `Dashboard.css`; hard-coded light colours in those files were replaced with tokens. The "3 text sizes" rule is applied inside the body map only; other screens keep their sizes.
+- **Radiation — decided:** `radiation_dose` is **not** monitoring-only. Its numeric dose limits stay disabled in `rules.json` (`value: null`, set by mission flight surgeons — open question Q-RAD), but two event rules are enabled and must stay on: `rad_y_spe` (solar particle event warning → yellow) and `rad_r_event` (dosimeter unexpectedly high / acute radiation event → red). Switching them off would hide a red. So:
+  - the astronaut checks radiation **every day** in the check-up's "Radiation check" block (dose rate, accumulated dose, 3 event toggles);
+  - the radiation zone shows the engine's status (`No data` until a dose is entered, `OK` with a dose and no event, `Watch` / `Alert` on an event);
+  - the zone carries a note: "Read your dosimeter at every check-up. Dose limits are set by mission flight surgeons; alerts come from the radiation events you report.";
+  - on yellow/red the aura sends out waves and the dashboard shows the animated `RadiationAlert` (see `DESIGN.md` §5.2).
+  The AC1 mock still uses a rules copy with all radiation rules disabled, to test the monitoring-only style itself.
+- **Existing component kept:** `InteractiveBody3DMap.tsx` keeps its path and exports and wraps `BodyMap`, so `MainDashboard` is unchanged apart from the radiation alert and animations. Its `LayerSwitcher` export renders nothing; the dashboard grid is now 2 columns.
+- **Added:** a list of all 7 zones under the figure (status word + icon), so every zone is keyboard-reachable without switching layers. When the parent selects a zone on another layer, the map switches to that layer.
+- **Theme:** `theme.css` remaps the older tokens from `App.css` / `Dashboard.css`; hard-coded light colours in those files were replaced with tokens. The "3 text sizes" rule is applied inside the body map and radiation alert; other screens keep their sizes.
 - **AC5 in the app:** the dashboard only renders the map after a check-up, so `result = null` is covered by unit tests, not visible in the running app.
-- **Tests:** `src/components/BodyMap/bodyMap.test.ts` covers AC1, AC2, AC5, AC8, aria-labels and placeholder art. Click/keyboard (AC3, AC4) and offline (AC7) were checked in a browser.
+- **Tests:** `src/components/BodyMap/bodyMap.test.ts` (AC1, AC2, AC5, AC8, aria-labels, placeholder art) and `src/components/RadiationAlert/radiationAlert.test.ts` (real engine: no event → no alert, SPE → yellow, dosimeter → red). Click/keyboard (AC3, AC4) and offline (AC7) were checked in a browser.

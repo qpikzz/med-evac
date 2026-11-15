@@ -24,6 +24,8 @@ export interface ZoneConfig {
   /** Short name used in aria-labels, e.g. "Heart". */
   shortLabel: string;
   hazard: string;
+  /** Optional extra line shown in the tooltip and zone list. */
+  note?: string;
   shape: ZoneShape;
 }
 
@@ -88,6 +90,7 @@ export const ZONES: ZoneConfig[] = [
     label: "Radiation dose (whole body)",
     shortLabel: "Radiation dose",
     hazard: "Space radiation",
+    note: "Read your dosimeter at every check-up. Dose limits are set by mission flight surgeons; alerts come from the radiation events you report.",
     shape: { kind: "aura", cx: 200, cy: 400, rx: 168, ry: 388 },
   },
   {

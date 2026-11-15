@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { useAppState } from "../features/app-state/AppStateContext";
 import type { TriggeredRule } from "../rules/types";
 import CheckupFormCard from "./CheckupFormCard";
 import IndicatorSparklineList from "./IndicatorSparklineList";
 import InteractiveBody3DMap, { LayerSwitcher } from "./InteractiveBody3DMap";
+import RadiationAlert from "./RadiationAlert/RadiationAlert";
 import "../Dashboard.css";
 
 interface MainDashboardProps {
@@ -43,11 +45,16 @@ function MainDashboard({
   onAskLocalAI,
   openCheckupToken,
 }: MainDashboardProps) {
-  const { evaluation, hasCheckup } = useAppState();
+  const { evaluation, hasCheckup, rules } = useAppState();
   const [editing, setEditing] = useState(false);
   const [selectedIndicator, setSelectedIndicator] = useState<string | null>(null);
   const [activeLayer, setActiveLayer] = useState<"Skin" | "Muscles" | "Organs">("Organs");
   const showForm = !hasCheckup || editing;
+
+  function showRadiationOnMap(): void {
+    setSelectedIndicator("radiation_dose");
+    document.querySelector(".body-map")?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 
   useEffect(() => {
     if (openCheckupToken > 0) {
@@ -57,27 +64,53 @@ function MainDashboard({
 
   return (
     <main className="main-dashboard">
-      {showForm ? (
-        <CheckupFormCard
-          onContactEarth={onContactEarth}
-          onSubmitted={() => setEditing(false)}
-        />
-      ) : (
-        <section className="checkup-complete-bar dashboard-card" aria-label="Check-up complete">
-          <div className="complete-copy">
-            <span className="complete-check" aria-hidden="true">✓</span>
-            <p>Thank you for taking care of yourself!</p>
-          </div>
-          <div className="complete-actions">
-            <button className="button button-secondary" type="button" onClick={onContactEarth}>
-              Contact Earth
-            </button>
-            <button className="button button-secondary" type="button" onClick={() => setEditing(true)}>
-              Edit Check-up
-            </button>
-          </div>
-        </section>
-      )}
+      <AnimatePresence mode="wait" initial={false}>
+        {showForm ? (
+          <motion.div
+            key="checkup-form"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12, transition: { duration: 0.15 } }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <CheckupFormCard
+              onContactEarth={onContactEarth}
+              onSubmitted={() => setEditing(false)}
+            />
+          </motion.div>
+        ) : (
+          <motion.section
+            key="checkup-complete"
+            className="checkup-complete-bar dashboard-card"
+            aria-label="Check-up complete"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <div className="complete-copy">
+              <motion.span
+                className="complete-check"
+                aria-hidden="true"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+              >
+                ✓
+              </motion.span>
+              <p>Thank you for taking care of yourself!</p>
+            </div>
+            <div className="complete-actions">
+              <button className="button button-secondary" type="button" onClick={onContactEarth}>
+                Contact Earth
+              </button>
+              <button className="button button-secondary" type="button" onClick={() => setEditing(true)}>
+                Edit Check-up
+              </button>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
 
       {!hasCheckup ? (
         <section className="waiting-summary dashboard-card" aria-live="polite">
@@ -87,7 +120,19 @@ function MainDashboard({
       ) : (
         !editing && (
           <>
-            <section className="status-summary-row" aria-label="Health summary">
+            <RadiationAlert
+              result={evaluation}
+              rules={rules}
+              onShowOnMap={showRadiationOnMap}
+              onContactEarth={onContactEarth}
+            />
+            <motion.section
+              className="status-summary-row"
+              aria-label="Health summary"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: "easeOut", delay: 0.05 }}
+            >
               <article className={`status-summary-card dashboard-card status-${evaluation.overall_status}`}>
                 <p className="summary-label">Overall Status</p>
                 <div className="summary-value">
@@ -118,9 +163,15 @@ function MainDashboard({
                         : "No escalation level is available."}
                 </p>
               </article>
-            </section>
+            </motion.section>
 
-            <section className="dashboard-grid" aria-label="Health dashboard">
+            <motion.section
+              className="dashboard-grid"
+              aria-label="Health dashboard"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut", delay: 0.12 }}
+            >
               <IndicatorSparklineList
                 selectedIndicator={selectedIndicator}
                 onSelectIndicator={setSelectedIndicator}
@@ -133,7 +184,7 @@ function MainDashboard({
                 onSelectIndicator={(indicatorId) => setSelectedIndicator(indicatorId)}
               />
               <LayerSwitcher activeLayer={activeLayer} onLayerChange={setActiveLayer} />
-            </section>
+            </motion.section>
           </>
         )
       )}

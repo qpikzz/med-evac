@@ -1,6 +1,6 @@
 # DESIGN.md — Design System & UI/UX Specification (ORBITA)
 
-> **Version:** 2.0 · 15 Nov 2026 — dark space theme + layered 2D body map (see `FEATURES/body-map.md`).
+> **Version:** 2.1 · 15 Nov 2026 — dark space theme, layered 2D body map (`FEATURES/body-map.md`), Recharts sparklines, Motion animations, daily radiation check + animated radiation alert.
 >
 > **Scope:** Visual design system, color tokens, typography, layout architecture, and screen specifications for **ORBITA** (*Onboard Remote Biometric & Integrated Telemetry Assistant*) (NASA Space Apps Challenge 2026, ORBITA project team). All UI text rendered in the application must be in **English** per `RULES.md`.
 
@@ -69,13 +69,11 @@ The older tokens used across `App.css` / `Dashboard.css` / `LoginScreen.css` (`-
 
 ## 4. Persistent Top Navigation Bar (Header)
 
-Displayed across all screens after login (`height: 64px`, `--surface` card):
-1. **Left — Brand & Mission Context:**
-   * **ORBITA** logo + name and expansion.
-   * `Day N · Mars transit` (day from the mission clock, e.g. `Day 40 · Mars transit`) + mission date (`YYYY-MM-DD`).
-   * Visible **`SYNTHETIC DATA`** badge (yellow outline pill) — always shown in the demo build.
-2. **Center — Primary Navigation Tabs:** `Main` · `Comms` (hidden for Ground Operator).
-3. **Right — Profile Switcher:** avatar with initials, name and role; dropdown with saved accounts, add account, log out (see `FEATURES/login.md`).
+Displayed across all screens after login (`height: 64px`, `--surface` card, compact):
+1. **Left — Brand & Mission Context:** 36 px ORBITA logo, `Day 40`, muted `·` separator, live local date (`YYYY-MM-DD`).
+2. **Center — Primary Navigation Tabs:** flat `Main` · `Comms` tabs (hidden for Ground Operator).
+3. **Right — Profile Switcher:** crew SVG avatar, name and role; dropdown with saved accounts, add account, forget account, log out (see `FEATURES/login.md`).
+* The `SYNTHETIC DATA` badge is shown on the daily check-up card (not in the header since the header-polish task).
 
 ---
 
@@ -95,7 +93,7 @@ The `Main` screen implements a progressive two-state layout so the astronaut com
        * Subjective Mood (`mood` 0–10 slider/stepper)
        * Body Mass (`body_mass` kg)
        * Skin Symptom Score (`skin_symptom_score` 0–10)
-       * Radiation (`radiation_dose_rate` µSv/h & `radiation_accumulated` mSv)
+       * **Radiation check** — a separate dashed block under the measurements: `radiation_dose_rate` µSv/h, `radiation_accumulated` mSv, plus the three radiation event toggles from `rules.json` (`spe_warning`, `dosimeter_unexpected_high`, `acute_radiation_event`). Text: *"Read your personal dosimeter. Dose limits are set by mission flight surgeons; any radiation event you mark here is checked by the rules."* The same flags also stay in the symptom list.
    * **Right Column — Symptoms, Tags & Free-Text Notes:**
      * **Quick Symptom Tags (42 Flags from `rules.json`):** Searchable/categorized compact multi-select pill tags (e.g., `Dizziness`, `Fainting`, `Face/Throat Swelling`, `Skin Rash`, `Fatigue`). Selected tags turn highlighted blue/amber and pass directly to `EvaluationInput.flags`.
      * **Free-Text Concern Box:** Textarea (`"Tell us if anything else is bothering you..."`). Any free-text notes not covered by structured tags are forwarded as context to the **Local AI Helper (Ollama)** for personalized explanation alongside triggered rules.
@@ -110,22 +108,27 @@ Once the check-up is submitted, the top form collapses into a compact confirmati
 
 1. **Top Confirmation Banner:**
    * Full-width sleek pill banner: *"Thank you for taking care of yourself!"* with a secondary action button **`Edit Check-up`** (re-expands State A form if needed).
-2. **Summary Status Row (Two Equal Cards):**
+2. **Radiation Alert (only when the engine reports `radiation_dose` yellow or red):**
+   * Full-width card with a status-coloured border, a radiation trefoil icon in a status-coloured circle with expanding rings (yellow 2.4 s, red 1.2 s) and slow rotation, spring entrance (Motion).
+   * Eyebrow `! RADIATION WARNING · WATCH` (yellow) or `!! RADIATION ALERT · ALERT` (red); then, for every triggered radiation rule (red first): `title`, `explanation`, `actions`, `recheck` — all text straight from the engine / `rules.json`.
+   * "You reported: …" (flag labels), escalation text from `rules.json` `ui_text`, buttons **`Show on body map`** (switches the map to the Skin layer and selects the radiation aura) and, for red, **`Contact Earth`**.
+3. **Summary Status Row (Two Equal Cards):**
    * **Card 1 — Overall Status (`overall_status`):** Large semantic badge (`Green — Normal`, `Yellow — Attention Needed`, `Red — Critical Alert`).
    * **Card 2 — Escalation Level (`overall_escalation`):** Clear action directive (`Self-Care`, `Crew Medical Officer`, `Ground Flight Surgeon`) with dynamic accent border matching `overall_status`.
-3. **2-Column Main Diagnostic Grid:**
+4. **2-Column Main Diagnostic Grid:**
    * **Left Column (~42% width) — Indicator Cards Stack:**
      * Vertical scrollable list of the 10 tracked indicators (`rules.json`).
      * Each card displays:
        * Indicator name & current measured value + unit (e.g., `Heart Rate · 84 bpm`).
-       * Compact **7-day trend sparkline** showing daily trajectory and baseline reference band.
+       * **7-day trend sparkline (Recharts `AreaChart`, 56 px high):** smooth line in the indicator's status colour with a soft gradient fill below, "your normal" baseline as a solid faint line and rule thresholds as dashed lines in their level colour; hover tooltip shows date + value + unit; the line draws in over 0.9 s (off with reduced motion).
        * Semantic status pill (`Green` / `Yellow` / `Red` / `No Data`) + `baseline_forming` subtle badge if applicable.
        * Clicking a card expands its triggered rule details: `title`, `explanation`, `actions` checklist, `recheck` timer, an `(i)` info icon revealing `Source: TABLE: ...`, and an **`Ask AI Helper`** button that opens `Comms` pre-loaded with that rule.
    * **Right Column (~58% width) — Layered 2D Body Map (`BodyMap`, full spec in `FEATURES/body-map.md`):**
      * Header: small `BODY MAP` label, caption `Check-up · YYYY-MM-DD` (or `No check-up yet today`), and the **layer tabs `Skin · Organs · Skeleton`** (default `Organs`). Each tab shows a badge with the worst zone status on that layer (icon + word), so a red status on a hidden layer is never invisible.
      * Flat 2D line-art figure (SVG viewBox `0 0 400 800`). Optional art per layer from `src/assets/body/` (`skin.*`, `organs.*`, `skeleton.*`); if missing, a minimal placeholder silhouette is drawn. Layers cross-fade in `200ms`.
      * **Zones (hotspots):** Brain · Sleep & mood, Heart · Rate & pressure, Blood · Glucose, Immune system (Organs layer); Skin · Temperature and Radiation dose — drawn as a soft aura around the whole body (Skin layer); Bones & muscle · Body mass (Skeleton layer). Positions live in `src/components/BodyMap/zones.ts` and can be moved without touching code.
-     * Hotspot = status-coloured circle with icon. Yellow pulses slowly (2.5 s), red faster (1.2 s), green static, `no_data` dim, monitoring-only = neutral dashed outline.
+     * Hotspot = status-coloured circle with icon. Yellow pulses slowly (2.5 s), red faster (1.2 s), green static, `no_data` dim, monitoring-only = neutral dashed outline. The radiation aura additionally sends out expanding waves when yellow/red.
+     * The radiation zone carries a note: *"Read your dosimeter at every check-up. Dose limits are set by mission flight surgeons; alerts come from the radiation events you report."*
      * Hover/focus → tooltip (label, status word, hazard line). Click / Enter / Space → selects the zone (white 2 px ring) and highlights + scrolls to the matching indicator card on the left.
      * Below the figure: a list of **all 7 zones** with status word, so every zone is reachable without switching layers.
 
@@ -152,6 +155,10 @@ Accessible from the top navigation bar (`Comms`) or via `Contact Earth` / `Ask A
 ## 7. Responsive & Desktop Window Constraints
 
 * **Target Resolution:** Optimized for Tauri desktop window (`1280 × 800` minimum, fluid scaling up to `1920 × 1080` and `2560 × 1440`). Also runs in a normal browser via `npm run dev`.
-* **Motion & Transitions:** Subtle CSS transitions only (`150ms–250ms ease`): check-up collapse, body-map layer cross-fade (`200ms`), status pulse on yellow/red hotspots. **All animation is turned off when `prefers-reduced-motion: reduce`.**
+* **Motion & Transitions:** `motion` (Motion for React) for screen-level animation, CSS for small loops:
+  * check-up form ↔ "Thank you" bar: cross-fade + 12 px slide (250 ms), check mark springs in;
+  * summary row and dashboard grid fade up (300–350 ms), indicator cards appear one after another (50 ms stagger);
+  * radiation alert: spring entrance, expanding rings, rotating trefoil; body-map layer cross-fade (200 ms, CSS), hotspot pulse and aura waves (CSS).
+  * `<MotionConfig reducedMotion="user">` wraps the app; looping animations are skipped and CSS animations disabled when `prefers-reduced-motion: reduce`.
 * **Accessibility:** hotspots are `role="button"`, `tabIndex=0`, with `aria-label` like `Heart: Watch — tell your crew medical officer`; layer tabs and zone list are keyboard-reachable buttons; visible focus rings in `--accent`.
 * **Branding & Assets:** no NASA logo or NASA branding in art or UI (Space Apps branding only). Images must be own drawings or CC0 / CC-BY and logged in `SOURCE.md`; AI-generated images need a visible "AI-generated illustration" note in About/Credits.
