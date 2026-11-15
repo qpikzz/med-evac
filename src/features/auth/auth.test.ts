@@ -24,6 +24,7 @@ import {
   SESSION_COPY,
 } from "./copy";
 import { createUnknownBadgeId, initials } from "./identity";
+import { demoBadgeSummary } from "./demoBadges";
 import { hashPin, isValidPin, randomSalt, verifyPinHash } from "./pinCrypto";
 import {
   createProfileHistoryStore,
@@ -40,7 +41,6 @@ import {
 } from "./session";
 import { createInactivityTimer } from "./sessionTimer";
 import type { StorageLike } from "./types";
-import { isWebAuthnAvailable, requestPlatformCredential } from "./webauthn";
 import { getToday } from "../synthetic-data/missionClock";
 
 const DEMO_LOGINS = [
@@ -78,24 +78,28 @@ describe("centralized auth constants and UI copy", () => {
     expect(ROLE_LABELS.ground_operator).toBe("Ground Operator");
   });
 
-  it("keeps the exact Russian login, enrollment, session, and header strings", () => {
-    expect(SCAN_COPY.title).toBe("Приложите NFC-бейдж к счётчику метки");
-    expect(PIN_COPY.title).toBe("Введите 6-значный PIN-код");
+  it("keeps the exact English login, enrollment, session, and header strings", () => {
+    expect(SCAN_COPY.title).toBe("Tap NFC Badge to Reader");
+    expect(SCAN_COPY.subtitle).toBe(
+      "Select a demo crew badge below or simulate a new unregistered tag",
+    );
+    expect(SCAN_COPY.newBadge).toBe("+ Tap New Unregistered Badge");
+    expect(PIN_COPY.title).toBe("Enter 6-Digit PIN");
     expect(PIN_COPY.lockout(30)).toBe(
-      "Слишком много неверных попыток. Повторите через 30 сек.",
+      "Too many incorrect attempts. Try again in 30s.",
     );
     expect(ENROLLMENT_COPY.createPrompt).toBe(
-      "Новый бейдж распознан. Придумайте PIN-код",
+      "New badge detected. Create a 6-digit PIN",
     );
-    expect(ENROLLMENT_COPY.confirmPrompt).toBe("Повторите PIN-код");
-    expect(ENROLLMENT_COPY.mismatch).toBe("PIN-коды не совпадают. Попробуйте снова");
-    expect(SESSION_COPY.question).toBe("Запомнить сессию?");
+    expect(ENROLLMENT_COPY.confirmPrompt).toBe("Confirm your 6-digit PIN");
+    expect(ENROLLMENT_COPY.mismatch).toBe("PINs do not match. Please try again.");
+    expect(SESSION_COPY.question).toBe("Remember this session?");
     expect(SESSION_COPY.ephemeral).toBe(
-      "Нет, по окончании работы выйти из аккаунта",
+      "No — log out after 5 min of inactivity",
     );
-    expect(SESSION_COPY.persistent).toBe("Да, не выходить из аккаунта");
-    expect(HEADER_COPY.addAccount).toBe("Добавить аккаунт");
-    expect(HEADER_COPY.logout).toBe("Выйти из аккаунта");
+    expect(SESSION_COPY.persistent).toBe("Yes — keep me signed in");
+    expect(HEADER_COPY.addAccount).toBe("Add Account");
+    expect(HEADER_COPY.logout).toBe("Sign Out");
   });
 });
 
@@ -116,14 +120,25 @@ describe("identity helpers", () => {
   });
 });
 
-describe("platform authenticator detection", () => {
-  it("falls back cleanly when WebAuthn is unavailable", async () => {
-    expect(isWebAuthnAvailable()).toBe(false);
-    await expect(requestPlatformCredential()).resolves.toEqual({
-      status: "unavailable",
-      message:
-        "Windows Hello / WebAuthn is unavailable on this terminal. Use a demo badge below.",
-    });
+describe("demo badge metadata", () => {
+  it("exposes the seeded roles, history states, and visible demo PIN hints", () => {
+    const store = createAuthStore({ storage: null });
+    const profiles = store.getProfiles();
+
+    expect(profiles.map(demoBadgeSummary)).toEqual([
+      {
+        subtitle: "Astronaut · 40-day history",
+        pinLabel: "NFC · PIN: 111111",
+      },
+      {
+        subtitle: "Astronaut · Empty history",
+        pinLabel: "NFC · PIN: 222222",
+      },
+      {
+        subtitle: "Ground Operator",
+        pinLabel: "NFC · PIN: 333333",
+      },
+    ]);
   });
 });
 
@@ -570,8 +585,8 @@ describe("ORBITA access gate and header UI contracts", () => {
     expect(html).toContain("Flight Surgeon (Houston)");
     expect(html).toContain("profile-option is-active");
     expect(html).toContain("profile-menu-divider");
-    expect(html).toContain("Добавить аккаунт");
-    expect(html).toContain("Выйти из аккаунта");
+    expect(html).toContain("Add Account");
+    expect(html).toContain("Sign Out");
     expect(html.indexOf("profile-switcher")).toBeGreaterThan(
       html.indexOf("primary-nav"),
     );
@@ -603,18 +618,23 @@ describe("ORBITA access gate and header UI contracts", () => {
     expect(html).not.toContain("primary-nav");
   });
 
-  it("criterion 1: cold start renders the ORBITA NFC prompt and demo badge controls", () => {
+  it("criterion 1: cold start renders the English ORBITA NFC prompt and demo badge controls", () => {
     const html = renderToStaticMarkup(
       React.createElement(AuthProvider, null, React.createElement(LoginScreen)),
     );
 
     expect(html).toContain("ORBITA");
-    expect(html).toContain("Приложите NFC-бейдж к счётчику метки");
-    expect(html).toContain("Windows Hello / WebAuthn");
-    expect(html).toContain("orbita-nfc-astro-01");
-    expect(html).toContain("orbita-nfc-astro-02");
-    expect(html).toContain("orbita-nfc-ground-01");
-    expect(html).toContain("Simulate New Unregistered Badge");
+    expect(html).toContain("Tap NFC Badge to Reader");
+    expect(html).toContain(
+      "Select a demo crew badge below or simulate a new unregistered tag",
+    );
+    expect(html).toContain("Astronaut · 40-day history");
+    expect(html).toContain("NFC · PIN: 111111");
+    expect(html).toContain("Astronaut · Empty history");
+    expect(html).toContain("NFC · PIN: 222222");
+    expect(html).toContain("Ground Operator");
+    expect(html).toContain("NFC · PIN: 333333");
+    expect(html).toContain("+ Tap New Unregistered Badge");
   });
 
   it("criterion 2A: a pre-focused saved badge opens the six-digit PIN keypad", () => {
@@ -629,10 +649,10 @@ describe("ORBITA access gate and header UI contracts", () => {
     );
 
     expect(html).toContain("Cmdr. Alex Vance");
-    expect(html).toContain("Введите 6-значный PIN-код");
+    expect(html).toContain("Enter 6-Digit PIN");
     expect(html).toContain("PIN entry, 0 of 6 digits");
     expect(html).toContain("pin-keypad");
-    expect(html).not.toContain("Приложите NFC-бейдж к счётчику метки");
+    expect(html).not.toContain("Tap NFC Badge to Reader");
   });
 
   it("renders all ten keypad digits plus Clear and Backspace", () => {

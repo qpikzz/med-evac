@@ -9,7 +9,6 @@ export const PIN_SALT_BYTES = 16;
 export const LOCKOUT_TICK_MS = 500;
 export const DISPLAY_NAME_MAX_LENGTH = 48;
 export const PROFILE_ID_PAD_LENGTH = 2;
-export const WEBAUTHN_TIMEOUT_MS = 60_000;
 export const UNKNOWN_BADGE_BYTES = 8;
 
 export const AUTH_PROFILES_STORAGE_KEY = "orbita_auth_profiles_v1";

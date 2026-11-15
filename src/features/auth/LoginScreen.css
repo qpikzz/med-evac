@@ -278,6 +278,7 @@
 
 .badge-copy {
   display: grid;
+  flex: 1 1 auto;
   min-width: 0;
   gap: 1px;
 }
@@ -292,15 +293,23 @@
 }
 
 .badge-role {
+  overflow: hidden;
   color: var(--text-secondary);
   font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.badge-id {
-  margin-left: auto;
-  color: var(--text-muted);
+.badge-pin {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  border-radius: 9999px;
+  color: var(--accent-primary);
+  background: var(--accent-soft);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
+  font-size: 9.5px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -554,8 +563,8 @@
     display: none;
   }
 
-  .badge-id {
-    display: none;
+  .badge-pin {
+    font-size: 9px;
   }
 }
 

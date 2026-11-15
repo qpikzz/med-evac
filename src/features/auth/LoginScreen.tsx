@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronLeft, Fingerprint, ScanLine } from "lucide-react";
+import { ChevronLeft, Nfc } from "lucide-react";
 import { useAuth } from "./AuthContext";
 import {
   DISPLAY_NAME_MAX_LENGTH,
@@ -13,11 +13,11 @@ import {
   SCAN_COPY,
   SESSION_COPY,
 } from "./copy";
+import { demoBadgeSummary } from "./demoBadges";
 import { createUnknownBadgeId, initials } from "./identity";
 import { PinDots } from "./PinDots";
 import { PinKeypad } from "./PinKeypad";
 import { isValidPin } from "./pinCrypto";
-import { requestPlatformCredential } from "./webauthn";
 import type { AuthProfile, SessionMode, UserRole } from "./types";
 import "./LoginScreen.css";
 
@@ -57,10 +57,8 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
   const [selectedProfile, setSelectedProfile] = useState<AuthProfile | null>(initialProfile);
   const [pin, setPin] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [lockoutRemainingMs, setLockoutRemainingMs] = useState(0);
-  const [helloBusy, setHelloBusy] = useState(false);
 
   const [unknownBadgeId, setUnknownBadgeId] = useState("");
   const [enrollmentStage, setEnrollmentStage] = useState<EnrollmentStage>("create");
@@ -131,7 +129,6 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
     setSelectedProfile(null);
     setPin("");
     setError(null);
-    setNotice(null);
     setLockoutRemainingMs(0);
     setEnrollmentStage("create");
     setFirstPin("");
@@ -146,7 +143,6 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
     setStep("pin");
     setPin("");
     setError(null);
-    setNotice(null);
     setLockoutRemainingMs(getLockoutRemainingMs(profile.credential_id));
     setVerifiedProfile(null);
   }
@@ -159,25 +155,8 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
     setDisplayName("");
     setRole("astronaut");
     setError(null);
-    setNotice(null);
     setVerifiedProfile(null);
     setStep("enroll");
-  }
-
-  async function handleWebAuthn(): Promise<void> {
-    setHelloBusy(true);
-    setError(null);
-    setNotice(null);
-    try {
-      const outcome = await requestPlatformCredential();
-      if (outcome.status === "ok") {
-        setNotice(SCAN_COPY.helloConfirmed);
-      } else if (outcome.status === "unavailable") {
-        setError(outcome.message);
-      }
-    } finally {
-      setHelloBusy(false);
-    }
   }
 
   function pressDigit(digit: string): void {
@@ -276,45 +255,37 @@ function LoginScreen({ initialCredentialId, allowCancel = false, onCancel }: Log
               <span className="nfc-ring nfc-ring-2" />
               <span className="nfc-ring nfc-ring-3" />
               <span className="nfc-core">
-                <ScanLine size={28} strokeWidth={1.8} />
+                <Nfc size={28} strokeWidth={1.8} />
               </span>
             </div>
             <h1 id="scan-title" className="gate-title">
               {SCAN_COPY.title}
             </h1>
             <p className="gate-subtitle">{SCAN_COPY.subtitle}</p>
-            <button
-              className="gate-primary"
-              type="button"
-              disabled={helloBusy}
-              onClick={() => void handleWebAuthn()}
-            >
-              <Fingerprint size={18} aria-hidden="true" />
-              {helloBusy ? SCAN_COPY.helloBusy : SCAN_COPY.helloButton}
-            </button>
-            {notice && <p className="gate-notice" role="status">{notice}</p>}
-            {error && <p className="gate-error" role="alert">{error}</p>}
 
             <div className="badge-section">
               <p className="badge-section-label">{SCAN_COPY.demoBadges}</p>
               <div className="badge-list">
-                {profiles.map((profile) => (
-                  <button
-                    className="badge-button"
-                    type="button"
-                    key={profile.profile_id}
-                    onClick={() => selectBadge(profile)}
-                  >
-                    <span className="badge-avatar" aria-hidden="true">
-                      {initials(profile.display_name)}
-                    </span>
-                    <span className="badge-copy">
-                      <span className="badge-name">{profile.display_name}</span>
-                      <span className="badge-role">{ROLE_LABELS[profile.role]}</span>
-                    </span>
-                    <span className="badge-id">{profile.credential_id}</span>
-                  </button>
-                ))}
+                {profiles.map((profile) => {
+                  const summary = demoBadgeSummary(profile);
+                  return (
+                    <button
+                      className="badge-button"
+                      type="button"
+                      key={profile.profile_id}
+                      onClick={() => selectBadge(profile)}
+                    >
+                      <span className="badge-avatar" aria-hidden="true">
+                        {initials(profile.display_name)}
+                      </span>
+                      <span className="badge-copy">
+                        <span className="badge-name">{profile.display_name}</span>
+                        <span className="badge-role">{summary.subtitle}</span>
+                      </span>
+                      <span className="badge-pin">{summary.pinLabel}</span>
+                    </button>
+                  );
+                })}
               </div>
               <button className="badge-new" type="button" onClick={selectUnknownBadge}>
                 {SCAN_COPY.newBadge}

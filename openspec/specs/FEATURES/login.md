@@ -88,14 +88,14 @@ The top-right Profile Switcher in `Header.tsx` must remain anchored strictly on 
    - **Section 1 — Saved Profiles:** Lists available accounts (`Cmdr. Alex Vance`, `Dr. Maya Lin`, `Flight Surgeon (Houston)`, plus any newly enrolled badges) with a checkmark on the active user. Clicking another saved account switches to `LoginScreen` pre-focused on that badge's PIN prompt (or switches immediately if already unlocked in current session).
    - **Divider:** `1px solid` subtle border.
    - **Section 2 — Account Actions:**
-     - **`"Добавить аккаунт"`** — Opens `LoginScreen` in new-badge scan / enrollment mode while preserving existing accounts.
-     - **`"Выйти из аккаунта"`** — Clears the active session (`activeSession = null`) and returns immediately to `LoginScreen` Step 1.
+     - **`"Add Account"`** — Opens `LoginScreen` in new-badge scan / enrollment mode while preserving existing accounts.
+     - **`"Sign Out"`** — Clears the active session (`activeSession = null`) and returns immediately to `LoginScreen` Step 1.
 
 ---
 
 ## 5. Future Hardware Integration Specification (NFC Reader Roadmap)
 
-> **Future Roadmap (`#TODO(nfc-hardware)`):** Replace the WebAuthn / demo tap trigger with a native Tauri Rust PC/SC or Web NFC reader daemon (`tauri-plugin-nfc` / `pcsc` crate).
+> **Future Roadmap (`#TODO(nfc-hardware)`):** Replace the demo badge tap targets with a native Tauri Rust PC/SC or Web NFC reader daemon (`tauri-plugin-nfc` / `pcsc` crate).
 
 ### Expected NFC Badge NDEF / APDU Payload Schema
 When physical NFC cards are provisioned for flight hardware, each badge stores a signed binary/CBOR or JSON record structured as follows:
@@ -121,9 +121,10 @@ When physical NFC cards are provisioned for flight hardware, each badge stores a
 
 ## 6. Acceptance Criteria
 
-1. Cold start opens **ORBITA** `LoginScreen` displaying `"Приложите NFC-бейдж к счётчику метки"` and WebAuthn / Windows Hello + demo badge controls.
+1. Cold start opens **ORBITA** `LoginScreen` displaying `"Tap NFC Badge to Reader"`, the NFC pulse reader icon, and the English demo badge controls; the NFC badge tap is the only Factor 1 path.
 2. Logging in as `astro-01` (`PIN: 111111`) loads the 40-day synthetic dataset; logging in as `astro-02` (`PIN: 222222`) loads an empty `HistoryStore` (`No Data`); logging in as `ground-01` (`PIN: 333333`) opens the Ground Operator `Comms` console.
 3. Entering a wrong 6-digit PIN 3 times triggers a strict **30-second** lockout countdown; after 30 seconds, 3 more wrong attempts again trigger a **30-second** lockout.
-4. Tapping an unknown badge seamlessly triggers `"Придумайте PIN-код"` $\rightarrow$ `"Повторите PIN-код"` and creates an isolated profile.
-5. After PIN verification, `"Запомнить сессию?"` appears with `"Нет, по окончании работы выйти из аккаунта"` (auto-logout after 5 minutes of inactivity) and `"Да, не выходить из аккаунта"` (persistent until manual logout).
-6. Top-right Profile Switcher uses a centered rotating SVG chevron (zero vertical jump), stays pinned to the far right in all roles, and includes `"Добавить аккаунт"` and `"Выйти из аккаунта"` in its dropdown.
+4. Tapping an unknown badge seamlessly triggers `"New badge detected. Create a 6-digit PIN"` $\rightarrow$ `"Confirm your 6-digit PIN"` and creates an isolated profile.
+5. After PIN verification, `"Remember this session?"` appears with `"No — log out after 5 min of inactivity"` (auto-logout after 5 minutes of inactivity) and `"Yes — keep me signed in"` (persistent until manual logout).
+6. Top-right Profile Switcher uses a centered rotating SVG chevron (zero vertical jump), stays pinned to the far right in all roles, and includes `"Add Account"` and `"Sign Out"` in its dropdown.
+7. Each seeded demo badge card displays the crew name, role, history state, and a visible `NFC · PIN: {pin}` pill (`111111`, `222222`, `333333`).

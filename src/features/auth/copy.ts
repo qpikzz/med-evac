@@ -1,52 +1,49 @@
 import { PIN_LENGTH } from "./constants";
 
 export const SCAN_COPY = {
-  title: "Приложите NFC-бейдж к счётчику метки",
-  subtitle: "Possession factor · offline credential registry · zero cloud storage",
+  title: "Tap NFC Badge to Reader",
+  subtitle: "Select a demo crew badge below or simulate a new unregistered tag",
   gateTag: "Mission Access Gate",
-  cancel: "Отмена",
-  helloButton: "Windows Hello / WebAuthn",
-  helloBusy: "Проверка Windows Hello...",
-  helloConfirmed: "Windows Hello подтверждён. Выберите демонстрационный бейдж ниже.",
+  cancel: "Cancel",
   demoBadges: "Demo crew badges",
-  newBadge: "Simulate New Unregistered Badge",
+  newBadge: "+ Tap New Unregistered Badge",
 } as const;
 
 export const PIN_COPY = {
-  title: `Введите ${PIN_LENGTH}-значный PIN-код`,
-  back: "Другой бейдж",
-  invalidPin: "Неверный PIN-код. Попробуйте снова.",
-  verifyFailed: "Не удалось проверить PIN-код. Приложите бейдж заново.",
-  lengthError: `PIN-код должен состоять из ${PIN_LENGTH} цифр.`,
+  title: `Enter ${PIN_LENGTH}-Digit PIN`,
+  back: "Use another badge",
+  invalidPin: "Incorrect PIN. Try again.",
+  verifyFailed: "Unable to verify the PIN. Tap the badge again.",
+  lengthError: `PIN must be ${PIN_LENGTH} digits.`,
   lockout: (seconds: number): string =>
-    `Слишком много неверных попыток. Повторите через ${seconds} сек.`,
+    `Too many incorrect attempts. Try again in ${seconds}s.`,
 } as const;
 
 export const ENROLLMENT_COPY = {
-  createPrompt: "Новый бейдж распознан. Придумайте PIN-код",
-  confirmPrompt: "Повторите PIN-код",
-  mismatch: "PIN-коды не совпадают. Попробуйте снова",
-  failed: "Не удалось создать профиль. Попробуйте снова.",
+  createPrompt: `New badge detected. Create a ${PIN_LENGTH}-digit PIN`,
+  confirmPrompt: `Confirm your ${PIN_LENGTH}-digit PIN`,
+  mismatch: "PINs do not match. Please try again.",
+  failed: "Unable to create the profile. Please try again.",
   displayNameLabel: "Display name (optional)",
   displayNamePlaceholder: "e.g. Cmdr. Nova Reyes",
   roleLabel: "Crew role",
-  continueButton: "Продолжить",
-  creatingButton: "Создание профиля...",
-  createButton: "Создать аккаунт",
+  continueButton: "Continue",
+  creatingButton: "Creating profile...",
+  createButton: "Create account",
 } as const;
 
 export const SESSION_COPY = {
-  question: "Запомнить сессию?",
-  ephemeral: "Нет, по окончании работы выйти из аккаунта",
-  persistent: "Да, не выходить из аккаунта",
+  question: "Remember this session?",
+  ephemeral: "No — log out after 5 min of inactivity",
+  persistent: "Yes — keep me signed in",
   ephemeralHint: "5-minute inactivity auto-lock",
   persistentHint: "Persistent until manual logout",
   ephemeralSubtitle: (displayName: string): string =>
-    `${displayName} · эфемерный режим блокируется через 5 минут бездействия.`,
+    `${displayName} · Ephemeral session locks after 5 minutes of inactivity.`,
 } as const;
 
 export const HEADER_COPY = {
   savedProfiles: "Saved profiles",
-  addAccount: "Добавить аккаунт",
-  logout: "Выйти из аккаунта",
+  addAccount: "Add Account",
+  logout: "Sign Out",
 } as const;
