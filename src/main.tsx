@@ -5,6 +5,9 @@ import { AuthProvider } from "./features/auth/AuthContext";
 import { AppStateProvider } from "./features/app-state/AppStateContext";
 import { migrateLegacyStorageKeys } from "./features/storage/migrateBrandKeys";
 
+// Theme last so it overrides the app's own CSS.
+import "./styles/theme.css";
+
 migrateLegacyStorageKeys();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

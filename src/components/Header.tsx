@@ -5,6 +5,7 @@ import { HEADER_COPY } from "../features/auth/copy";
 import type { AuthProfile } from "../features/auth/types";
 import CrewAvatar from "./CrewAvatar";
 import OrbitaLogo from "./OrbitaLogo";
+import { getToday, missionDayForDate } from "../features/synthetic-data";
 
 export type { UserRole } from "../features/auth/types";
 export type AppView = "main" | "comms";
@@ -43,6 +44,8 @@ function Header({
   const [currentDate, setCurrentDate] = useState(() => formatLocalDate(new Date()));
   const switcherRef = useRef<HTMLDivElement | null>(null);
   const role = activeProfile.role;
+  const today = getToday();
+  const missionDay = missionDayForDate(today);
 
   useEffect(() => {
     let timeoutId: number;
@@ -130,6 +133,25 @@ function Header({
   }
 
   return (
+    <header className="app-header">
+      <div className="header-brand">
+        <div className="brand-lockup" aria-label="ORBITA">
+          <OrbitaLogo size={32} />
+          <span className="brand-copy">
+            <span className="brand-name">ORBITA</span>
+            <span className="brand-tagline">
+              Onboard Remote Biometric &amp; Integrated Telemetry Assistant
+            </span>
+          </span>
+        </div>
+        <div className="mission-context">
+          <span className="mission-day">
+            Day {missionDay} <span className="mission-transit">· Mars transit</span>
+          </span>
+          <time className="mission-date" dateTime={today}>{today}</time>
+          <span className="synthetic-badge">Synthetic data</span>
+        </div>
+      </div>
     <>
       <header className="app-header">
         <div className="header-brand">

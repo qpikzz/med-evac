@@ -3,7 +3,7 @@
   # 🚀 ORBITA
   **Onboard Remote Biometric & Integrated Telemetry Assistant**
 
-  *A project by the **ORBITA team** for the **NASA Space Apps Challenge***
+  *A project by the **CyberAstro team** for the **NASA Space Apps Challenge 2026***
 
   <p>
     <img src="https://img.shields.io/badge/NASA-Space_Apps_Challenge-0B3D91?style=for-the-badge" alt="NASA Space Apps Challenge" />
