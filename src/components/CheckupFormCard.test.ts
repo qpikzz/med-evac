@@ -2,11 +2,19 @@ import { describe, expect, it } from "vitest";
 import rulesJson from "../data/rules.json";
 import { loadRules } from "../rules/loadRules";
 import {
+  getSegmentsFromSavedNotes,
   getAutocompleteQuery,
   getSymptomSuggestions,
   removeAutocompleteQuery,
+  removeSymptomSegment,
+  serializeSegments,
 } from "./SymptomNotesComposer";
-import { getThresholdFeedback } from "./CheckupFormCard";
+import {
+  getCanonicalMetricValue,
+  getDisplayedMetricUnit,
+  getDisplayedMetricValue,
+  getThresholdFeedback,
+} from "./CheckupFormCard";
 
 const rules = loadRules(rulesJson);
 
@@ -40,5 +48,34 @@ describe("check-up form helpers", () => {
     ).not.toContain("dizziness");
     expect(removeAutocompleteQuery("I feel dizz", "dizz")).toBe("I feel ");
     expect(removeAutocompleteQuery("head", "head")).toBe("");
+  });
+
+  it("converts display units while keeping threshold checks in canonical units", () => {
+    expect(getDisplayedMetricValue("body_temp", "37", "imperial")).toBe("98.6");
+    expect(getCanonicalMetricValue("body_temp", "102.2", "imperial")).toBe("39");
+    expect(getDisplayedMetricUnit("body_temp", "°C", "imperial")).toBe("°F");
+    expect(getDisplayedMetricValue("body_mass", "69.1", "imperial")).toBe("152.3");
+    expect(getDisplayedMetricUnit("body_mass", "kg", "imperial")).toBe("lbs");
+    expect(getDisplayedMetricUnit("glucose", "mg/dL", "metric")).toBe("mg/dL");
+
+    const canonicalTemperature = getCanonicalMetricValue("body_temp", "102.2", "imperial");
+    expect(getThresholdFeedback(rules, "body_temp", canonicalTemperature, "rest", [])).toBe("alert");
+  });
+
+  it("restores selected symptom pills inline while keeping their serialized notes readable", () => {
+    const segments = getSegmentsFromSavedNotes(
+      "I have dizziness since morning.",
+      ["dizziness"],
+      rules.flags,
+    );
+    expect(segments).toEqual([
+      { kind: "text", text: "I have " },
+      { kind: "symptom", id: "dizziness", label: "Dizziness" },
+      { kind: "text", text: " since morning." },
+    ]);
+    expect(serializeSegments(segments)).toBe("I have Dizziness since morning.");
+    expect(serializeSegments(removeSymptomSegment(segments, "dizziness"))).toBe(
+      "I have since morning.",
+    );
   });
 });

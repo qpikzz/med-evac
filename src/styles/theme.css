@@ -108,15 +108,3 @@ select {
   color: var(--text-muted);
 }
 
-.synthetic-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border: 1px solid var(--status-yellow);
-  border-radius: 999px;
-  color: var(--status-yellow);
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}

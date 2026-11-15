@@ -11,8 +11,87 @@ interface CheckupFormCardProps {
 }
 
 type FieldValues = Record<string, string>;
+export type UnitSystem = "metric" | "imperial";
 
 const EMPTY_VALUES: FieldValues = {};
+const UNIT_SYSTEM_STORAGE_KEY = "orbita_unit_system";
+
+function getStoredUnitSystem(): UnitSystem {
+  if (typeof globalThis.localStorage === "undefined") {
+    return "metric";
+  }
+  return globalThis.localStorage.getItem(UNIT_SYSTEM_STORAGE_KEY) === "imperial"
+    ? "imperial"
+    : "metric";
+}
+
+function normalizeNumericInput(value: string): number | null {
+  const normalized = value.trim().replace(",", ".");
+  if (!/^[+-]?\d+(\.\d+)?$/.test(normalized)) {
+    return null;
+  }
+  const numeric = Number(normalized);
+  return Number.isFinite(numeric) ? numeric : null;
+}
+
+function formatOneDecimal(value: number): string {
+  return value.toFixed(1);
+}
+
+export function getDisplayedMetricValue(
+  metricId: string,
+  canonicalValue: string,
+  unitSystem: UnitSystem,
+): string {
+  const numeric = normalizeNumericInput(canonicalValue);
+  if (numeric === null) {
+    return canonicalValue;
+  }
+  if (unitSystem === "metric") {
+    return metricId === "body_temp" || metricId === "body_mass"
+      ? formatOneDecimal(numeric)
+      : canonicalValue;
+  }
+  if (metricId === "body_temp") {
+    return formatOneDecimal((numeric * 9) / 5 + 32);
+  }
+  if (metricId === "body_mass") {
+    return formatOneDecimal(numeric * 2.20462);
+  }
+  return canonicalValue;
+}
+
+export function getCanonicalMetricValue(
+  metricId: string,
+  displayedValue: string,
+  unitSystem: UnitSystem,
+): string {
+  const numeric = normalizeNumericInput(displayedValue);
+  if (numeric === null || unitSystem === "metric") {
+    return displayedValue;
+  }
+  if (metricId === "body_temp") {
+    return String(Number((((numeric - 32) * 5) / 9).toFixed(3)));
+  }
+  if (metricId === "body_mass") {
+    return String(Number((numeric / 2.20462).toFixed(3)));
+  }
+  return displayedValue;
+}
+
+export function getDisplayedMetricUnit(
+  metricId: string,
+  canonicalUnit: string,
+  unitSystem: UnitSystem,
+): string {
+  if (unitSystem === "imperial" && metricId === "body_temp") {
+    return "°F";
+  }
+  if (unitSystem === "imperial" && metricId === "body_mass") {
+    return "lbs";
+  }
+  return canonicalUnit;
+}
 
 function getTodayValues(metrics: ReturnType<typeof useAppState>["rules"]["metrics"],
   readings: ReturnType<typeof useAppState>["readings"],
@@ -30,22 +109,30 @@ function getTodayValues(metrics: ReturnType<typeof useAppState>["rules"]["metric
   return values;
 }
 
-function formatError(result: ReturnType<ReturnType<typeof useAppState>["validateCheckup"]>["results"][number]): string {
+function formatError(
+  result: ReturnType<ReturnType<typeof useAppState>["validateCheckup"]>["results"][number],
+  unitSystem: UnitSystem,
+): string {
   if (result.ok) {
     return "";
   }
   if (result.code !== "out_of_range" || !result.range) {
     return result.message;
   }
-  const { min, max, unit } = result.range;
+  const { min, max } = result.range;
+  const unit = getDisplayedMetricUnit(result.metric, result.range.unit, unitSystem);
+  const displayBound = (value: number): string =>
+    getDisplayedMetricValue(result.metric, String(value), unitSystem);
+  const displayMin = min === null ? null : displayBound(min);
+  const displayMax = max === null ? null : displayBound(max);
   if (min !== null && max !== null) {
-    return `${result.message} Expected ${min}–${max} ${unit}.`;
+    return `${result.message} Expected ${displayMin}–${displayMax} ${unit}.`;
   }
   if (min !== null) {
-    return `${result.message} Expected at least ${min} ${unit}.`;
+    return `${result.message} Expected at least ${displayMin} ${unit}.`;
   }
   if (max !== null) {
-    return `${result.message} Expected at most ${max} ${unit}.`;
+    return `${result.message} Expected at most ${displayMax} ${unit}.`;
   }
   return result.message;
 }
@@ -134,6 +221,8 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
   const [values, setValues] = useState<FieldValues>(() =>
     getTodayValues(rules.metrics, readings, today),
   );
+  const [unitSystem, setUnitSystem] = useState<UnitSystem>(getStoredUnitSystem);
+  const [displayDrafts, setDisplayDrafts] = useState<FieldValues>({});
   const [temperatureContext, setTemperatureContext] = useState<MeasurementContext>(() => {
     const reading = [...readings].reverse().find(
       (item) => item.date === today && item.metric === "body_temp",
@@ -157,7 +246,9 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     [entries, validateCheckup],
   );
   const errors = new Map(
-    validation.results.filter((result) => !result.ok).map((result) => [result.metric, formatError(result)]),
+    validation.results
+      .filter((result) => !result.ok)
+      .map((result) => [result.metric, formatError(result, unitSystem)]),
   );
   const metricById = useMemo(
     () => new Map(rules.metrics.map((metric) => [metric.id, metric])),
@@ -166,6 +257,19 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
 
   function updateValue(metric: string, value: string): void {
     setValues((current) => ({ ...current, [metric]: value }));
+  }
+
+  function updateDisplayedValue(metric: string, displayedValue: string): void {
+    setDisplayDrafts((current) => ({ ...current, [metric]: displayedValue }));
+    updateValue(metric, getCanonicalMetricValue(metric, displayedValue, unitSystem));
+  }
+
+  function changeUnitSystem(nextUnitSystem: UnitSystem): void {
+    if (typeof globalThis.localStorage !== "undefined") {
+      globalThis.localStorage.setItem(UNIT_SYSTEM_STORAGE_KEY, nextUnitSystem);
+    }
+    setDisplayDrafts({});
+    setUnitSystem(nextUnitSystem);
   }
 
   function feedbackFor(metricId: string, context: MeasurementContext = "rest") {
@@ -191,6 +295,9 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
       metricId,
       metricId === "body_temp" ? temperatureContext : "rest",
     );
+    const displayedValue =
+      displayDrafts[metricId] ??
+      getDisplayedMetricValue(metricId, values[metricId] ?? "", unitSystem);
     return (
       <div className="metric-field" key={metricId}>
         <div className="metric-label-row">
@@ -203,12 +310,18 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
             type="text"
             inputMode="decimal"
             autoComplete="off"
-            value={values[metricId] ?? ""}
+            value={displayedValue}
             aria-invalid={Boolean(error)}
             aria-describedby={error ? `error-${metricId}` : undefined}
-            onChange={(event) => updateValue(metricId, event.currentTarget.value)}
+            onChange={(event) =>
+              metricId === "body_mass"
+                ? updateDisplayedValue(metricId, event.currentTarget.value)
+                : updateValue(metricId, event.currentTarget.value)
+            }
           />
-          <span className="metric-unit">{metric.unit}</span>
+          <span className="metric-unit">
+            {getDisplayedMetricUnit(metricId, metric.unit, unitSystem)}
+          </span>
         </div>
         {error && (
           <p className="field-error" id={`error-${metricId}`} role="alert">
@@ -293,6 +406,9 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
     }
     const error = errors.get(metric.id);
     const feedback = feedbackFor(metric.id, temperatureContext);
+    const displayedValue =
+      displayDrafts[metric.id] ??
+      getDisplayedMetricValue(metric.id, values[metric.id] ?? "", unitSystem);
     return (
       <div className="metric-field">
         <div className="metric-label-row">
@@ -306,12 +422,14 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
               type="text"
               inputMode="decimal"
               autoComplete="off"
-              value={values.body_temp ?? ""}
+              value={displayedValue}
               aria-invalid={Boolean(error)}
               aria-describedby={error ? "error-body_temp" : undefined}
-              onChange={(event) => updateValue(metric.id, event.currentTarget.value)}
+              onChange={(event) => updateDisplayedValue(metric.id, event.currentTarget.value)}
             />
-            <span className="metric-unit">{metric.unit}</span>
+            <span className="metric-unit">
+              {getDisplayedMetricUnit(metric.id, metric.unit, unitSystem)}
+            </span>
           </div>
           <div className="segmented-control context-toggle" role="group" aria-label="Temperature context">
             {(["rest", "exercise"] as const).map((context) => (
@@ -342,6 +460,10 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
       return null;
     }
     const value = values[metricId] ?? "";
+    const parsedSliderValue = Number(value);
+    const sliderValue = value === "" || !Number.isFinite(parsedSliderValue)
+      ? 0
+      : Math.min(10, Math.max(0, parsedSliderValue));
     const error = errors.get(metricId);
     return (
       <div className="score-field">
@@ -351,24 +473,29 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
             {value === "" ? "—" : value} <span>/ 10</span>
           </output>
         </div>
-        <div className="score-segments" role="group" aria-label={`${metric.label}, 0 to 10`}>
-          {Array.from({ length: 11 }, (_, score) => {
-            const scoreText = String(score);
-            return (
-              <button
-                className={value === scoreText ? "is-selected" : ""}
-                type="button"
-                key={score}
-                aria-label={`${metric.label}: ${score} out of 10`}
-                aria-pressed={value === scoreText}
-                onClick={() => updateValue(metricId, scoreText)}
-              >
-                {score}
-              </button>
-            );
-          })}
+        <div className="score-slider">
+          <span aria-hidden="true">0</span>
+          <input
+            type="range"
+            min={0}
+            max={10}
+            step={1}
+            value={sliderValue}
+            aria-label={`${metric.label}, 0 to 10`}
+            aria-valuetext={value === "" ? "Not selected" : `${value} out of 10`}
+            aria-describedby={error ? `error-${metricId}` : undefined}
+            onChange={(event) => updateValue(metricId, event.currentTarget.value)}
+            style={{
+              background: `linear-gradient(to right, var(--accent) ${sliderValue * 10}%, var(--surface-2) ${sliderValue * 10}%)`,
+            }}
+          />
+          <span aria-hidden="true">10</span>
         </div>
-        {error && <p className="field-error" role="alert">{error}</p>}
+        {error && (
+          <p className="field-error" id={`error-${metricId}`} role="alert">
+            {error}
+          </p>
+        )}
       </div>
     );
   }
@@ -393,6 +520,7 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
       demoValues[metric.id] ??= "";
     }
     setValues(demoValues);
+    setDisplayDrafts({});
     setSelectedFlags(syntheticHistory.day40_checkup.flags);
     setClinicalNotes("");
   }
@@ -406,23 +534,40 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
   }
 
   return (
-    <form className="checkup-card dashboard-card" onSubmit={handleSubmit} noValidate>
-      <div className="section-heading">
-        <div>
-          <p className="section-eyebrow">Daily check-up</p>
-          <h2>How are you feeling today?</h2>
+    <form className="checkup-form" onSubmit={handleSubmit} noValidate>
+      <div className="checkup-content">
+        <div className="section-heading">
+          <div>
+            <p className="section-eyebrow">Daily check-up</p>
+            <h2>How are you feeling today?</h2>
+          </div>
+          <div className="unit-system-toggle" role="group" aria-label="Display units">
+            <button
+              type="button"
+              aria-pressed={unitSystem === "metric"}
+              className={unitSystem === "metric" ? "is-selected" : ""}
+              onClick={() => changeUnitSystem("metric")}
+            >
+              Metric (°C, kg)
+            </button>
+            <button
+              type="button"
+              aria-pressed={unitSystem === "imperial"}
+              className={unitSystem === "imperial" ? "is-selected" : ""}
+              onClick={() => changeUnitSystem("imperial")}
+            >
+              Imperial (°F, lbs)
+            </button>
+          </div>
         </div>
-        <span className="synthetic-badge">Synthetic data</span>
-      </div>
 
-      <div className="checkup-grid">
         <section className="metric-form-column" aria-label="Measurements">
           <h3>Measurements</h3>
           <div className="measurement-groups">
             <section className="measurement-group" aria-labelledby="vitals-heading">
               <h4 id="vitals-heading">Vitals</h4>
-              <div className="measurement-row">
-                {renderBloodPressureField()}
+              {renderBloodPressureField()}
+              <div className="vitals-row">
                 {renderMetricField("heart_rate")}
                 {renderTemperatureField()}
                 {renderMetricField("glucose")}
@@ -434,6 +579,8 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
               <div className="measurement-row">
                 {renderMetricField("sleep_hours")}
                 {renderMetricField("body_mass")}
+              </div>
+              <div className="measurement-row">
                 {renderScoreField("mood")}
                 {renderScoreField("skin_symptom_score")}
               </div>
@@ -449,29 +596,31 @@ function CheckupFormCard({ onContactEarth, onSubmitted }: CheckupFormCardProps) 
           </div>
         </section>
 
-        <SymptomNotesComposer
-          flags={rules.flags}
-          selectedFlags={selectedFlags}
-          onToggleFlag={toggleFlag}
-          notes={clinicalNotes}
-          onNotesChange={setClinicalNotes}
-        />
-      </div>
-
-      <div className="form-actions">
-        <div className="secondary-actions">
-          <button className="button button-secondary" type="button" onClick={onContactEarth}>
-            Contact Earth
-          </button>
-          {import.meta.env.DEV && (
-            <button className="button button-quiet" type="button" onClick={loadDay40Demo}>
-              Fill day-40 check-up
-            </button>
-          )}
+        <div className="composer-divider">
+          <SymptomNotesComposer
+            flags={rules.flags}
+            selectedFlags={selectedFlags}
+            onToggleFlag={toggleFlag}
+            notes={clinicalNotes}
+            onNotesChange={setClinicalNotes}
+          />
         </div>
-        <button className="button button-primary" type="submit" disabled={!validation.allOk}>
-          Submit Check-up
-        </button>
+
+        <div className="form-actions">
+          <div className="secondary-actions">
+            <button className="button button-secondary" type="button" onClick={onContactEarth}>
+              Contact Earth
+            </button>
+            {import.meta.env.DEV && (
+              <button className="button button-quiet" type="button" onClick={loadDay40Demo}>
+                Fill day-40 check-up
+              </button>
+            )}
+          </div>
+          <button className="button button-primary" type="submit" disabled={!validation.allOk}>
+            Submit Check-up
+          </button>
+        </div>
       </div>
     </form>
   );
