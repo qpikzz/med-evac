@@ -4,6 +4,7 @@ import { describeDeviation, getReferenceLines } from "../features/personal-basel
 import { useAppState } from "../features/app-state/AppStateContext";
 import type { IndicatorResult, Reading, Status, TriggeredRule } from "../rules/types";
 import TrendSparkline, { type TrendPoint } from "./charts/TrendSparkline";
+import { IndicatorIcon } from "./indicatorIcons";
 import DoseBudgetMeter from "./charts/DoseBudgetMeter";
 import { doseBudget } from "../features/radiation/doseBudget";
 import { TRANSIT_DAYS } from "../features/synthetic-data";
@@ -116,6 +117,9 @@ function IndicatorCard({
         }}
       >
         <span className="indicator-title-row">
+          <span className={`indicator-icon indicator-icon-${indicator.status}`}>
+            <IndicatorIcon id={indicator.indicator_id} />
+          </span>
           <span className="indicator-title">{definition.label}</span>
           <span className={`status-badge status-badge-${indicator.status}`}>
             {statusLabel(indicator.status)}
