@@ -9,6 +9,7 @@ import {
   type EarthTelemetrySnapshot,
 } from "../features/earth-link/chat";
 import { loadRules } from "../rules/loadRules";
+import { resetChatSessionStoreRegistry } from "../features/ai-helper/chatSessions";
 import CommsChannelDeck from "./CommsChannelDeck";
 import EarthLinkPanel, { cleanRuleSource, TelemetryDetails } from "./EarthLinkPanel";
 import LocalAIChannel from "./LocalAIChannel";
@@ -17,6 +18,7 @@ const rules = loadRules(rulesJson);
 
 describe("Comms views", () => {
   it("renders the Onboard SI assistant as a clean chat workspace", () => {
+    resetChatSessionStoreRegistry();
     const markup = renderToStaticMarkup(
       createElement(
         AuthProvider,
@@ -26,14 +28,17 @@ describe("Comms views", () => {
           null,
           createElement(LocalAIChannel, {
             onOpenCheckup: () => undefined,
-            selectedContext: null,
           }),
         ),
       ),
     );
 
-    expect(markup).toContain("Clinical Reasoning &amp; Overall Picture");
+    expect(markup).toContain('aria-label="Today&#x27;s clinical summary"');
     expect(markup).toContain("Why is my heart rate yellow?");
+    expect(markup).toContain("Day 40 · Green");
+    expect(markup).not.toContain("Clinical Reasoning &amp; Overall Picture");
+    expect(markup).not.toContain("Onboard SI is thinking");
+    expect(markup).toContain("Day 40 · Clinical Briefing (1 message)");
     expect(markup).toContain("Deterministic rules set status and urgency; AI provides clinical context only.");
     expect(markup).not.toContain("AI explanation - not a diagnosis");
     expect(markup).not.toContain("SYNTHETIC");

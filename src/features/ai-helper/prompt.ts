@@ -1,6 +1,10 @@
 import type { EvaluationResult, RulesFile, Status } from "../../rules/types";
 import type { PictureResult } from "./combinations";
 import {
+  formatBaselineDeviation,
+  getTriggeredMetricSummaries,
+} from "./clinicalSummary";
+import {
   MAX_TURNS_SENT,
   MAX_USER_CHARS,
   type ChatMessage,
@@ -11,6 +15,7 @@ export const SYSTEM_PROMPT = [
   "You explain; you do not decide. Colours, urgency and whom to contact are set only by the app's health rules. Never change, soften or question them.",
   "Strictly order every clinical response by severity. Open immediately with all CRITICAL / RED alerts, the affected metrics, and why they need immediate attention. Only after every RED item, summarize ELEVATED / YELLOW warnings. Mention NOMINAL / GREEN metrics briefly at the end or only when specifically asked.",
   "Round all calculated or averaged numbers to 1–2 decimal places depending on the metric (e.g., 36.8 °C for temperature, 6.6 h for sleep, whole numbers for bpm and mmHg). NEVER output raw unrounded floating-point decimals like 36.84285714285715.",
+  "When CONTEXT includes an Exact baseline comparison, quote its observed value, baseline, and signed deviation exactly; do not guess or recompute these numbers from a rule threshold.",
   'Never give a diagnosis or name a disease as a conclusion. Use "may be related to" and "worth discussing with your crew medical officer".',
   "Use only the facts in the CONTEXT message. If something is not there, say you do not know.",
   "When you mention a combination from the verified list, name its source. If the picture is marked UNVERIFIED, say so.",
@@ -179,10 +184,12 @@ function serializeContext(
   lines.push(`Overall status: ${ev.overall_status}`);
   lines.push(`Overall escalation: ${ev.overall_escalation ?? "none"}`);
 
-  const prioritized = sortIndicatorsBySeverity(ev.indicators);
-  const redIndicators = prioritized.filter((indicator) => indicator.status === "red");
-  const yellowIndicators = prioritized.filter((indicator) => indicator.status === "yellow");
-  const nonGreen = [...redIndicators, ...yellowIndicators];
+  const summaries = getTriggeredMetricSummaries(ev, rules);
+  const redIndicators = summaries.filter((summary) => summary.status === "red");
+  const yellowIndicators = summaries.filter((summary) => summary.status === "yellow");
+  const nonGreenIndicatorIds = Array.from(
+    new Set(summaries.map((summary) => summary.indicatorId)),
+  );
 
   for (const [heading, indicators] of [
     ["CRITICAL / RED ALERTS — address these first:", redIndicators],
@@ -192,18 +199,19 @@ function serializeContext(
     if (indicators.length === 0) {
       lines.push("- None");
     }
-    for (const indicator of indicators) {
+    for (const summary of indicators) {
+      const { triggered } = summary.primary;
+      const baseline = formatBaselineDeviation(summary, rules);
       lines.push(
-        `- ${indicatorLabel(rules, indicator.indicator_id)} (${indicator.indicator_id}): ${indicator.status.toUpperCase()}`,
+        `- ${summary.label} (${summary.metricKey}): ${summary.status.toUpperCase()}`,
       );
-      const triggered = [...indicator.triggered].sort(
-        (left, right) => STATUS_PRIORITY[left.level] - STATUS_PRIORITY[right.level],
-      );
-      for (const rule of triggered) {
-        lines.push(`  Rule: ${rule.title}`);
-        lines.push(`  Explanation: ${rule.explanation}`);
-        lines.push(`  Source: ${rule.source}`);
-        lines.push(...observedLines(rules, rule.rule_id, rule.observed));
+      lines.push(`  Rule: ${triggered.title}`);
+      lines.push(`  Explanation: ${baseline?.explanation ?? triggered.explanation}`);
+      lines.push(`  Source: ${triggered.source}`);
+      if (baseline) {
+        lines.push(`  Exact baseline comparison: ${baseline.comparison}`);
+      } else {
+        lines.push(...observedLines(rules, triggered.rule_id, triggered.observed));
       }
     }
   }
@@ -227,8 +235,8 @@ function serializeContext(
       lines.push(`  Source: ${combination.source}`);
     }
   } else if (picture.unverified) {
-    const labels = nonGreen
-      .map((indicator) => indicatorLabel(rules, indicator.indicator_id))
+    const labels = nonGreenIndicatorIds
+      .map((indicatorId) => indicatorLabel(rules, indicatorId))
       .join(", ");
     lines.push(`UNVERIFIED PICTURE: no verified combination matches ${labels}`);
   } else {

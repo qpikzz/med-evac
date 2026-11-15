@@ -18,7 +18,6 @@ import {
   seedEarthChatThread,
   type EarthChatMessage,
 } from "./features/earth-link/chat";
-import type { TriggeredRule } from "./rules/types";
 import "./App.css";
 
 interface LoginPrompt {
@@ -38,7 +37,6 @@ function App() {
   } = useAppState();
   const [activeView, setActiveView] = useState<AppView>("main");
   const [commsChannel, setCommsChannel] = useState<"local" | "earth">("local");
-  const [commsContext, setCommsContext] = useState<string | null>(null);
   const [openCheckupToken, setOpenCheckupToken] = useState(0);
   const initialAstronautId =
     activeProfile?.role === "astronaut" ? activeProfile.profile_id : "astro-01";
@@ -67,7 +65,6 @@ function App() {
     }
     setActiveView(landingViewForRole(activeProfile.role));
     setCommsChannel(landingChannelForRole(activeProfile.role));
-    setCommsContext(null);
     setEarthAstronautId(
       activeProfile.role === "astronaut" ? activeProfile.profile_id : "astro-01",
     );
@@ -141,11 +138,8 @@ function App() {
     setActiveView("comms");
   }
 
-  function askLocalAI(indicatorLabel: string, rule?: TriggeredRule): void {
+  function askLocalAI(): void {
     setCommsChannel("local");
-    setCommsContext(
-      rule ? `${indicatorLabel}: ${rule.title}` : `${indicatorLabel}: today's indicator summary`,
-    );
     setActiveView("comms");
   }
 
@@ -183,7 +177,6 @@ function App() {
 
   function signOut(): void {
     setLoginPrompt(null);
-    setCommsContext(null);
     setEarthChatError(null);
     logout();
   }
@@ -234,7 +227,6 @@ function App() {
           {effectiveChannel === "local" ? (
             <LocalAIChannel
               onOpenCheckup={openTodaysCheckup}
-              selectedContext={commsContext}
             />
           ) : (
             <EarthLinkPanel

@@ -9,6 +9,10 @@ import type { EvaluationResult } from "../../rules/types";
 import { computeBaselines } from "../personal-baseline/baseline";
 import { createHistoryStore, loadSyntheticDataset } from "../synthetic-data/historyStore";
 import {
+  buildDeterministicClinicalSummary,
+  getTriggeredMetricSummaries,
+} from "./clinicalSummary";
+import {
   CombinationsFileError,
   loadCombinations,
   matchCombinations,
@@ -101,8 +105,8 @@ describe("ai helper", () => {
     expect(context.indexOf("CRITICAL / RED ALERTS")).toBeLessThan(
       context.indexOf("ELEVATED / YELLOW WARNINGS"),
     );
-    expect(context.indexOf("Sleep (sleep_hours): RED")).toBeLessThan(
-      context.indexOf("Heart rate (heart_rate): YELLOW"),
+    expect(context.indexOf("Sleep last night (sleep_hours): RED")).toBeLessThan(
+      context.indexOf("Resting heart rate (heart_rate): YELLOW"),
     );
     expect(SYSTEM_PROMPT).toContain("Open immediately with all CRITICAL / RED alerts");
   });
@@ -129,12 +133,13 @@ describe("ai helper", () => {
     };
 
     const context = explainMessages(evaluation)[1].content;
-    expect(context).toContain("Observed value: 80 bpm");
-    expect(context).toContain("Observed baseline: 63 bpm");
-    expect(context).toContain("Observed delta: 17");
+    expect(context).toContain(
+      "Exact baseline comparison: Observed 80 bpm · preflight baseline 63 bpm · deviation +17 bpm",
+    );
+    expect(context).toContain(
+      "Your resting heart rate (80 bpm) is +17 bpm above your preflight baseline of 63 bpm (alert threshold: ±12 bpm).",
+    );
     expect(context).toContain("Observed value: 6.6 h");
-    expect(context).toContain("Observed baseline: 6.6 h");
-    expect(context).toContain("Observed delta: -0.12");
     expect(context).not.toContain("80.12345");
     expect(context).not.toContain("6.642857142857");
 
@@ -145,6 +150,117 @@ describe("ai helper", () => {
     ).toBe(
       "Temperature 39.01 °C; sleep 6.6 h; pulse 80 bpm; pressure 122 mmHg; average 36.84.",
     );
+  });
+
+  it("builds the initial deterministic briefing red-first with rounded observations", () => {
+    const { ev } = day40();
+    const evaluation = cloneEvaluation(ev);
+    const sleep = evaluation.indicators.find((item) => item.indicator_id === "sleep_hours");
+    const heart = evaluation.indicators.find((item) => item.indicator_id === "heart_rate");
+    if (!sleep?.triggered[0] || !heart?.triggered[0]) {
+      throw new Error("Day-40 briefing indicators are missing");
+    }
+
+    sleep.status = "red";
+    sleep.escalation = rules.escalation.red;
+    sleep.triggered[0].level = "red";
+    sleep.triggered[0].observed = {
+      metric: "sleep_hours",
+      value: 6.642857142857,
+      baseline: 7.123456789,
+      delta: -0.123456789,
+    };
+    heart.status = "yellow";
+    heart.escalation = rules.escalation.yellow;
+    heart.triggered[0].observed = {
+      metric: "heart_rate",
+      value: 80.12345,
+      baseline: 62.654321,
+      delta: 17.345678,
+    };
+
+    const summary = buildDeterministicClinicalSummary(evaluation, rules, 40);
+    expect(summary.indexOf("CRITICAL / RED alerts")).toBeLessThan(
+      summary.indexOf("ELEVATED / YELLOW warnings"),
+    );
+    expect(summary.indexOf("Sleep last night:")).toBeLessThan(
+      summary.indexOf("Resting heart rate:"),
+    );
+    expect(summary).toContain("Observed 6.6 h.");
+    expect(summary).toContain(
+      "Your resting heart rate (80 bpm) is +17 bpm above your preflight baseline of 63 bpm (alert threshold: ±12 bpm).",
+    );
+    expect(summary).not.toContain("6.642857142857");
+  });
+
+  it("consolidates same-metric red threshold and baseline triggers with exact comparison", () => {
+    const { ev } = day40();
+    const evaluation = cloneEvaluation(ev);
+    const temperature = evaluation.indicators.find(
+      (item) => item.indicator_id === "body_temperature",
+    );
+    if (!temperature) {
+      throw new Error("Day-40 body temperature indicator is missing");
+    }
+    temperature.status = "red";
+    temperature.escalation = rules.escalation.red;
+    temperature.triggered = [
+      {
+        rule_id: "temp_r_abs",
+        level: "red",
+        source: "TABLE: Body temperature, RED",
+        title: "High fever",
+        explanation: "Your resting temperature is 39.0 °C or higher.",
+        actions: [],
+        recheck: "Measure again in 30 minutes.",
+        observed: { metric: "body_temp", value: 43 },
+      },
+      {
+        rule_id: "temp_y_baseline",
+        level: "yellow",
+        source: "TABLE: Body temperature, YELLOW",
+        title: "Temperature above your normal",
+        explanation: "Your resting temperature is at least 1 °C above your own 7-day average.",
+        actions: [],
+        recheck: "Measure again in 30 minutes.",
+        observed: { metric: "body_temp", value: 43, baseline: 36.8, delta: 6.2 },
+      },
+    ];
+
+    const temperatureSummaries = getTriggeredMetricSummaries(evaluation, rules).filter(
+      (summary) => summary.metricKey === "body_temp",
+    );
+    expect(temperatureSummaries).toHaveLength(1);
+    expect(temperatureSummaries[0].status).toBe("red");
+
+    const briefing = buildDeterministicClinicalSummary(evaluation, rules, 40);
+    const temperatureBullets = briefing
+      .split("\n")
+      .filter((line) => line.startsWith("- Body temperature:"));
+    expect(temperatureBullets).toHaveLength(1);
+    expect(temperatureBullets[0]).toContain(
+      "Your resting temperature (43.0 °C) is +6.2 °C above your 7-day baseline of 36.8 °C (alert threshold: +1.0 °C).",
+    );
+    expect(briefing).not.toContain("at least 1 °C above your own 7-day average");
+
+    const context = buildMessages({
+      mode: "explain_today",
+      ev: evaluation,
+      picture: matchCombinations(evaluation, [], fixture),
+      rules,
+      chat: [],
+    })[1].content;
+    const temperatureContextLines = context
+      .split("\n")
+      .filter((line) => line.startsWith("- Body temperature (body_temp):"));
+    expect(temperatureContextLines).toHaveLength(1);
+    expect(context).toContain(
+      "Exact baseline comparison: Observed 43.0 °C · 7-day baseline 36.8 °C · deviation +6.2 °C",
+    );
+    expect(context).toContain(
+      "Your resting temperature (43.0 °C) is +6.2 °C above your 7-day baseline of 36.8 °C (alert threshold: +1.0 °C).",
+    );
+    expect(context).not.toContain("at least 1 °C above your own 7-day average");
   });
 
   it("criterion 1: Day-40 picture matches the heart-and-sleep combination", () => {

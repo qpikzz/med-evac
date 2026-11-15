@@ -4,41 +4,39 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
   type FormEvent,
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import {
   DEFAULT_HELPER_SETTINGS,
   askModel,
-  type LlmResult,
 } from "../features/ai-helper/ollama";
 import {
   buildMessages,
   formatClinicalResponse,
   PromptError,
-  sortIndicatorsBySeverity,
 } from "../features/ai-helper/prompt";
+import {
+  getChatSessionStore,
+  formatChatSessionOptionLabel,
+  type SIChatMessage,
+} from "../features/ai-helper/chatSessions";
+import {
+  buildDeterministicClinicalSummary,
+  getTriggeredMetricSummaries,
+} from "../features/ai-helper/clinicalSummary";
 import {
   loadDefaultCombinations,
 } from "../features/ai-helper/defaultCombinations";
 import { matchCombinations } from "../features/ai-helper/combinations";
 import { buildSafetySupportCard, checkSafety } from "../features/ai-helper/safety";
 import { useAppState } from "../features/app-state/AppStateContext";
+import { useAuth } from "../features/auth/AuthContext";
 
 interface LocalAIChannelProps {
   onOpenCheckup: () => void;
-  selectedContext: string | null;
 }
-
-interface VisibleMessage {
-  role: "user" | "assistant";
-  content: string;
-}
-
-type ConversationTurn = {
-  role: "user" | "assistant";
-  content: string;
-};
 
 const QUICK_PROMPTS = [
   "Why is my heart rate yellow?",
@@ -46,66 +44,59 @@ const QUICK_PROMPTS = [
   "Analyze today's results",
 ];
 
-function fallbackText(result: Exclude<LlmResult, { status: "ok" }>): string {
-  switch (result.status) {
-    case "unavailable":
-      return "The local AI assistant is not running. Showing verified combinations only.";
-    case "model_missing":
-      return `The local AI model is not installed (run: ollama pull ${DEFAULT_HELPER_SETTINGS.model}). Showing verified combinations only.`;
-    case "timeout":
-    case "error":
-      return "The AI assistant did not answer. Showing verified combinations only.";
-  }
-}
-
-function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps) {
+function LocalAIChannel({ onOpenCheckup }: LocalAIChannelProps) {
   const { evaluation, flagsToday, clinicalNotesToday, rules, missionDay } = useAppState();
+  const { activeProfile } = useAuth();
+  const profileId = activeProfile?.profile_id ?? "guest";
   const combinations = useMemo(() => loadDefaultCombinations(rules), [rules]);
   const picture = useMemo(
     () => matchCombinations(evaluation, flagsToday, combinations),
     [combinations, evaluation, flagsToday],
   );
   const supportCard = useMemo(() => buildSafetySupportCard(rules), [rules]);
-  const [chat, setChat] = useState<VisibleMessage[]>([]);
+  const deterministicBriefing = useMemo(
+    () => buildDeterministicClinicalSummary(evaluation, rules, missionDay),
+    [evaluation, missionDay, rules],
+  );
+  const sessionStore = useMemo(
+    () =>
+      getChatSessionStore(profileId, {
+        missionDay,
+        status: evaluation.overall_status,
+        briefing: deterministicBriefing,
+      }),
+    [deterministicBriefing, evaluation.overall_status, missionDay, profileId],
+  );
+  const sessionState = useSyncExternalStore(
+    sessionStore.subscribe,
+    sessionStore.getSnapshot,
+    sessionStore.getSnapshot,
+  );
+  const activeSession =
+    sessionState.sessions.find((session) => session.id === sessionState.activeSessionId) ??
+    sessionState.sessions[0];
   const [composer, setComposer] = useState("");
-  const [autoExplanation, setAutoExplanation] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
-  const [isThinking, setIsThinking] = useState(false);
+  const [thinkingRequest, setThinkingRequest] = useState<{
+    profileId: string;
+    sessionId: string;
+    requestId: number;
+  } | null>(null);
   const [inputError, setInputError] = useState<string | null>(null);
   const [showSupportCard, setShowSupportCard] = useState(false);
   const requestId = useRef(0);
   const chatStreamRef = useRef<HTMLDivElement>(null);
-
-  const nonGreenKey = picture.non_green_indicators.join(",");
-  const explainKey = `${evaluation.today}:${evaluation.overall_status}:${nonGreenKey}:${evaluation.indicators
-    .filter((indicator) => indicator.status === "yellow" || indicator.status === "red")
-    .flatMap((indicator) => indicator.triggered.map((rule) => rule.rule_id))
-    .join(",")}`;
+  const isThinking =
+    thinkingRequest?.profileId === profileId &&
+    thinkingRequest.sessionId === activeSession?.id;
 
   const runModel = useCallback(
-    async (
-      mode: "explain_today" | "chat",
-      text: string,
-      chatTurns: ConversationTurn[],
-    ): Promise<void> => {
-      const safety = checkSafety(text);
-      if (safety.hit) {
-        setShowSupportCard(true);
-        setNotice(null);
-        setIsThinking(false);
-        return;
-      }
-
+    async (sessionId: string, chatTurns: SIChatMessage[]): Promise<void> => {
       const currentRequest = ++requestId.current;
-      setIsThinking(true);
-      setNotice(null);
-      if (mode === "explain_today") {
-        setAutoExplanation(null);
-      }
+      setThinkingRequest({ profileId, sessionId, requestId: currentRequest });
 
       try {
         const messages = buildMessages({
-          mode,
+          mode: "chat",
           ev: evaluation,
           picture,
           rules,
@@ -113,52 +104,60 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
           clinicalNotes: clinicalNotesToday,
         });
         const result = await askModel(messages, DEFAULT_HELPER_SETTINGS);
-        if (currentRequest !== requestId.current) {
+        if (!sessionStore.getSession(sessionId)) {
           return;
         }
-        if (result.status === "ok") {
-          if (mode === "explain_today") {
-            setAutoExplanation(formatClinicalResponse(result.text));
-          } else {
-            setChat((current) => [
-              ...current,
-              { role: "assistant", content: formatClinicalResponse(result.text) },
-            ]);
-          }
+
+        if (result.status === "ok" && result.text.trim()) {
+          sessionStore.appendMessage(
+            sessionId,
+            "assistant",
+            formatClinicalResponse(result.text.trim()),
+          );
         } else {
-          setNotice(fallbackText(result));
+          const reason =
+            result.status === "ok"
+              ? "Ollama returned an empty response."
+              : result.status === "unavailable"
+                ? "Ollama is unavailable."
+                : result.status === "model_missing"
+                  ? `The local AI model is not installed (run: ollama pull ${DEFAULT_HELPER_SETTINGS.model}).`
+                  : result.status === "timeout"
+                    ? "Ollama did not respond before the timeout."
+                    : `Ollama could not complete the request (${result.detail}).`;
+          sessionStore.appendMessage(
+            sessionId,
+            "assistant",
+            `${reason} Here is today's deterministic clinical briefing:\n\n${deterministicBriefing}`,
+          );
         }
       } catch (error) {
-        if (currentRequest !== requestId.current) {
-          return;
+        if (sessionStore.getSession(sessionId)) {
+          const reason =
+            error instanceof PromptError
+              ? `The request could not be sent: ${error.message}`
+              : "The AI assistant could not complete the request.";
+          sessionStore.appendMessage(
+            sessionId,
+            "assistant",
+            `${reason} Here is today's deterministic clinical briefing:\n\n${deterministicBriefing}`,
+          );
         }
-        setNotice(
-          error instanceof PromptError
-            ? error.message
-            : "The AI assistant did not answer. Showing verified combinations only.",
-        );
       } finally {
-        if (currentRequest === requestId.current) {
-          setIsThinking(false);
-        }
+        setThinkingRequest((current) =>
+          current?.requestId === currentRequest ? null : current,
+        );
       }
     },
-    [clinicalNotesToday, evaluation, picture, rules],
-  );
-
-  useEffect(() => {
-    if (picture.non_green_indicators.length === 0) {
-      setAutoExplanation(null);
-      return;
-    }
-    void runModel("explain_today", "", []);
-  }, [explainKey, picture.non_green_indicators.length, runModel]);
-
-  useEffect(
-    () => () => {
-      requestId.current += 1;
-    },
-    [],
+    [
+      clinicalNotesToday,
+      deterministicBriefing,
+      evaluation,
+      picture,
+      profileId,
+      rules,
+      sessionStore,
+    ],
   );
 
   useEffect(() => {
@@ -166,9 +165,27 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
     if (stream) {
       stream.scrollTop = stream.scrollHeight;
     }
-  }, [chat, isThinking]);
+  }, [activeSession?.messages, isThinking]);
+
+  function createNewSession(): void {
+    sessionStore.createSession(missionDay, deterministicBriefing);
+    setComposer("");
+    setInputError(null);
+  }
+
+  function deleteActiveSession(): void {
+    if (!activeSession) {
+      return;
+    }
+    sessionStore.deleteSession(activeSession.id, missionDay, deterministicBriefing);
+    setComposer("");
+    setInputError(null);
+  }
 
   function submitText(text: string): void {
+    if (!activeSession) {
+      return;
+    }
     if (text.length > DEFAULT_HELPER_SETTINGS.max_user_chars) {
       setInputError("Please keep it under 1000 characters.");
       return;
@@ -179,19 +196,24 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
     }
 
     setInputError(null);
-    setNotice(null);
-    const nextChat: ConversationTurn[] = [
-      ...chat.map(({ role, content }) => ({ role, content })),
-      { role: "user", content: trimmed },
-    ];
-    setChat((current) => [...current, { role: "user", content: trimmed }]);
+    const updatedSession = sessionStore.appendMessage(activeSession.id, "user", trimmed);
     setComposer("");
 
     if (checkSafety(trimmed).hit) {
       setShowSupportCard(true);
+      const supportReply = supportCard
+        ? [
+            supportCard.title,
+            supportCard.explanation,
+            ...supportCard.actions,
+            `Check in: ${supportCard.recheck}`,
+          ].join("\n\n")
+        : deterministicBriefing;
+      sessionStore.appendMessage(activeSession.id, "assistant", supportReply);
       return;
     }
-    void runModel("chat", trimmed, nextChat);
+    setShowSupportCard(false);
+    void runModel(activeSession.id, updatedSession.messages);
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
@@ -206,75 +228,31 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
     }
   }
 
-  const triggeredIndicators = sortIndicatorsBySeverity(
-    evaluation.indicators.filter((indicator) => indicator.triggered.length > 0),
-  );
+  const triggeredMetrics = getTriggeredMetricSummaries(evaluation, rules);
 
   return (
     <section className="local-ai-panel" aria-label="Local AI assistant">
-      <header className="local-ai-context">
-        <div className="local-ai-context-main">
-          <div>
-            <span className={`comms-triage-pill triage-${evaluation.overall_status}`}>
-              Day {missionDay} · {evaluation.overall_status.replace("_", " ")}
-            </span>
-          </div>
-          <span className="offline-model-badge">
-            Local Neural Engine · {DEFAULT_HELPER_SETTINGS.model}
-          </span>
-        </div>
+      <header className="local-ai-context" aria-label="Today's clinical summary">
+        <span className={`comms-triage-pill triage-${evaluation.overall_status}`}>
+          Day {missionDay} · {evaluation.overall_status.replace("_", " ")}
+        </span>
         <div className="rule-chip-list" aria-label="Triggered rules">
-          {triggeredIndicators.length > 0
-            ? triggeredIndicators.map((indicator) => (
-                <span
-                  className={`rule-context-chip status-${indicator.status}`}
-                  key={indicator.indicator_id}
-                >
-                  {indicator.indicator_id === "heart_rate"
-                    ? "Heart rate differs from your normal"
-                    : indicator.indicator_id === "sleep_hours"
-                      ? "Not enough sleep this week"
-                      : rules.indicators.find((item) => item.id === indicator.indicator_id)?.label
-                        ?? indicator.indicator_id}
-                </span>
-              ))
-            : <span className="rule-context-chip">No triggered indicators today</span>}
+          {triggeredMetrics.map((metric) => (
+            <span
+              className={`rule-context-chip status-${metric.status}`}
+              key={metric.metricKey}
+            >
+              {metric.metricKey === "heart_rate"
+                ? "Heart rate differs from your normal"
+                : metric.metricKey === "sleep_hours"
+                  ? "Not enough sleep this week"
+                  : metric.label}
+            </span>
+          ))}
         </div>
-        {selectedContext && <p className="selected-ai-context">Opened from Main: {selectedContext}</p>}
-        <details className="clinical-reasoning">
-          <summary>
-            <span>Clinical Reasoning &amp; Overall Picture</span>
-            <span className="reasoning-hint">Rules-led context · optional</span>
-          </summary>
-          <div className="clinical-reasoning-content">
-            {picture.matched.length > 0 ? (
-              <div className="combination-list">
-                {picture.matched.map(({ combination }) => (
-                  <article className="matched-combination" key={combination.id}>
-                    <h3>{combination.title}</h3>
-                    <p>Possible explanations to discuss with your crew medical officer:</p>
-                    <ul>
-                      {combination.possible_explanations.map((explanation) => (
-                        <li key={explanation}>{explanation}</li>
-                      ))}
-                    </ul>
-                    {combination.actions.length > 0 && (
-                      <ul>
-                        {combination.actions.map((action) => <li key={action}>{action}</li>)}
-                      </ul>
-                    )}
-                    <p className="combination-source">Based on: {combination.source}</p>
-                  </article>
-                ))}
-              </div>
-            ) : picture.unverified ? (
-              <p>Unverified picture: multiple indicators changed together. Discuss with your crew medical officer.</p>
-            ) : (
-              <p>No combined changes today.</p>
-            )}
-            {autoExplanation && <p className="reasoning-explanation">{autoExplanation}</p>}
-          </div>
-        </details>
+        <span className="offline-model-badge">
+          Local Neural Engine · {DEFAULT_HELPER_SETTINGS.model}
+        </span>
       </header>
 
       {showSupportCard && supportCard && (
@@ -293,14 +271,47 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
       )}
 
       <section className="ai-chat-panel" aria-label="AI explanation and chat">
-        {notice && <p className="ai-fallback-notice" role="status">{notice}</p>}
+        {sessionState.storageError && (
+          <p className="ai-fallback-notice" role="alert">{sessionState.storageError}</p>
+        )}
+
+        {activeSession && (
+          <div className="si-session-bar" aria-label="SI chat sessions">
+            <label className="visually-hidden" htmlFor="si-session-selector">Saved SI sessions</label>
+            <select
+              id="si-session-selector"
+              value={activeSession.id}
+              onChange={(event) => {
+                sessionStore.selectSession(event.currentTarget.value);
+              }}
+            >
+              {sessionState.sessions.map((session) => (
+                <option key={session.id} value={session.id}>
+                  {formatChatSessionOptionLabel(session)}
+                </option>
+              ))}
+            </select>
+            <button type="button" className="si-new-session" onClick={createNewSession}>
+              + New Session
+            </button>
+            <button
+              type="button"
+              className="si-delete-session"
+              aria-label={`Delete session ${activeSession.title}`}
+              title="Delete session"
+              onClick={deleteActiveSession}
+            >
+              ×
+            </button>
+          </div>
+        )}
 
         <div className="chat-stream" aria-live="polite" ref={chatStreamRef}>
-          {chat.length === 0 && !isThinking && (
+          {activeSession?.messages.length === 0 && !isThinking && (
             <p className="chat-empty-state">Ask a question to start a private conversation on this device.</p>
           )}
-          {chat.map((message, index) => (
-            <article className={`chat-message chat-${message.role}`} key={`${message.role}-${index}`}>
+          {activeSession?.messages.map((message) => (
+            <article className={`chat-message chat-${message.role}`} key={message.id}>
               <span className="chat-role">
                 {message.role === "user" ? "You" : "Onboard SI · granite3.3:8b"}
               </span>
