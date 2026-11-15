@@ -1,4 +1,4 @@
-# SPEC: Synthetic data, history store & mission clock  ·  v1.0  ·  14 Nov 2026, 17:05 (Baku)
+# SPEC: Synthetic data, history store & mission clock  ·  v1.1  ·  15 Nov 2026 (v1.0 14 Nov 2026, 17:05 Baku; v1.1 adds illustrative radiation readings)
 
 ## 0\. In simple terms 
 
@@ -65,6 +65,7 @@ export interface SyntheticDataset {
   astronaut: { id: "SYN-01"; display_name: "Astronaut A (synthetic)" };
   mission: {
     name: "Mars transit (synthetic)";
+    transit_days: 180;                     // v1.1: illustrative one-way transit length (NASA DRA 5.0, NASA/SP-2009-566: ≈ 180 days)
     day1_date: "2026-10-06";
     demo_day: 40;
   };
@@ -82,7 +83,7 @@ export interface SyntheticDataset {
 }
 ```
 
-All readings: `context: "rest"`, `valid: true`. Readings sorted by date, then by metric order: `heart_rate, bp_systolic, bp_diastolic, glucose, body_temp, sleep_hours, mood, body_mass, skin_symptom_score`. Radiation metrics are **not** generated (OPEN QUESTION Q-RAD in rules-engine; their rules are disabled).
+All readings: `context: "rest"`, `valid: true`. Readings sorted by date, then by metric order: `heart_rate, bp_systolic, bp_diastolic, glucose, body_temp, sleep_hours, mood, body_mass, skin_symptom_score, radiation_dose_rate, radiation_accumulated`. Radiation readings are **illustrative synthetic values** (added v1.1, 15 Nov 2026); no rule uses them — numeric radiation limits stay disabled (OPEN QUESTION Q-RAD).
 
 ### 4.2 Values (exact, no randomness)
 
@@ -109,8 +110,12 @@ All readings: `context: "rest"`, `valid: true`. Readings sorted by date, then by
 | mood | 8, 7, 7, 8, 7, 7, 8 | d37–d40 \= 6 |
 | skin\_symptom\_score | 1, 0, 1, 1, 0, 1, 0 | — |
 | body\_mass | formula: `(700 − Math.floor((d − 1) / 4)) / 10` → 70.0 on d1, 69.1 on d40 | — |
+| radiation\_dose\_rate (µSv/h) | 74, 76, 75, 73, 77, 76, 74 | — |
+| radiation\_accumulated (mSv) | formula: `round(1.8 × d, 1)` → 1.8 on d1, 72.0 on d40 | — |
 
-Days 1–39 go to `history`; day 40 goes to `day40_checkup` (same rule). Day 40 therefore \= heart\_rate 80, bp 117/78, glucose 97, body\_temp 37.0, sleep 6.5, mood 6, body\_mass 69.1, skin 0\.
+Days 1–39 go to `history`; day 40 goes to `day40_checkup` (same rule). Day 40 therefore \= heart\_rate 80, bp 117/78, glucose 97, body\_temp 37.0, sleep 6.5, mood 6, body\_mass 69.1, skin 0, radiation dose rate 77 µSv/h, accumulated 72.0 mSv\.
+
+**Radiation numbers (illustrative, not thresholds):** deep-space cruise galactic-cosmic-ray dose equivalent ≈ 1.8 mSv/day (≈ 75 µSv/h), measured by MSL/RAD in transit to Mars \[SwRI press release, 30 May 2013; original study Zeitlin et al., *Science* 340:1080–1084, 2013 — paywalled, abstract only\]. The 7-value pattern adds a small ±2 µSv/h day-to-day variation (invented, synthetic); accumulated dose is 1.8 mSv × mission day. The mission is a **180-day one-way Mars transit** (`TRANSIT_DAYS` in `missionClock.ts`), so arrival ≈ 324 mSv. Shielding, solar cycle and spacecraft differ, so these are demo values only.
 
 **Why these numbers (checked against shipped `rules.json`):**
 
@@ -186,18 +191,18 @@ Plain Node.js ES module, **no dependencies**. Run: `node scripts/generate-synthe
 
 1. **Determinism.** Running the generator twice → identical file (compare strings).  
 2. **Label.** `synthetic === true`, `label` contains "SYNTHETIC"; loader rejects a copy with `synthetic: false`.  
-3. **Counts.** preflight \= 35 readings (7 × 5); history \= 39 days × 9 metrics \= 351 readings; `flags_by_date` has 39 keys, all `[]`; day40\_checkup has 9 readings.  
+3. **Counts.** preflight \= 35 readings (7 × 5); history \= 39 days × 11 metrics \= 429 readings; `flags_by_date` has 39 keys, all `[]`; day40\_checkup has 11 readings.  
 4. **Dates.** history first date 2026-10-06, last 2026-11-13; `missionDateForDay(40) === "2026-11-14"`; `missionDayForDate("2026-10-06") === 1`; `getToday() === "2026-11-14"`.  
 5. **Story values.** heart\_rate d38 \= 62, d39 \= 76, day40 \= 80; sleep d34..d39 \= 7.0, 6.5, 6.5, 7.0, 6.5, 6.0, day40 \= 6.5; body\_mass d1 \= 70.0, d40 \= 69.1.  
-6. **Day-40 evaluation (integration with rules engine \+ baseline).** Store with `includeDay40:true`, today 2026-11-14, baselines from `computeBaselines`, flags \[\] → heart\_rate `yellow` via `hr_y_baseline` (observed.delta 18); sleep\_hours `yellow` via `sleep_y_avg7`; blood\_pressure, blood\_sugar, body\_temperature, mood, body\_mass, skin\_health `green`; immune\_signs `green`; radiation\_dose `no_data`; overall `yellow`, escalation `crew_medical_officer`.  
+6. **Day-40 evaluation (integration with rules engine \+ baseline).** Store with `includeDay40:true`, today 2026-11-14, baselines from `computeBaselines`, flags \[\] → heart\_rate `yellow` via `hr_y_baseline` (observed.delta 18); sleep\_hours `yellow` via `sleep_y_avg7`; blood\_pressure, blood\_sugar, body\_temperature, mood, body\_mass, skin\_health `green`; immune\_signs `green`; radiation\_dose `green` (dose recorded, no radiation event flagged); overall `yellow`, escalation `crew_medical_officer`.  
 7. **No hidden alarms.** For every day 8..39 evaluated with history up to that day: no indicator is `red`; heart\_rate is never yellow; only sleep\_hours may be yellow (days 38–39).  
-8. **Store rules.** `addReadings([{...valid:false}])` throws; `getReadings()` returns a copy (mutating it does not change the store); `setFlags("2026-11-14", ["cough","cough"])` → `getFlags` \= `["cough"]`; `reset()` restores 351 history readings; `subscribe` listener is called once per `addReadings`.  
+8. **Store rules.** `addReadings([{...valid:false}])` throws; `getReadings()` returns a copy (mutating it does not change the store); `setFlags("2026-11-14", ["cough","cough"])` → `getFlags` \= `["cough"]`; `reset()` restores 429 history readings; `subscribe` listener is called once per `addReadings`.  
 9. **includeDay40 false (default).** `hasCheckup("2026-11-14") === false`.  
 10. **Demo entry.** `day40_checkup.demo_invalid_entry` \= `{metric:"heart_rate", raw:"920"}` and input check rejects it \[specs/input-check.md \#1\].
 
 ## 9\. Out of scope
 
-Persistent database, multiple astronauts, radiation data (until Q-RAD), random noise, importing real devices, editing past days.
+Persistent database, multiple astronauts, radiation **thresholds** (until Q-RAD), random noise, importing real devices, editing past days.
 
 ## 10\. Files
 
@@ -319,6 +324,7 @@ export interface SyntheticDataset {
   astronaut: { id: "SYN-01"; display_name: "Astronaut A (synthetic)" };
   mission: {
     name: "Mars transit (synthetic)";
+    transit_days: 180;                     // v1.1: illustrative one-way transit length (NASA DRA 5.0, NASA/SP-2009-566: ≈ 180 days)
     day1_date: "2026-10-06";
     demo_day: 40;
   };
@@ -336,7 +342,7 @@ export interface SyntheticDataset {
 }
 ```
 
-All readings: `context: "rest"`, `valid: true`. Readings sorted by date, then by metric order: `heart_rate, bp_systolic, bp_diastolic, glucose, body_temp, sleep_hours, mood, body_mass, skin_symptom_score`. Radiation metrics are **not** generated (OPEN QUESTION Q-RAD in rules-engine; their rules are disabled).
+All readings: `context: "rest"`, `valid: true`. Readings sorted by date, then by metric order: `heart_rate, bp_systolic, bp_diastolic, glucose, body_temp, sleep_hours, mood, body_mass, skin_symptom_score, radiation_dose_rate, radiation_accumulated`. Radiation readings are **illustrative synthetic values** (added v1.1, 15 Nov 2026); no rule uses them — numeric radiation limits stay disabled (OPEN QUESTION Q-RAD).
 
 ### **4.2 Values (exact, no randomness)**
 
@@ -363,8 +369,12 @@ All readings: `context: "rest"`, `valid: true`. Readings sorted by date, then by
 | mood | 8, 7, 7, 8, 7, 7, 8 | d37–d40 \= 6 |
 | skin\_symptom\_score | 1, 0, 1, 1, 0, 1, 0 | — |
 | body\_mass | formula: `(700 − Math.floor((d − 1) / 4)) / 10` → 70.0 on d1, 69.1 on d40 | — |
+| radiation\_dose\_rate (µSv/h) | 74, 76, 75, 73, 77, 76, 74 | — |
+| radiation\_accumulated (mSv) | formula: `round(1.8 × d, 1)` → 1.8 on d1, 72.0 on d40 | — |
 
-Days 1–39 go to `history`; day 40 goes to `day40_checkup` (same rule). Day 40 therefore \= heart\_rate 80, bp 117/78, glucose 97, body\_temp 37.0, sleep 6.5, mood 6, body\_mass 69.1, skin 0\.
+Days 1–39 go to `history`; day 40 goes to `day40_checkup` (same rule). Day 40 therefore \= heart\_rate 80, bp 117/78, glucose 97, body\_temp 37.0, sleep 6.5, mood 6, body\_mass 69.1, skin 0, radiation dose rate 77 µSv/h, accumulated 72.0 mSv\.
+
+**Radiation numbers (illustrative, not thresholds):** deep-space cruise galactic-cosmic-ray dose equivalent ≈ 1.8 mSv/day (≈ 75 µSv/h), measured by MSL/RAD in transit to Mars \[SwRI press release, 30 May 2013; original study Zeitlin et al., *Science* 340:1080–1084, 2013 — paywalled, abstract only\]. The 7-value pattern adds a small ±2 µSv/h day-to-day variation (invented, synthetic); accumulated dose is 1.8 mSv × mission day. The mission is a **180-day one-way Mars transit** (`TRANSIT_DAYS` in `missionClock.ts`), so arrival ≈ 324 mSv. Shielding, solar cycle and spacecraft differ, so these are demo values only.
 
 **Why these numbers (checked against shipped `rules.json`):**
 
@@ -440,18 +450,18 @@ Plain Node.js ES module, **no dependencies**. Run: `node scripts/generate-synthe
 
 1. **Determinism.** Running the generator twice → identical file (compare strings).  
 2. **Label.** `synthetic === true`, `label` contains "SYNTHETIC"; loader rejects a copy with `synthetic: false`.  
-3. **Counts.** preflight \= 35 readings (7 × 5); history \= 39 days × 9 metrics \= 351 readings; `flags_by_date` has 39 keys, all `[]`; day40\_checkup has 9 readings.  
+3. **Counts.** preflight \= 35 readings (7 × 5); history \= 39 days × 11 metrics \= 429 readings; `flags_by_date` has 39 keys, all `[]`; day40\_checkup has 11 readings.  
 4. **Dates.** history first date 2026-10-06, last 2026-11-13; `missionDateForDay(40) === "2026-11-14"`; `missionDayForDate("2026-10-06") === 1`; `getToday() === "2026-11-14"`.  
 5. **Story values.** heart\_rate d38 \= 62, d39 \= 76, day40 \= 80; sleep d34..d39 \= 7.0, 6.5, 6.5, 7.0, 6.5, 6.0, day40 \= 6.5; body\_mass d1 \= 70.0, d40 \= 69.1.  
-6. **Day-40 evaluation (integration with rules engine \+ baseline).** Store with `includeDay40:true`, today 2026-11-14, baselines from `computeBaselines`, flags \[\] → heart\_rate `yellow` via `hr_y_baseline` (observed.delta 18); sleep\_hours `yellow`via `sleep_y_avg7`; blood\_pressure, blood\_sugar, body\_temperature, mood, body\_mass, skin\_health `green`; immune\_signs `green`; radiation\_dose `no_data`; overall `yellow`, escalation `crew_medical_officer`.  
+6. **Day-40 evaluation (integration with rules engine \+ baseline).** Store with `includeDay40:true`, today 2026-11-14, baselines from `computeBaselines`, flags \[\] → heart\_rate `yellow` via `hr_y_baseline` (observed.delta 18); sleep\_hours `yellow`via `sleep_y_avg7`; blood\_pressure, blood\_sugar, body\_temperature, mood, body\_mass, skin\_health `green`; immune\_signs `green`; radiation\_dose `green` (dose recorded, no radiation event flagged); overall `yellow`, escalation `crew_medical_officer`.  
 7. **No hidden alarms.** For every day 8..39 evaluated with history up to that day: no indicator is `red`; heart\_rate is never yellow; only sleep\_hours may be yellow (days 38–39).  
-8. **Store rules.** `addReadings([{...valid:false}])` throws; `getReadings()` returns a copy (mutating it does not change the store); `setFlags("2026-11-14", ["cough","cough"])` → `getFlags` \= `["cough"]`; `reset()` restores 351 history readings; `subscribe` listener is called once per `addReadings`.  
+8. **Store rules.** `addReadings([{...valid:false}])` throws; `getReadings()` returns a copy (mutating it does not change the store); `setFlags("2026-11-14", ["cough","cough"])` → `getFlags` \= `["cough"]`; `reset()` restores 429 history readings; `subscribe` listener is called once per `addReadings`.  
 9. **includeDay40 false (default).** `hasCheckup("2026-11-14") === false`.  
 10. **Demo entry.** `day40_checkup.demo_invalid_entry` \= `{metric:"heart_rate", raw:"920"}` and input check rejects it \[specs/input-check.md \#1\].
 
 ## **9\. Out of scope**
 
-Persistent database, multiple astronauts, radiation data (until Q-RAD), random noise, importing real devices, editing past days.
+Persistent database, multiple astronauts, radiation **thresholds** (until Q-RAD), random noise, importing real devices, editing past days.
 
 ## **10\. Files**
 

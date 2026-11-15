@@ -154,10 +154,10 @@ describe("input check", () => {
       500,
     );
     expect(
-      okOf(checkEntry({ metric: "radiation_accumulated", raw: "100" }, date, rules)).reading.value,
-    ).toBe(100);
+      okOf(checkEntry({ metric: "radiation_accumulated", raw: "1000" }, date, rules)).reading.value,
+    ).toBe(1000);
     expect(
-      errorOf(checkEntry({ metric: "radiation_accumulated", raw: "100.1" }, date, rules)).code,
+      errorOf(checkEntry({ metric: "radiation_accumulated", raw: "1000.1" }, date, rules)).code,
     ).toBe("out_of_range");
     expect(
       okOf(checkEntry({ metric: "radiation_dose_rate", raw: "150" }, date, rules)).reading.value,

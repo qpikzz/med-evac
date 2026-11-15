@@ -6,7 +6,7 @@ The module calculates the astronaut's personal baseline: their typical heart rat
 - **Pre-flight.** The 7-day average of measurements taken on Earth prior to launch. This data is used to compare heart rate, blood pressure, mood, and body weight.
 - **Moving average.** The average of the previous 7 days of flight, excluding today. This is used to compare temperatures.
 
-The module only calculates the average and range and passes them to the rules engine. It does not assign a color. Its second task is to prepare the “your normal” line and the threshold lines—taken from `rules.json`—for the graph. For example, for heart rate, this is the 62 line and the thresholds of 50 and 74 (62 ± 12). The module does not generate its own numbers. In the 40th-day log, this is step 3: this astronaut’s normal heart rate is 62, and today it is 80.
+The module only calculates the average and range and passes them to the rules engine. It does not assign a color. Its second task is to prepare the “your normal” line and the threshold lines—taken from `rules.json`—for the graph. For example, for heart rate, this is the 62 line and the thresholds of 50 and 74 (62 ± 12). The module does not generate its own numbers. (UI note, DESIGN.md §5.2: the indicator sparkline currently draws only the “your normal” line; threshold lines stay available from `getReferenceLines()` for other views.) In the 40th-day log, this is step 3: this astronaut’s normal heart rate is 62, and today it is 80.
 
 ## 1. Goal
 

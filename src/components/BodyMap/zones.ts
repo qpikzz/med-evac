@@ -90,7 +90,7 @@ export const ZONES: ZoneConfig[] = [
     label: "Radiation dose (whole body)",
     shortLabel: "Radiation dose",
     hazard: "Space radiation",
-    note: "Read your dosimeter at every check-up. Dose limits are set by mission flight surgeons; alerts come from the radiation events you report.",
+    note: "Read your dosimeter at every check-up. Alerts come from radiation events you report and from the dose-rate and total-dose limits in the rules.",
     shape: { kind: "aura", cx: 200, cy: 400, rx: 168, ry: 388 },
   },
   {

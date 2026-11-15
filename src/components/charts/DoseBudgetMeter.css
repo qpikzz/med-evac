@@ -1,0 +1,125 @@
+.dose-budget {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 4px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.dose-budget-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dose-budget-title {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dose-budget-value {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.dose-budget-value strong {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.dose-meter {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.dose-meter-fill,
+.dose-meter-projected {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+}
+
+.dose-meter-fill {
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(122, 162, 255, 0.55);
+}
+
+.dose-meter-projected {
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(122, 162, 255, 0.35) 0 4px,
+    rgba(122, 162, 255, 0.15) 4px 8px
+  );
+}
+
+.dose-meter-tick {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  transform: translateX(-1px);
+  border-radius: 1px;
+}
+
+.dose-tick-yellow { background: var(--status-yellow); }
+.dose-tick-red { background: var(--status-red); }
+
+.dose-budget-rows {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.dose-budget-rows div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.dose-budget-rows dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.dose-budget-rows dd {
+  margin: 0;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.dose-key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.dose-key-today { background: var(--accent); }
+.dose-key-projected {
+  background: repeating-linear-gradient(135deg, rgba(122, 162, 255, 0.55) 0 2px, rgba(122, 162, 255, 0.2) 2px 4px);
+}
+
+.dose-budget-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+.dose-key-tick {
+  width: 3px;
+  border-radius: 1px;
+  background: linear-gradient(to right, var(--status-yellow) 0 50%, var(--status-red) 50% 100%);
+}

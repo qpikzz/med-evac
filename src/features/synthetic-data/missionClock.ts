@@ -1,5 +1,8 @@
 export const MISSION_DAY1 = "2026-10-06";
 export const DEMO_DAY = 40;
+/** Illustrative Mars transit length (one way): ≈ 180 days crew transit Earth→Mars in
+ *  NASA's Mars Design Reference Architecture 5.0 (NASA/SP-2009-566). */
+export const TRANSIT_DAYS = 180;
 
 const MS_PER_DAY = 86_400_000;
 

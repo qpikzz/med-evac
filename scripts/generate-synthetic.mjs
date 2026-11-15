@@ -18,7 +18,14 @@ const METRIC_ORDER = [
   "mood",
   "body_mass",
   "skin_symptom_score",
+  "radiation_dose_rate",
+  "radiation_accumulated",
 ];
+
+// Radiation (illustrative, synthetic): deep-space cruise GCR dose equivalent ≈ 1.8 mSv/day ≈ 75 µSv/h,
+// as measured by MSL/RAD in transit to Mars (SwRI press release, 30 May 2013; study: Zeitlin et al., Science 340:1080, 2013).
+// Accumulated dose = 1.8 mSv × mission day. Not a threshold — no rule uses these numbers.
+const RAD_MSV_PER_DAY = 1.8;
 
 const PREFLIGHT_PATTERNS = {
   heart_rate: [62, 63, 61, 62, 63, 61, 62],
@@ -37,6 +44,7 @@ const MISSION_PATTERNS = {
   sleep_hours: [7.5, 7.0, 8.0, 7.5, 7.5, 7.0, 8.0],
   mood: [8, 7, 7, 8, 7, 7, 8],
   skin_symptom_score: [1, 0, 1, 1, 0, 1, 0],
+  radiation_dose_rate: [74, 76, 75, 73, 77, 76, 74],
 };
 
 const OVERRIDES = {
@@ -55,6 +63,9 @@ function missionValue(metric, day) {
   const override = OVERRIDES[metric];
   if (override && Object.prototype.hasOwnProperty.call(override, day)) {
     return override[day];
+  }
+  if (metric === "radiation_accumulated") {
+    return Math.round(day * RAD_MSV_PER_DAY * 10) / 10;
   }
   if (metric === "body_mass") {
     return (700 - Math.floor((day - 1) / 4)) / 10;
@@ -98,7 +109,7 @@ export function buildSyntheticDataset() {
     schema_version: "1.0",
     generator: "scripts/generate-synthetic.mjs",
     astronaut: { id: "SYN-01", display_name: "Astronaut A (synthetic)" },
-    mission: { name: "Mars transit (synthetic)", day1_date: MISSION_DAY1, demo_day: 40 },
+    mission: { name: "Mars transit (synthetic)", day1_date: MISSION_DAY1, demo_day: 40, transit_days: 180 },
     preflight: { readings: preflightReadings() },
     history: { readings: historyReadings, flags_by_date: flagsByDate },
     day40_checkup: {

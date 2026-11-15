@@ -69,14 +69,14 @@ describe("synthetic dataset", () => {
 
   it("criterion 3: expected counts", () => {
     expect(dataset.preflight.readings).toHaveLength(35);
-    expect(dataset.history.readings).toHaveLength(351);
+    expect(dataset.history.readings).toHaveLength(429);
     expect(Object.keys(dataset.history.flags_by_date)).toHaveLength(39);
     expect(
       Object.values(dataset.history.flags_by_date).every(
         (flags) => Array.isArray(flags) && flags.length === 0,
       ),
     ).toBe(true);
-    expect(dataset.day40_checkup.readings).toHaveLength(9);
+    expect(dataset.day40_checkup.readings).toHaveLength(11);
   });
 
   it("criterion 4: dates and mission clock", () => {
@@ -156,7 +156,7 @@ describe("synthetic dataset", () => {
     ]) {
       expect(indicator(result, id).status).toBe("green");
     }
-    expect(indicator(result, "radiation_dose").status).toBe("no_data");
+    expect(indicator(result, "radiation_dose").status).toBe("green");
     expect(result.overall_status).toBe("yellow");
     expect(result.overall_escalation).toBe("crew_medical_officer");
   });
@@ -208,17 +208,17 @@ describe("synthetic dataset", () => {
     ).toThrow();
 
     const firstCopy = store.getReadings();
-    expect(firstCopy).toHaveLength(351);
+    expect(firstCopy).toHaveLength(429);
     firstCopy[0].value = -1;
     firstCopy.push({ date: "2026-11-14", metric: "mood", value: 1, valid: true });
-    expect(store.getReadings()).toHaveLength(351);
+    expect(store.getReadings()).toHaveLength(429);
     expect(store.getReadings()[0].value).not.toBe(-1);
 
     store.setFlags("2026-11-14", ["cough", "cough"]);
     expect(store.getFlags("2026-11-14")).toEqual(["cough"]);
 
     store.reset();
-    expect(store.getReadings()).toHaveLength(351);
+    expect(store.getReadings()).toHaveLength(429);
 
     const listener = vi.fn();
     const unsubscribe = store.subscribe(listener);
@@ -245,7 +245,7 @@ describe("synthetic dataset", () => {
 
     const fullStore = createHistoryStore(dataset, { includeDay40: true });
     expect(fullStore.hasCheckup("2026-11-14")).toBe(true);
-    expect(fullStore.getReadings()).toHaveLength(360);
+    expect(fullStore.getReadings()).toHaveLength(440);
   });
 
   it("criterion 10a: demo invalid entry is scripted", () => {

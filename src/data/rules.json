@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "generated_from": "Health_Indicators_Research.xlsx, sheet 'Indicators' (Ayesha). Rules transcribed by hand from columns G, H, I; every rule has a 'source'.",
-  "last_updated": "2026-11-14T13:50+04:00",
+  "last_updated": "2026-11-15T12:00+04:00",
   "settings": {
     "rolling_baseline_days": 7,
     "min_rolling_baseline_readings": 7,
@@ -109,7 +109,7 @@
       "label": "Accumulated dose",
       "unit": "mSv",
       "plausible_min": 0,
-      "plausible_max": 100
+      "plausible_max": 1000
     }
   ],
   "flags": [
@@ -1530,16 +1530,16 @@
         {
           "id": "rad_y_rate",
           "level": "yellow",
-          "enabled": false,
+          "enabled": true,
           "trigger": {
             "type": "threshold",
             "metric": "radiation_dose_rate",
             "op": ">",
-            "value": null
+            "value": 150
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, YELLOW ('dose rate rises above the expected mission baseline'). OPEN QUESTION Q-RAD: mission value not in table.",
+          "source": "TABLE: Radiation dose, YELLOW ('dose rate rises above the expected mission baseline'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): expected cruise rate ≈ 75 µSv/h (≈ 1.8 mSv/day measured by MSL/RAD; SwRI press release 30 May 2013 / Zeitlin et al., Science 2013); yellow above 2 × expected = 150 µSv/h. Not a medical limit.",
           "title": "Radiation higher than expected",
           "explanation": "The dose rate is above what is expected for this mission.",
           "actions": [
@@ -1573,16 +1573,16 @@
         {
           "id": "rad_y_accum",
           "level": "yellow",
-          "enabled": false,
+          "enabled": true,
           "trigger": {
             "type": "threshold",
             "metric": "radiation_accumulated",
             "op": ">=",
-            "value": null
+            "value": 480
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, YELLOW ('approaches the mission-specific action level'). OPEN QUESTION Q-RAD.",
+          "source": "TABLE: Radiation dose, YELLOW ('approaches the mission-specific action level'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): action level = 80 % of the NASA-STD-3001 Vol. 1 Rev. C (2023): career effective dose limit 600 mSv → 480 mSv. A nominal 180-day transit at ≈ 1.8 mSv/day gives ≈ 324 mSv.",
           "title": "Accumulated dose approaching the mission limit",
           "explanation": "Your total radiation dose is close to this mission's action level.",
           "actions": [
@@ -1594,16 +1594,16 @@
         {
           "id": "rad_r_accum",
           "level": "red",
-          "enabled": false,
+          "enabled": true,
           "trigger": {
             "type": "threshold",
             "metric": "radiation_accumulated",
             "op": ">=",
-            "value": null
+            "value": 600
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, RED ('reaches or exceeds a predefined mission-specific emergency threshold'). OPEN QUESTION Q-RAD.",
+          "source": "TABLE: Radiation dose, RED ('reaches or exceeds a predefined mission-specific emergency threshold'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): NASA-STD-3001 Vol. 1 Rev. C (2023): career effective dose limit 600 mSv.",
           "title": "Accumulated dose at the emergency limit",
           "explanation": "Your total radiation dose has reached this mission's emergency threshold.",
           "actions": [
