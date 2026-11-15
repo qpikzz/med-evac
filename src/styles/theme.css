@@ -245,3 +245,92 @@ select {
 .indicator-icon-green { color: var(--status-green); background: rgba(63, 224, 176, 0.12); }
 .indicator-icon-yellow { color: var(--status-yellow); background: rgba(255, 184, 77, 0.14); }
 .indicator-icon-red { color: var(--status-red); background: rgba(255, 92, 108, 0.14); }
+
+/* ---- Comms: larger channel emblems with their own space ---- */
+.comms-channel-icon {
+  width: 84px !important;
+  height: 84px !important;
+  flex: 0 0 84px !important;
+  border-radius: 24px !important;
+  box-shadow: 0 0 40px -10px rgba(79, 227, 208, 0.45), inset 0 0 24px rgba(34, 211, 238, 0.08) !important;
+}
+
+.comms-channel-icon svg {
+  width: 70px !important;
+  height: 70px !important;
+}
+
+/* ---- Login: big centred brand and a planet rising behind the card ---- */
+.orbita-gate {
+  position: relative;
+  overflow: hidden;
+}
+
+.orbita-gate::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -118vmin;
+  width: 150vmin;
+  height: 150vmin;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle at 50% 8%, rgba(127, 168, 255, 0.35), transparent 30%),
+    radial-gradient(circle at 50% 50%, #0d1a3a 0%, #070d1f 70%);
+  box-shadow: 0 -20px 80px rgba(96, 140, 255, 0.35), inset 0 30px 60px rgba(127, 190, 255, 0.25);
+  pointer-events: none;
+}
+
+.orbita-gate-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 600px) !important;
+  padding: 32px 36px 36px !important;
+  box-shadow: 0 40px 120px -40px rgba(80, 120, 255, 0.55) !important;
+}
+
+.orbita-gate-header {
+  flex-direction: column;
+  justify-content: center !important;
+  gap: 18px !important;
+  text-align: center;
+  padding-bottom: 26px !important;
+}
+
+.orbita-brand {
+  flex-direction: column;
+  gap: 14px !important;
+}
+
+.orbita-brand > svg {
+  width: 72px !important;
+  height: 72px !important;
+  filter: drop-shadow(0 0 24px rgba(127, 168, 255, 0.6));
+}
+
+.orbita-brand-copy {
+  align-items: center;
+}
+
+.orbita-brand-name {
+  font-family: var(--font-display) !important;
+  font-size: 52px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  line-height: 1 !important;
+  background: linear-gradient(180deg, #ffffff 30%, #9fbcff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+.orbita-brand-tagline {
+  max-width: 34ch;
+  font-size: 15px !important;
+}
+
+.orbita-gate-tag {
+  font-family: var(--font-mono);
+  color: var(--accent-2) !important;
+}
