@@ -105,7 +105,7 @@ Cite every NASA, ESA, JAXA, or open scientific standard used in the RAG knowledg
 | *HHC Spaceflight Risks* | NASA Human Health and Countermeasures | https://www.nasa.gov/humans-in-space/hhc-spaceflight-risks/ | NASA website content | Evidence link for the Pulmonary function indicator |
 | *PubMed Central article PMC9818606* | NIH National Library of Medicine (PubMed Central) | https://pmc.ncbi.nlm.nih.gov/articles/PMC9818606/ | Publisher terms apply | Evidence link for the Pulmonary function indicator |
 | *European Respiratory Journal, vol. 60, issue 1, article 2101499* | European Respiratory Society | https://publications.ersnet.org/content/erj/60/1/2101499 | Publisher terms apply | Evidence link for the Pulmonary function indicator |
-| *PubMed record PMID 34058745* | NIH National Library of Medicine (PubMed) | https://pubmed.ncbi.nlm.nih.gov/34058745/ | Publisher terms apply | Evidence link for the Skin health indicator |
+| *PubMed record PMID 34058745* | NIH National Library of Medicine (PubMed) | https://pubmed.ncbi.nlm.nih.gov/34058745/ | Abstract publicly available / Full text copyrighted (S. Karger AG) | Evidence link for the Skin health indicator |
 | *PubMed Central article PMC9604750* | NIH National Library of Medicine (PubMed Central) | https://pmc.ncbi.nlm.nih.gov/articles/PMC9604750/ | CC BY 4.0 | Evidence link for the Skin health indicator |
 | *ScienceDirect article S0738081X25002858* | Elsevier (ScienceDirect) | https://www.sciencedirect.com/science/article/pii/S0738081X25002858 | CC BY 4.0 | Evidence link for the Skin health indicator |
 
