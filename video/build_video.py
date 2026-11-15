@@ -26,7 +26,7 @@ OUT = os.path.join(HERE, "orbita_demo.mp4")
 WORK = os.path.join(HERE, "build")
 
 W, H, FPS = 1920, 1080, 30
-MAX_LEN = 30.0
+MAX_LEN = 28.5
 
 TEAM = "CyberAstro"
 MEMBERS = ["Nurlana Nurullayeva", "Nikita Shvedov", "Ayesha Aliyeva", "Rəna Rüstəmli"]
@@ -44,8 +44,8 @@ METADATA_COMMENT = ("Voice-over generated with SI (edge-tts, Microsoft neural vo
 # ---------------------------------------------------------------------------
 SHOTS = [
     dict(id="title",   kind="card", dur=3.0),
-    dict(id="login",   kind="clip", src=("00:00.5", "00:02.0"), speed=1.0, chip="Astronaut · offline login"),
-    dict(id="home",    kind="clip", src=("00:12.5", "00:14.0"), speed=1.0, chip="Astronaut · home"),
+    dict(id="login",   kind="clip", src=("00:00.5", "00:01.5"), speed=1.0, chip="Astronaut · offline login"),
+    dict(id="home",    kind="clip", src=("00:12.5", "00:13.5"), speed=1.0, chip="Astronaut · home"),
     dict(id="checkup", kind="clip", src=("02:19.0", "02:23.5"), speed=1.5, chip="1 · Daily check-up"),
     dict(id="alert",   kind="clip", src=("02:25.3", "02:28.3"), speed=1.0, chip="2 · Rules flag radiation"),
     dict(id="body",    kind="clip", src=("02:30.0", "02:32.5"), speed=1.0, chip="3 · Body map"),
@@ -54,7 +54,7 @@ SHOTS = [
     dict(id="draft",   kind="clip", src=("05:04.0", "05:07.75"), speed=1.5, chip="5 · Report to Earth"),
     dict(id="earth",   kind="clip", src=("05:48.0", "05:50.5"), speed=1.0, chip="Mission Control · Earth"),
     dict(id="reply",   kind="clip", src=("06:32.0", "06:34.5"), speed=1.0, chip="6 · Flight surgeon replies"),
-    dict(id="end",     kind="card", dur=2.5),
+    dict(id="end",     kind="card", dur=3.0),
 ]
 
 # ---------------------------------------------------------------------------
@@ -62,12 +62,12 @@ SHOTS = [
 # The script warns if a line runs into the next one.
 # ---------------------------------------------------------------------------
 VOICE = [
-    dict(at="title",   off=0.3, text="Mars is twenty light-minutes from any doctor. ORBITA watches crew health, fully offline."),
+    dict(at="title",   off=0.2, rate="+6%", text="Mars is twenty light-minutes from any doctor. ORBITA watches crew health, fully offline."),
     dict(at="checkup", off=0.1, text="Fifty-two transparent rules check ten daily vitals against the astronaut's own baseline. Radiation: red."),
     dict(at="body",    off=0.1, text="The body map shows what's at risk."),
     dict(at="ask",     off=0.1, text="A local AI explains why. It never decides."),
     dict(at="draft",   off=0.1, text="ORBITA drafts a report for the flight surgeon. Mission Control reviews the data and replies."),
-    dict(at="end",     off=0.1, text="Offline. Explainable. Ready for Mars."),
+    dict(at="end",     off=0.1, text="Offline. Explainable. Synthetic data."),
 ]
 
 FONT_CANDIDATES = [
@@ -179,11 +179,11 @@ def make_clip(s, preview):
     return name
 
 
-def tts(i, text, voice):
+def tts(i, text, voice, rate="+0%"):
     name = f"vo_{i}.mp3"
     exe = shutil.which("edge-tts")
     cli = [exe] if exe else [sys.executable, "-m", "edge_tts"]
-    run([*cli, "--voice", voice, "--rate=+0%", "--text", text, "--write-media", name])
+    run([*cli, "--voice", voice, f"--rate={rate}", "--text", text, "--write-media", name])
     return name
 
 
@@ -253,12 +253,12 @@ def main():
     # 3) voice
     vo, cues = [], []
     for i, v in enumerate(VOICE):
-        f = f"vo_{i}.mp3" if args.skip_tts else tts(i, v["text"], voice)
+        f = f"vo_{i}.mp3" if args.skip_tts else tts(i, v["text"], voice, v.get("rate", "+0%"))
         if not os.path.exists(os.path.join(WORK, f)):
             sys.exit(f"Missing build/{f} (run without --skip-tts)")
         st = starts[v["at"]] + v["off"]
         d = duration(os.path.join(WORK, f))
-        nxt = starts[VOICE[i + 1]["at"]] + VOICE[i + 1]["off"] if i + 1 < len(VOICE) else total - 0.3
+        nxt = starts[VOICE[i + 1]["at"]] + VOICE[i + 1]["off"] if i + 1 < len(VOICE) else total - 0.4
         flag = "OK" if st + d <= nxt else f"!! overlaps by {st + d - nxt:.2f}s — shorten text"
         print(f"  VO{i} {st:5.2f}–{st + d:5.2f}  {flag}")
         vo.append((f, st))
@@ -300,7 +300,7 @@ def main():
         mix += "[mus]"; n_in += 1
     af.append(f"{mix}amix=inputs={n_in}:normalize=0:duration=longest,"
               f"apad,atrim=0:{total},afade=t=in:st=0:d=0.4,"
-              f"afade=t=out:st={total - 0.6:.3f}:d=0.6[aout]")
+              f"afade=t=out:st={total - 0.3:.3f}:d=0.3[aout]")
     cmd += ["-filter_complex", ";".join(af), "-vf", ",".join(vf),
             "-map", "0:v", "-map", "[aout]", *enc_args(args.preview),
             "-c:a", "aac", "-b:a", "192k", "-t", f"{total:.3f}",
