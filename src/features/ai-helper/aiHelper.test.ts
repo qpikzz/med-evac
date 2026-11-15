@@ -515,3 +515,17 @@ describe("ai helper", () => {
     expect(() => loadCombinations(shippedCombinations, rules)).not.toThrow();
   });
 });
+
+describe("AI output review and multilingual safety (audit 15 Nov 2026)", () => {
+  it("flags diagnoses and reassurance that contradicts a yellow/red status", async () => {
+    const { reviewAiAnswer, checkSafety } = await import("./safety");
+    expect(reviewAiAnswer("Your heart rate may be related to short sleep. Tell your crew medical officer.", "yellow").ok).toBe(true);
+    expect(reviewAiAnswer("You have a heart attack.", "red").issues).toContain("diagnosis");
+    expect(reviewAiAnswer("Everything looks fine, nothing to worry about.", "red").issues).toContain(
+      "reassurance_conflicts_with_rules",
+    );
+    expect(reviewAiAnswer("Everything looks fine.", "green").ok).toBe(true);
+    expect(checkSafety("я не хочу жить").hit).toBe(true);
+    expect(checkSafety("I want to die").hit).toBe(true);
+  });
+});

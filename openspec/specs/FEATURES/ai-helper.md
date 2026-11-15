@@ -64,7 +64,7 @@ export interface Combination {
 export interface CombinationsFile { schema_version: "1.0"; combinations: Combination[] }
 ```
 
-If the list in the other chat has a different shape, it is converted to this one (field meaning must not change). The content is **not** written by the agent.
+If the list in the other chat has a different shape, it is converted to this one (field meaning must not change). The content is **not** written by the agent. **15 Nov 2026:** the file holds 16 combinations converted from the co-occurrence criteria that Ayesha's table v5 states itself (e.g. BP RED "with chest pain", Sleep hazards "sleep loss … lower mood"); each `source` quotes the table and lists its links. No heart-rate + sleep link exists in the table, so the Day-40 picture is shown as **unverified** (scenario S1, second branch).
 
 ### 4.2 Functions
 
@@ -84,7 +84,7 @@ export function checkSafety(text: string): SafetyHit | { hit: false };
 
 export interface HelperSettings {
   ollama_url: "http://127.0.0.1:11434";
-  model: string;            // default "granite3.3:2b"  (A-AI1)
+  model: string;            // "granite3.3:8b" (A-AI1 resolved: the app ships with 8b)
   timeout_ms: 60000;        // A-AI2
   temperature: 0.2;         // A-AI3
   max_user_chars: 1000;
@@ -238,3 +238,10 @@ Desirable, not MVP [BRIEF §4]. Layer 1 (matcher + panel): ~45 min agent + 30 mi
 | Testable criteria | ✓ 14 |
 | Security | ✓ |
 | MVP and time | ✓ marked desirable, layer 1 cheap |
+
+## 12. Audit update — 15 Nov 2026
+
+- **Layer 1 is visible without AI:** the Comms → Onboard SI screen shows a "Layer 1 · verified combinations (no AI)" panel: matched combinations (title, possible explanations, actions, whom to discuss with, "Based on:" quote + links) or the "Unverified picture: … Discuss with your crew medical officer." notice. Before, the picture only went into the model prompt.
+- **Output review:** every model answer is checked by `reviewAiAnswer()` (`safety.ts`): naming a diagnosis/disease, or reassurance ("everything looks fine", "nothing to worry") while the rules say yellow/red, appends a "Rules check" note with today's status and escalation. The answer is kept; the rules always win.
+- **Safety phrases** also cover "self harm", "want to die", "better off dead" and Russian phrases (убить себя, покончить с собой, суицид, навредить себе, не хочу жить, самоповрежд…).
+- **Not testable in CI:** real model answers need Ollama + `granite3.3:8b` on the presenter's laptop; run the red-team prompts in the demo checklist before recording.

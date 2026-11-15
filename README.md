@@ -26,6 +26,13 @@ ORBITA pairs an **offline-first deterministic clinical rules engine** with a loc
 4. **Crew Access Gate (NFC Demo Profiles)** — Switch between the demo profiles for Cmdr. Alex Vance, Dr. Maya Lin, and Flight Surgeon (Houston), each with isolated profile history. The gate also supports onboarding an unregistered badge.
 5. **Zero-Cloud Privacy & Graceful Offline Fallback** — Check-up history and chat sessions are stored locally in profile-scoped `localStorage`. No cloud inference is required; if the local Ollama model is offline, ORBITA falls back to a deterministic local clinical summary.
 
+### Science base
+
+- **10 daily indicators** (blood pressure, heart rate, blood sugar, body temperature, sleep, mood, body mass, immune signs, radiation dose, skin) are checked by **52 deterministic rules** in `src/data/rules.json`. Every rule quotes the team's Health_Indicators_Research table (v5) and lists its NASA / PubMed sources.
+- **6 more indicators** (SpO₂, bone health, nutrition & hydration, exercise, vision changes, pulmonary function) live only in `src/data/knowledge_base.json` as reference for the onboard assistant — they are not part of the daily check-up, so the crew is not overloaded.
+- **16 verified symptom combinations** (`src/data/combinations.json`) come from the table's own criteria; anything else is shown as an "unverified picture — discuss with your crew medical officer".
+- Radiation limits are illustrative mission settings derived from NASA-STD-3001 (600 mSv career, blood-forming-organ limits) and MSL/RAD cruise data (≈ 1.8 mSv/day). All data is **synthetic**.
+
 ## 3. Architecture & Tech Stack
 
 ```text

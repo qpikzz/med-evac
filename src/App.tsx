@@ -10,9 +10,12 @@ import { landingChannelForRole, landingViewForRole } from "./features/auth/sessi
 import type { AuthProfile } from "./features/auth/types";
 import { useAppState } from "./features/app-state/AppStateContext";
 import {
+  buildEarthDraftText,
   buildEarthTelemetrySnapshot,
+  createAutoReceipt,
   createEarthChatMessage,
   earthChatActivity,
+  pendingReceipts,
   loadEarthChatThread,
   saveEarthChatThread,
   seedEarthChatThread,
@@ -38,6 +41,7 @@ function App() {
   const [activeView, setActiveView] = useState<AppView>("main");
   const [commsChannel, setCommsChannel] = useState<"local" | "earth">("local");
   const [openCheckupToken, setOpenCheckupToken] = useState(0);
+  const [earthDraftRequested, setEarthDraftRequested] = useState(false);
   const initialAstronautId =
     activeProfile?.role === "astronaut" ? activeProfile.profile_id : "astro-01";
   const [earthAstronautId, setEarthAstronautId] = useState(initialAstronautId);
@@ -123,6 +127,34 @@ function App() {
     },
     [clinicalNotesToday, evaluation, flagsToday, hasCheckup, missionDay, readings, rules],
   );
+  // Automatic, simulated receipt from Earth once an astronaut message has arrived.
+  useEffect(() => {
+    const due = pendingReceipts(earthThread, nowMs);
+    if (due.length > 0) {
+      setEarthThread((current) => [...current, ...due.map(createAutoReceipt)]);
+    }
+  }, [earthThread, nowMs]);
+
+  const showRedDraftBanner =
+    activeProfile?.role === "astronaut" && hasCheckup && evaluation.overall_status === "red";
+  const earthDraftText = useMemo(
+    () =>
+      earthDraftRequested
+        ? buildEarthDraftText(
+            evaluation,
+            Object.fromEntries(rules.indicators.map((indicator) => [indicator.id, indicator.label])),
+            missionDay,
+          )
+        : null,
+    [earthDraftRequested, evaluation, missionDay, rules],
+  );
+
+  function reviewEarthDraft(): void {
+    setEarthDraftRequested(true);
+    setCommsChannel("earth");
+    setActiveView("comms");
+  }
+
   const earthActivity = earthChatActivity(
     earthThread,
     nowMs,
@@ -158,6 +190,7 @@ function App() {
     setEarthThread((current) => [...current, message]);
     setNowMs(createdAtMs);
     setEarthChatError(null);
+    setEarthDraftRequested(false);
   }
 
   function selectAccount(profile: AuthProfile): void {
@@ -203,6 +236,14 @@ function App() {
         onLogout={signOut}
         onForgetProfile={forgetProfile}
       />
+      {showRedDraftBanner && effectiveView === "main" && (
+        <div className="red-auto-draft-banner" role="status">
+          <span>A message for the flight surgeon is ready. Review and send.</span>
+          <button className="button button-primary" type="button" onClick={reviewEarthDraft}>
+            Review draft
+          </button>
+        </div>
+      )}
       {effectiveView === "main" ? (
         <MainDashboard
           onContactEarth={contactEarth}
@@ -241,6 +282,7 @@ function App() {
               currentTelemetry={role === "astronaut" ? currentTelemetry : null}
               onSelectAstronaut={setEarthAstronautId}
               onSend={sendEarthChat}
+              draftText={role === "astronaut" ? earthDraftText : null}
             />
           )}
         </main>

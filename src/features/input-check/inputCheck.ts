@@ -40,6 +40,9 @@ interface Candidate {
 const BP_ORDER_MESSAGE =
   "The upper (systolic) value must be higher than the lower (diastolic) value. Please measure again.";
 const OUT_OF_RANGE_MESSAGE = "Looks like a measurement error. Please measure again.";
+// Glucose is entered in mg/dL. A value of 2–33 is almost always mmol/L (normal ≈ 4–7 mmol/L).
+const GLUCOSE_MMOL_MESSAGE =
+  "This looks like mmol/L. Please enter mg/dL (mmol/L × 18, e.g. 5.4 mmol/L = 97 mg/dL).";
 const NOT_A_NUMBER_MESSAGE = "Please enter a number, for example 72 or 36.8.";
 
 export function checkEntry(entry: RawEntry, date: string, rules: RulesFile): CheckResult {
@@ -96,7 +99,8 @@ export function checkEntry(entry: RawEntry, date: string, rules: RulesFile): Che
       ok: false,
       metric: metric.id,
       code: "out_of_range",
-      message: OUT_OF_RANGE_MESSAGE,
+      message:
+        metric.id === "glucose" && value >= 2 && value <= 33 ? GLUCOSE_MMOL_MESSAGE : OUT_OF_RANGE_MESSAGE,
       raw,
       range: { min: metric.plausible_min, max: metric.plausible_max, unit: metric.unit },
     };

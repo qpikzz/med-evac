@@ -5,16 +5,10 @@ import { HEADER_COPY } from "../features/auth/copy";
 import type { AuthProfile } from "../features/auth/types";
 import CrewAvatar from "./CrewAvatar";
 import OrbitaLogo from "./OrbitaLogo";
+import { getToday, missionDayForDate } from "../features/synthetic-data";
 
 export type { UserRole } from "../features/auth/types";
 export type AppView = "main" | "comms";
-
-function formatLocalDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
 
 interface HeaderProps {
   activeView: AppView;
@@ -40,24 +34,13 @@ function Header({
   const [profileOpen, setProfileOpen] = useState(false);
   const [forgetError, setForgetError] = useState<string | null>(null);
   const [forgetTarget, setForgetTarget] = useState<AuthProfile | null>(null);
-  const [currentDate, setCurrentDate] = useState(() => formatLocalDate(new Date()));
+  // Mission clock, not the computer clock: "Day 40" always pairs with its own date (2026-11-14).
+  const missionDate = getToday();
+  const missionDay = missionDayForDate(missionDate);
   const switcherRef = useRef<HTMLDivElement | null>(null);
   const role = activeProfile.role;
 
-  useEffect(() => {
-    let timeoutId: number;
-    const updateAtMidnight = () => {
-      const now = new Date();
-      setCurrentDate(formatLocalDate(now));
-      const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-      timeoutId = window.setTimeout(
-        updateAtMidnight,
-        nextMidnight.getTime() - now.getTime() + 50,
-      );
-    };
-    updateAtMidnight();
-    return () => window.clearTimeout(timeoutId);
-  }, []);
+
 
   useEffect(() => {
     if (!profileOpen) {
@@ -137,9 +120,10 @@ function Header({
             <OrbitaLogo size={42} />
           </div>
           <div className="mission-context">
-            <span className="mission-day">Day 40</span>
+            <span className="mission-day">Day {missionDay}</span>
             <span className="mission-divider" aria-hidden="true">·</span>
-            <time className="mission-date" dateTime={currentDate}>{currentDate}</time>
+            <time className="mission-date" dateTime={missionDate}>{missionDate}</time>
+            <span className="synthetic-badge" title="Fictional astronaut and synthetic data — not real medical data">Synthetic data</span>
           </div>
         </div>
 

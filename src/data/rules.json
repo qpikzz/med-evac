@@ -52,7 +52,7 @@
       "indicator_id": "blood_sugar",
       "label": "Blood glucose",
       "unit": "mg/dL",
-      "plausible_min": 0,
+      "plausible_min": 20,
       "plausible_max": 600
     },
     {
@@ -84,7 +84,7 @@
       "indicator_id": "body_mass",
       "label": "Body mass",
       "unit": "kg",
-      "plausible_min": 0,
+      "plausible_min": 30,
       "plausible_max": null
     },
     {
@@ -479,7 +479,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Blood pressure, YELLOW",
+          "source": "TABLE: Blood pressure, YELLOW | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
           "title": "Blood pressure higher than usual",
           "explanation": "Your systolic pressure was 130 mmHg or higher on repeated readings. In microgravity, fluid shifts change how your heart and vessels work.",
           "actions": [
@@ -501,7 +501,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Blood pressure, YELLOW",
+          "source": "TABLE: Blood pressure, YELLOW | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
           "title": "Blood pressure higher than usual",
           "explanation": "Your diastolic pressure was 80 mmHg or higher on repeated readings.",
           "actions": [
@@ -523,7 +523,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Blood pressure, YELLOW",
+          "source": "TABLE: Blood pressure, YELLOW | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
           "title": "Blood pressure lower than usual",
           "explanation": "Your systolic pressure was below 90 mmHg on repeated readings. Low pressure can cause dizziness and fainting.",
           "actions": [
@@ -545,7 +545,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Blood pressure, YELLOW",
+          "source": "TABLE: Blood pressure, YELLOW | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
           "title": "Blood pressure lower than usual",
           "explanation": "Your diastolic pressure was below 60 mmHg on repeated readings.",
           "actions": [
@@ -569,7 +569,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Blood pressure, YELLOW ('persistent deviation from individual baseline'); 10 mmHg [ANSWER: Lana, 14 Nov 13:36, '9-10 mmHg'] - SOURCE PENDING (PubMed, Ayesha); 2 consecutive days (A2)",
+          "source": "TABLE: Blood pressure, YELLOW ('persistent deviation from individual baseline'); 10 mmHg [ANSWER: Lana, 14 Nov 13:36, '9-10 mmHg']; 2 consecutive days (A2) | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
           "title": "Blood pressure differs from your normal",
           "explanation": "Your blood pressure has been at least 10 mmHg away from your personal normal for 2 days.",
           "actions": [
@@ -592,7 +592,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Blood pressure, YELLOW ('persistent deviation from individual baseline'); 10 mmHg [ANSWER: Lana, 14 Nov 13:36, '9-10 mmHg'] - SOURCE PENDING (PubMed, Ayesha); 2 consecutive days (A2)",
+          "source": "TABLE: Blood pressure, YELLOW ('persistent deviation from individual baseline'); 10 mmHg [ANSWER: Lana, 14 Nov 13:36, '9-10 mmHg']; 2 consecutive days (A2) | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
           "title": "Blood pressure differs from your normal",
           "explanation": "Your blood pressure has been at least 10 mmHg away from your personal normal for 2 days.",
           "actions": [
@@ -613,7 +613,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Blood pressure, RED",
+          "source": "TABLE: Blood pressure, RED | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
           "title": "Very high blood pressure",
           "explanation": "Your systolic pressure reached 180 mmHg or higher. This needs medical assessment now.",
           "actions": [
@@ -635,7 +635,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Blood pressure, RED",
+          "source": "TABLE: Blood pressure, RED | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
           "title": "Very high blood pressure",
           "explanation": "Your diastolic pressure reached 120 mmHg or higher. This needs medical assessment now.",
           "actions": [
@@ -660,7 +660,7 @@
             "fainting",
             "severe_dizziness"
           ],
-          "source": "TABLE: Blood pressure, RED ('very low BP with fainting or severe dizziness'). 'Very low' = below the YELLOW low limit: ASSUMPTION A5.",
+          "source": "TABLE: Blood pressure, RED ('very low BP with fainting or severe dizziness'). 'Very low' = below the YELLOW low limit: ASSUMPTION A5 | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/; https://pubmed.ncbi.nlm.nih.gov/25774397/; https://pubmed.ncbi.nlm.nih.gov/41390616/; https://pubmed.ncbi.nlm.nih.gov/30189994/",
           "title": "Low blood pressure with fainting or severe dizziness",
           "explanation": "Low blood pressure together with fainting or severe dizziness can mean your circulation is unstable.",
           "actions": [
@@ -691,7 +691,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Heart rate, YELLOW ('persistent deviation from individual baseline'); deviation 12 bpm [ANSWER: Lana, 14 Nov 13:36] - SOURCE PENDING (Ayesha); 'persistent' = 2 consecutive days (A2)",
+          "source": "TABLE: Heart rate, YELLOW ('persistent deviation from individual baseline'); deviation 12 bpm [ANSWER: Lana, 14 Nov 13:36]; 'persistent' = 2 consecutive days (A2) | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/missions/station/iss-research/nasa-shares-station-research-today-supporting-moon-mars-tomorrow/; https://pubmed.ncbi.nlm.nih.gov/41027905/; https://www.jacc.org/doi/10.1016/j.jacc.2023.05.058",
           "title": "Heart rate differs from your normal",
           "explanation": "Your resting heart rate has been at least 12 beats per minute away from your personal normal for 2 days. Your heart adapts to microgravity, so a change from YOUR usual value matters even inside general limits.",
           "actions": [
@@ -711,7 +711,7 @@
             "op": ">",
             "value": 100
           },
-          "source": "TABLE: Heart rate, Normal range (60-100 bpm, added by team 14 Nov) - SOURCE LINK PENDING (Ayesha)",
+          "source": "TABLE: Heart rate, Normal range (60-100 bpm, added by team 14 Nov) | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/missions/station/iss-research/nasa-shares-station-research-today-supporting-moon-mars-tomorrow/; https://pubmed.ncbi.nlm.nih.gov/41027905/; https://www.jacc.org/doi/10.1016/j.jacc.2023.05.058",
           "title": "Resting heart rate above 100",
           "explanation": "Your resting heart rate is above the general adult range of 60-100 beats per minute.",
           "persistence": 1,
@@ -733,7 +733,7 @@
             "op": "<",
             "value": 60
           },
-          "source": "TABLE: Heart rate, Normal range (60-100 bpm, added by team 14 Nov) - SOURCE LINK PENDING (Ayesha)",
+          "source": "TABLE: Heart rate, Normal range (60-100 bpm, added by team 14 Nov) | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/missions/station/iss-research/nasa-shares-station-research-today-supporting-moon-mars-tomorrow/; https://pubmed.ncbi.nlm.nih.gov/41027905/; https://www.jacc.org/doi/10.1016/j.jacc.2023.05.058",
           "title": "Resting heart rate below 60",
           "explanation": "Your resting heart rate is below the general adult range of 60-100 beats per minute.",
           "persistence": 1,
@@ -764,7 +764,7 @@
             "severe_dizziness",
             "breathing_difficulty"
           ],
-          "source": "TABLE: Heart rate, RED ('abnormal heart rate with chest pain, fainting, severe dizziness or shortness of breath'); deviation 12 bpm [ANSWER: Lana] - SOURCE PENDING (Ayesha)",
+          "source": "TABLE: Heart rate, RED ('abnormal heart rate with chest pain, fainting, severe dizziness or shortness of breath'); deviation 12 bpm [ANSWER: Lana] | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/missions/station/iss-research/nasa-shares-station-research-today-supporting-moon-mars-tomorrow/; https://pubmed.ncbi.nlm.nih.gov/41027905/; https://www.jacc.org/doi/10.1016/j.jacc.2023.05.058",
           "title": "Unusual heart rate with warning symptoms",
           "explanation": "An unusual heart rate together with chest pain, fainting, severe dizziness or shortness of breath needs medical assessment now.",
           "actions": [
@@ -786,7 +786,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Heart rate, RED ('suspected arrhythmia or irregular heart rhythm')",
+          "source": "TABLE: Heart rate, RED ('suspected arrhythmia or irregular heart rhythm') | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/missions/station/iss-research/nasa-shares-station-research-today-supporting-moon-mars-tomorrow/; https://pubmed.ncbi.nlm.nih.gov/41027905/; https://www.jacc.org/doi/10.1016/j.jacc.2023.05.058",
           "title": "Possible irregular heartbeat",
           "explanation": "An irregular heartbeat needs to be checked by a doctor.",
           "actions": [
@@ -815,7 +815,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Blood sugar, YELLOW",
+          "source": "TABLE: Blood sugar, YELLOW | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
           "title": "Low blood sugar",
           "explanation": "Your glucose is below 70 mg/dL. Low sugar can affect energy and concentration.",
           "actions": [
@@ -837,7 +837,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Blood sugar, YELLOW",
+          "source": "TABLE: Blood sugar, YELLOW | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
           "title": "High blood sugar",
           "explanation": "Your glucose stayed above 180 mg/dL on repeated readings, not just after a meal. Long spaceflight can change how your body uses sugar.",
           "actions": [
@@ -858,7 +858,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Blood sugar, YELLOW",
+          "source": "TABLE: Blood sugar, YELLOW | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
           "title": "Symptoms of low blood sugar",
           "explanation": "Sweating, shakiness, sudden hunger or dizziness can be signs of low blood sugar.",
           "actions": [
@@ -879,7 +879,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Blood sugar, RED",
+          "source": "TABLE: Blood sugar, RED | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
           "title": "Very low blood sugar",
           "explanation": "Your glucose is below 54 mg/dL. This is clinically significant low blood sugar.",
           "actions": [
@@ -902,7 +902,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Blood sugar, RED ('regardless of the measured glucose level')",
+          "source": "TABLE: Blood sugar, RED ('regardless of the measured glucose level') | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
           "title": "Confusion or loss of consciousness",
           "explanation": "Confusion, seizures or loss of consciousness need help right away, whatever the glucose value.",
           "actions": [
@@ -926,7 +926,7 @@
             "high_sugar_crisis_signs",
             "ketones_suspected"
           ],
-          "source": "TABLE: Blood sugar, RED ('persistently above 200 mg/dL with symptoms or suspected ketones')",
+          "source": "TABLE: Blood sugar, RED ('persistently above 200 mg/dL with symptoms or suspected ketones') | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
           "title": "High blood sugar with symptoms",
           "explanation": "Glucose above 200 mg/dL with symptoms or ketones can mean a high-sugar crisis.",
           "actions": [
@@ -948,7 +948,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Blood sugar, RED ('vomiting, dehydration, abdominal pain, excessive thirst ... suggest a possible hyperglycemic crisis')",
+          "source": "TABLE: Blood sugar, RED ('vomiting, dehydration, abdominal pain, excessive thirst ... suggest a possible hyperglycemic crisis') | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/wp-content/uploads/2015/02/human_adaptation_2021_final.pdf; https://pubmed.ncbi.nlm.nih.gov/36224737/; https://pubmed.ncbi.nlm.nih.gov/41358894/",
           "title": "Possible high-sugar crisis",
           "explanation": "Vomiting, dehydration, belly pain or strong thirst can be signs of a high-sugar crisis.",
           "actions": [
@@ -980,34 +980,12 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Body temperature, YELLOW ('at least 1 °C above the astronaut's own 7-day baseline')",
+          "source": "TABLE: Body temperature, YELLOW ('at least 1 °C above the astronaut's own 7-day baseline') | Sources (Health_Indicators_Research table v5): https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
           "title": "Temperature above your normal",
           "explanation": "Your resting temperature is at least 1 °C above your own 7-day average. In space, resting temperature runs higher than on Earth, so we compare with your normal.",
           "actions": [
             "Rest and drink water.",
             "Lower exercise intensity and take cooling breaks.",
-            "Tell your crew medical officer if it stays high."
-          ],
-          "recheck": "Measure again in 30 minutes."
-        },
-        {
-          "id": "temp_y_abs",
-          "level": "yellow",
-          "enabled": false,
-          "trigger": {
-            "type": "threshold",
-            "metric": "body_temp",
-            "op": ">=",
-            "value": 37.8,
-            "context": "rest"
-          },
-          "persistence": 1,
-          "requires_flags": [],
-          "source": "TABLE: Body temperature, YELLOW ('37.8 to 38.9 °C'). DISABLED pending OPEN QUESTION Q-TEMP: conflicts with TABLE: Body temperature, Normal ('in-flight resting core may stabilise near 38 °C').",
-          "title": "Raised temperature",
-          "explanation": "Your resting temperature is 37.8 °C or higher.",
-          "actions": [
-            "Rest and drink water.",
             "Tell your crew medical officer if it stays high."
           ],
           "recheck": "Measure again in 30 minutes."
@@ -1025,7 +1003,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Body temperature, YELLOW",
+          "source": "TABLE: Body temperature, YELLOW | Sources (Health_Indicators_Research table v5): https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
           "title": "Temperature lower than normal",
           "explanation": "Your resting temperature is below 36.0 °C.",
           "actions": [
@@ -1048,7 +1026,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Body temperature, YELLOW ('core temperature after exercise is 39.0 °C or higher')",
+          "source": "TABLE: Body temperature, YELLOW ('core temperature after exercise is 39.0 °C or higher') | Sources (Health_Indicators_Research table v5): https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
           "title": "Overheating after exercise",
           "explanation": "Your temperature after exercise reached 39.0 °C. In microgravity your body loses heat less easily.",
           "actions": [
@@ -1070,7 +1048,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Body temperature, RED",
+          "source": "TABLE: Body temperature, RED | Sources (Health_Indicators_Research table v5): https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
           "title": "High fever",
           "explanation": "Your resting temperature is 39.0 °C or higher.",
           "actions": [
@@ -1095,7 +1073,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Body temperature, RED ('at least 1 °C above baseline for more than 24 hours'). '>24 h' = 2 consecutive daily readings: ASSUMPTION A4.",
+          "source": "TABLE: Body temperature, RED ('at least 1 °C above baseline for more than 24 hours'). '>24 h' = 2 consecutive daily readings: ASSUMPTION A4 | Sources (Health_Indicators_Research table v5): https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
           "title": "Temperature above your normal for more than a day",
           "explanation": "Your temperature has stayed at least 1 °C above your normal for more than a day.",
           "actions": [
@@ -1125,7 +1103,7 @@
             "skin_rash",
             "breathing_difficulty"
           ],
-          "source": "TABLE: Body temperature, RED ('fever with chills, confusion, severe headache, rash or breathing difficulty'). Fever = YELLOW baseline rule: ASSUMPTION A6.",
+          "source": "TABLE: Body temperature, RED ('fever with chills, confusion, severe headache, rash or breathing difficulty'). Fever = YELLOW baseline rule: ASSUMPTION A6 | Sources (Health_Indicators_Research table v5): https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
           "title": "Fever with warning symptoms",
           "explanation": "A raised temperature together with chills, confusion, severe headache, rash or breathing difficulty needs a doctor.",
           "actions": [
@@ -1147,7 +1125,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Body temperature, RED",
+          "source": "TABLE: Body temperature, RED | Sources (Health_Indicators_Research table v5): https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
           "title": "Very low temperature",
           "explanation": "Your temperature is below 35.0 °C.",
           "actions": [
@@ -1170,7 +1148,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Body temperature, RED ('during exercise or spacewalks: 40.0 °C or higher')",
+          "source": "TABLE: Body temperature, RED ('during exercise or spacewalks: 40.0 °C or higher') | Sources (Health_Indicators_Research table v5): https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
           "title": "Dangerous overheating",
           "explanation": "Your temperature during exercise reached 40.0 °C or higher.",
           "actions": [
@@ -1192,7 +1170,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Body temperature, RED ('dizziness, confusion or sweating that stops' during exercise)",
+          "source": "TABLE: Body temperature, RED ('dizziness, confusion or sweating that stops' during exercise) | Sources (Health_Indicators_Research table v5): https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/; https://www.nasa.gov/missions/station/heat-safety-in-space-keeps-infants-and-patients-safe-on-earth/; https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/",
           "title": "Signs of heat stress",
           "explanation": "Dizziness, confusion or sweating that stops during exercise are signs of dangerous heat stress.",
           "actions": [
@@ -1222,7 +1200,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Sleep hours, YELLOW",
+          "source": "TABLE: Sleep hours, YELLOW | Sources (Health_Indicators_Research table v5): https://doi.org/10.1016/S1474-4422(14)70122-X; https://www.nasa.gov/wp-content/uploads/2023/03/sleep-accomodations-technical-brief-ochmo.pdf; https://pmc.ncbi.nlm.nih.gov/articles/PMC4434546/",
           "title": "Not enough sleep this week",
           "explanation": "Your 7-day average sleep is below 7 hours. Short sleep raises the risk of errors and lowers mood and immunity.",
           "actions": [
@@ -1244,7 +1222,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Sleep hours, YELLOW ('any use of sleep aids')",
+          "source": "TABLE: Sleep hours, YELLOW ('any use of sleep aids') | Sources (Health_Indicators_Research table v5): https://doi.org/10.1016/S1474-4422(14)70122-X; https://www.nasa.gov/wp-content/uploads/2023/03/sleep-accomodations-technical-brief-ochmo.pdf; https://pmc.ncbi.nlm.nih.gov/articles/PMC4434546/",
           "title": "Sleep aid used",
           "explanation": "Using a sleep aid is worth discussing with your crew medical officer.",
           "actions": [
@@ -1265,7 +1243,7 @@
           },
           "persistence": 7,
           "requires_flags": [],
-          "source": "TABLE: Sleep hours, RED ('6 hours or less per night for 7 nights in a row')",
+          "source": "TABLE: Sleep hours, RED ('6 hours or less per night for 7 nights in a row') | Sources (Health_Indicators_Research table v5): https://doi.org/10.1016/S1474-4422(14)70122-X; https://www.nasa.gov/wp-content/uploads/2023/03/sleep-accomodations-technical-brief-ochmo.pdf; https://pmc.ncbi.nlm.nih.gov/articles/PMC4434546/",
           "title": "A week of short sleep",
           "explanation": "You slept 6 hours or less for 7 nights in a row.",
           "actions": [
@@ -1286,7 +1264,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Sleep hours, RED ('errors during tasks caused by fatigue')",
+          "source": "TABLE: Sleep hours, RED ('errors during tasks caused by fatigue') | Sources (Health_Indicators_Research table v5): https://doi.org/10.1016/S1474-4422(14)70122-X; https://www.nasa.gov/wp-content/uploads/2023/03/sleep-accomodations-technical-brief-ochmo.pdf; https://pmc.ncbi.nlm.nih.gov/articles/PMC4434546/",
           "title": "Fatigue is causing errors",
           "explanation": "Errors caused by fatigue are a safety risk for you and the crew.",
           "actions": [
@@ -1316,7 +1294,7 @@
           },
           "persistence": 3,
           "requires_flags": [],
-          "source": "TABLE: Mood, YELLOW ('decrease of 2 or more points from personal baseline for 3 consecutive days'); baseline = preflight per TABLE: Mood, Normal",
+          "source": "TABLE: Mood, YELLOW ('decrease of 2 or more points from personal baseline for 3 consecutive days'); baseline = preflight per TABLE: Mood, Normal | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/6-0-medical-operations/; https://ntrs.nasa.gov/citations/20250001454; https://www.nature.com/articles/s41586-024-07648-x",
           "title": "Mood lower than your usual",
           "explanation": "Your mood has been 2 or more points below your usual for 3 days. Isolation and distance from home can affect mood.",
           "actions": [
@@ -1339,7 +1317,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Mood, YELLOW ('repeatedly reports increased stress, sadness, loneliness or irritability')",
+          "source": "TABLE: Mood, YELLOW ('repeatedly reports increased stress, sadness, loneliness or irritability') | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/6-0-medical-operations/; https://ntrs.nasa.gov/citations/20250001454; https://www.nature.com/articles/s41586-024-07648-x",
           "title": "You have been feeling low",
           "explanation": "Stress, sadness, loneliness or irritability on most days is worth paying attention to.",
           "actions": [
@@ -1363,7 +1341,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Mood, RED",
+          "source": "TABLE: Mood, RED | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/reference/6-0-medical-operations/; https://ntrs.nasa.gov/citations/20250001454; https://www.nature.com/articles/s41586-024-07648-x",
           "title": "You deserve support right now",
           "explanation": "What you are feeling matters. You do not have to handle it alone.",
           "actions": [
@@ -1393,7 +1371,7 @@
           },
           "persistence": 2,
           "requires_flags": [],
-          "source": "TABLE: Body mass, YELLOW ('sustained decrease of approximately 2% or more from preflight baseline'). 'Sustained' = 2 consecutive readings: ASSUMPTION A2.",
+          "source": "TABLE: Body mass, YELLOW ('sustained decrease of approximately 2% or more from preflight baseline'). 'Sustained' = 2 consecutive readings: ASSUMPTION A2 | Sources (Health_Indicators_Research table v5): https://pubmed.ncbi.nlm.nih.gov/25197887/; https://www.nasa.gov/directorates/esdmd/hhp/food-and-nutrition-risk/; https://www.nasa.gov/wp-content/uploads/2024/08/human-adaptation-2021-final-b.pdf",
           "title": "Body mass going down",
           "explanation": "Your body mass is at least 2% below your preflight value. Losing mass can mean you are not eating enough and losing muscle or bone.",
           "actions": [
@@ -1420,7 +1398,7 @@
             "unusual_weakness",
             "dizziness"
           ],
-          "source": "TABLE: Body mass, RED ('loss of approximately 5% or more accompanied by ... weakness, dizziness')",
+          "source": "TABLE: Body mass, RED ('loss of approximately 5% or more accompanied by ... weakness, dizziness') | Sources (Health_Indicators_Research table v5): https://pubmed.ncbi.nlm.nih.gov/25197887/; https://www.nasa.gov/directorates/esdmd/hhp/food-and-nutrition-risk/; https://www.nasa.gov/wp-content/uploads/2024/08/human-adaptation-2021-final-b.pdf",
           "title": "Large body mass loss with symptoms",
           "explanation": "You have lost 5% or more of your body mass and feel weak or dizzy.",
           "actions": [
@@ -1454,7 +1432,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Immune signs / symptoms, YELLOW",
+          "source": "TABLE: Immune signs / symptoms, YELLOW | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/directorates/esdmd/hhp/immune-risk/; https://www.nasa.gov/humans-in-space/nasa-investigates-how-dormant-viruses-behave-during-spaceflight/",
           "title": "New mild symptoms",
           "explanation": "Spaceflight can weaken the immune system and wake up dormant viruses, so new symptoms are worth tracking.",
           "actions": [
@@ -1482,7 +1460,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Immune signs / symptoms, RED",
+          "source": "TABLE: Immune signs / symptoms, RED | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/directorates/esdmd/hhp/immune-risk/; https://www.nasa.gov/humans-in-space/nasa-investigates-how-dormant-viruses-behave-during-spaceflight/",
           "title": "Serious symptoms",
           "explanation": "These symptoms need medical assessment right away.",
           "actions": [
@@ -1494,12 +1472,14 @@
         {
           "id": "imm_r_fever_symptoms",
           "level": "red",
-          "enabled": false,
+          "enabled": true,
           "trigger": {
-            "type": "threshold",
+            "type": "baseline_delta",
             "metric": "body_temp",
-            "op": ">=",
-            "value": 38.0,
+            "baseline": "rolling",
+            "direction": "above",
+            "unit": "abs",
+            "amount": 1.0,
             "context": "rest"
           },
           "persistence": 1,
@@ -1511,7 +1491,7 @@
             "cold_sores",
             "oral_lesions"
           ],
-          "source": "TABLE: Immune signs / symptoms, RED ('38 °C or higher with other infection symptoms'). DISABLED pending OPEN QUESTION Q-TEMP: conflicts with TABLE: Body temperature, RED (39.0 °C).",
+          "source": "TABLE v5: Immune signs / symptoms, RED ('temperature reaches higher, particularly with other infection symptoms'); 'higher' = at least 1 °C above the personal 7-day baseline, the same definition the table v5 uses for Body temperature, YELLOW. Q-TEMP resolved by table v5. | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/directorates/esdmd/hhp/immune-risk/; https://www.nasa.gov/humans-in-space/nasa-investigates-how-dormant-viruses-behave-during-spaceflight/; https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/",
           "title": "Fever with signs of infection",
           "explanation": "A temperature of 38 °C or higher with infection symptoms needs a doctor.",
           "actions": [
@@ -1539,7 +1519,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, YELLOW ('dose rate rises above the expected mission baseline'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): expected cruise rate ≈ 75 µSv/h (≈ 1.8 mSv/day measured by MSL/RAD; SwRI press release 30 May 2013 / Zeitlin et al., Science 2013); yellow above 2 × expected = 150 µSv/h. Not a medical limit.",
+          "source": "TABLE: Radiation dose, YELLOW ('dose rate rises above the expected mission baseline'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): expected cruise rate ≈ 75 µSv/h (≈ 1.8 mSv/day measured by MSL/RAD; SwRI press release 30 May 2013 / Zeitlin et al., Science 2013); yellow above 2 × expected = 150 µSv/h. Not a medical limit | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/hrp/hazard-space-radiation/; https://www.nasa.gov/reference/4-0-human-performance/; https://srag.jsc.nasa.gov/spaceradiation/faq/faq.cfm; https://www.nasa.gov/wp-content/uploads/2020/10/2022-01-05_nasa-std-3001_vol.1_rev._b_final_draft_with_signature_010522.pdf",
           "title": "Radiation higher than expected",
           "explanation": "The dose rate is above what is expected for this mission.",
           "actions": [
@@ -1560,7 +1540,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, RED ('a dosimeter indicates an unexpectedly high exposure'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): red at >= 1000 µSv/h (1 mSv/h). That is ≈ 13 × the ≈ 75 µSv/h cruise rate (MSL/RAD; SwRI press release 2013) and, if it lasted a day, ≈ 24 mSv ≈ 10 % of NASA's 250 mSv solar-particle-event design limit per day (NASA OCHMO radiation technical brief, NASA-STD-3001). Not a medical limit.",
+          "source": "TABLE: Radiation dose, RED ('a dosimeter indicates an unexpectedly high exposure'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): red at >= 1000 µSv/h (1 mSv/h). That is ≈ 13 × the ≈ 75 µSv/h cruise rate (MSL/RAD; SwRI press release 2013) and, if it lasted a day, ≈ 24 mSv ≈ 10 % of NASA's 250 mSv solar-particle-event design limit per day (NASA OCHMO radiation technical brief, NASA-STD-3001). Not a medical limit | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/hrp/hazard-space-radiation/; https://www.nasa.gov/reference/4-0-human-performance/; https://srag.jsc.nasa.gov/spaceradiation/faq/faq.cfm; https://www.nasa.gov/wp-content/uploads/2020/10/2022-01-05_nasa-std-3001_vol.1_rev._b_final_draft_with_signature_010522.pdf",
           "title": "Radiation dose rate very high",
           "explanation": "The dose rate is many times higher than normal for this flight. This is what a strong solar particle event looks like inside the spacecraft.",
           "actions": [
@@ -1582,7 +1562,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, YELLOW ('a solar particle event warning is issued')",
+          "source": "TABLE: Radiation dose, YELLOW ('a solar particle event warning is issued') | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/hrp/hazard-space-radiation/; https://www.nasa.gov/reference/4-0-human-performance/; https://srag.jsc.nasa.gov/spaceradiation/faq/faq.cfm; https://www.nasa.gov/wp-content/uploads/2020/10/2022-01-05_nasa-std-3001_vol.1_rev._b_final_draft_with_signature_010522.pdf",
           "title": "Solar particle event warning",
           "explanation": "A solar storm can raise radiation levels quickly. Outside Earth's magnetic field you have less natural protection.",
           "actions": [
@@ -1591,6 +1571,29 @@
             "Wait for instructions from mission control."
           ],
           "recheck": "Check the dosimeter after the event."
+        },
+        {
+          "id": "rad_y_bfo30",
+          "level": "yellow",
+          "enabled": true,
+          "trigger": {
+            "type": "window_average",
+            "metric": "radiation_dose_rate",
+            "days": 30,
+            "op": ">=",
+            "value": 278
+          },
+          "persistence": 1,
+          "requires_flags": [],
+          "source": "TABLE v5: Radiation dose, YELLOW ('accumulated dose approaches the NASA limits for blood-forming organs: 250 mGy-Eq over 30 days'). 250 mGy-Eq / 30 days ≈ 8.3 per day ≈ 347 µSv/h on average; yellow at 80 % = 278 µSv/h averaged over the last 30 daily readings (mGy-Eq ≈ mSv for this purpose). Needs 30 days of readings. | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/hrp/hazard-space-radiation/; https://www.nasa.gov/reference/4-0-human-performance/; https://srag.jsc.nasa.gov/spaceradiation/faq/faq.cfm; https://www.nasa.gov/wp-content/uploads/2020/10/2022-01-05_nasa-std-3001_vol.1_rev._b_final_draft_with_signature_010522.pdf",
+          "title": "30-day dose approaching the NASA blood-forming-organ limit",
+          "explanation": "Your average radiation dose over the last 30 days is close to NASA's 30-day limit for blood-forming organs (bone marrow).",
+          "actions": [
+            "Check your personal dosimeter readings.",
+            "Reduce unnecessary exposure and use the shielded area when instructed.",
+            "Tell your crew medical officer."
+          ],
+          "recheck": "Check the dose rate daily."
         },
         {
           "id": "rad_y_accum",
@@ -1604,7 +1607,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, YELLOW ('approaches the mission-specific action level'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): action level = 80 % of the NASA-STD-3001 Vol. 1 Rev. C (2023): career effective dose limit 600 mSv → 480 mSv. A nominal 180-day transit at ≈ 1.8 mSv/day gives ≈ 324 mSv.",
+          "source": "TABLE: Radiation dose, YELLOW ('approaches the mission-specific action level'). TABLE v5 adds 'approaches the NASA limits for blood-forming organs: 500 mGy-Eq over 1 year'. ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit, < 1 year): action level 480 mSv ≈ 96 % of the 1-year BFO limit (mGy-Eq ≈ mSv for this purpose) and 80 % of the NASA-STD-3001 Vol. 1 Rev. C (2023): career effective dose limit 600 mSv → 480 mSv. A nominal 180-day transit at ≈ 1.8 mSv/day gives ≈ 324 mSv | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/hrp/hazard-space-radiation/; https://www.nasa.gov/reference/4-0-human-performance/; https://srag.jsc.nasa.gov/spaceradiation/faq/faq.cfm; https://www.nasa.gov/wp-content/uploads/2020/10/2022-01-05_nasa-std-3001_vol.1_rev._b_final_draft_with_signature_010522.pdf",
           "title": "Accumulated dose approaching the mission limit",
           "explanation": "Your total radiation dose is close to this mission's action level.",
           "actions": [
@@ -1625,7 +1628,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, RED ('reaches or exceeds a predefined mission-specific emergency threshold'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): NASA-STD-3001 Vol. 1 Rev. C (2023): career effective dose limit 600 mSv.",
+          "source": "TABLE: Radiation dose, RED ('reaches or exceeds a predefined mission-specific emergency threshold'). ILLUSTRATIVE MISSION SETTING (Q-RAD, 15 Nov 2026, Mars transit): NASA-STD-3001 Vol. 1 Rev. C (2023): career effective dose limit 600 mSv | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/hrp/hazard-space-radiation/; https://www.nasa.gov/reference/4-0-human-performance/; https://srag.jsc.nasa.gov/spaceradiation/faq/faq.cfm; https://www.nasa.gov/wp-content/uploads/2020/10/2022-01-05_nasa-std-3001_vol.1_rev._b_final_draft_with_signature_010522.pdf",
           "title": "Accumulated dose at the emergency limit",
           "explanation": "Your total radiation dose has reached this mission's emergency threshold.",
           "actions": [
@@ -1647,7 +1650,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Radiation dose, RED",
+          "source": "TABLE: Radiation dose, RED | Sources (Health_Indicators_Research table v5): https://www.nasa.gov/hrp/hazard-space-radiation/; https://www.nasa.gov/reference/4-0-human-performance/; https://srag.jsc.nasa.gov/spaceradiation/faq/faq.cfm; https://www.nasa.gov/wp-content/uploads/2020/10/2022-01-05_nasa-std-3001_vol.1_rev._b_final_draft_with_signature_010522.pdf",
           "title": "High radiation exposure",
           "explanation": "An unexpectedly high exposure or an acute radiation event needs medical evaluation.",
           "actions": [
@@ -1676,7 +1679,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Skin health, YELLOW ('symptom severity reaches 4/10 or higher')",
+          "source": "TABLE: Skin health, YELLOW ('symptom severity reaches 4/10 or higher') | Sources (Health_Indicators_Research table v5): https://pubmed.ncbi.nlm.nih.gov/34058745/; https://pmc.ncbi.nlm.nih.gov/articles/PMC9604750/; https://www.sciencedirect.com/science/article/pii/S0738081X25002858",
           "title": "Skin symptoms bothering you",
           "explanation": "Your skin symptoms are 4 out of 10 or higher. Dry cabin air and limited hygiene can irritate the skin.",
           "actions": [
@@ -1701,7 +1704,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Skin health, YELLOW",
+          "source": "TABLE: Skin health, YELLOW | Sources (Health_Indicators_Research table v5): https://pubmed.ncbi.nlm.nih.gov/34058745/; https://pmc.ncbi.nlm.nih.gov/articles/PMC9604750/; https://www.sciencedirect.com/science/article/pii/S0738081X25002858",
           "title": "New skin change",
           "explanation": "New skin changes and slow-healing wounds are worth tracking in space.",
           "actions": [
@@ -1727,7 +1730,7 @@
           },
           "persistence": 1,
           "requires_flags": [],
-          "source": "TABLE: Skin health, RED",
+          "source": "TABLE: Skin health, RED | Sources (Health_Indicators_Research table v5): https://pubmed.ncbi.nlm.nih.gov/34058745/; https://pmc.ncbi.nlm.nih.gov/articles/PMC9604750/; https://www.sciencedirect.com/science/article/pii/S0738081X25002858",
           "title": "Possible serious skin infection or reaction",
           "explanation": "These signs can mean a serious infection or allergic reaction.",
           "actions": [

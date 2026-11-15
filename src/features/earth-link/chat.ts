@@ -73,7 +73,7 @@ const SEED_MESSAGES: EarthChatMessage[] = [
     id: "astro-01-day-39-surgeon",
     astronautId: "astro-01",
     sender: "flight_surgeon",
-    text: "Copy, Crew. Mild resting heart rate elevation in microgravity is commonly linked to fluid shifts, dehydration, accumulated sleep debt, or recent high-intensity resistive training. For today, prioritize steady hydration (2.5–3 L), shift to light aerobic recovery instead of heavy resistive loads, and re-check resting vitals tomorrow morning. Ping us if it rises above +15 bpm over your 7-day baseline or is accompanied by dizziness.",
+    text: "Copy, Alex. A mild rise in resting heart rate in flight can come with fluid shifts, dehydration or short sleep. For today, keep steady hydration, choose light aerobic recovery instead of heavy resistive loads, and re-check resting vitals tomorrow morning. Tell us if it stays 12 bpm or more above your preflight normal, or comes with chest pain, fainting or dizziness.",
     missionDay: 39,
     createdAtMs: Date.parse("2026-11-13T08:35:00.000Z"),
     arrivesAtMs: Date.parse("2026-11-13T08:55:00.000Z"),
@@ -333,4 +333,57 @@ export function earthMessageDelivery(
   nowMs: number,
 ): EarthMessageDelivery {
   return nowMs < message.arrivesAtMs ? "transmitting" : "delivered";
+}
+
+
+/** Text of the automatic receipt Earth sends when an astronaut message arrives (simulated). */
+export const AUTO_RECEIPT_TEXT =
+  "Received — under review by the flight surgeon. (Automatic receipt, simulated.)";
+
+/** Builds the automatic receipt for an astronaut message: it is "sent" when that message arrives
+ *  and takes the same one-way delay to come back. Id is derived, so it is created only once. */
+export function createAutoReceipt(original: EarthChatMessage): EarthChatMessage {
+  return createEarthChatMessage({
+    id: `${original.id}-receipt`,
+    astronautId: original.astronautId,
+    sender: "flight_surgeon",
+    text: AUTO_RECEIPT_TEXT,
+    missionDay: original.missionDay,
+    createdAtMs: original.arrivesAtMs,
+  });
+}
+
+/** Astronaut messages that have arrived on Earth but have no receipt yet. */
+export function pendingReceipts(thread: EarthChatMessage[], nowMs: number): EarthChatMessage[] {
+  const ids = new Set(thread.map((message) => message.id));
+  return thread.filter(
+    (message) =>
+      message.sender === "astronaut" &&
+      message.arrivesAtMs <= nowMs &&
+      !ids.has(`${message.id}-receipt`) &&
+      // a real reply from the flight surgeon after this message makes a receipt unnecessary
+      !thread.some((other) => other.sender === "flight_surgeon" && other.createdAtMs > message.createdAtMs),
+  );
+}
+
+/** Draft for the flight surgeon, built only from the rules engine's result (no own logic). */
+export function buildEarthDraftText(
+  evaluation: { overall_status: string; indicators: { indicator_id: string; status: string; triggered: { title: string; level: string }[] }[] },
+  labels: Record<string, string>,
+  missionDay: number,
+): string {
+  const lines = evaluation.indicators
+    .filter((indicator) => indicator.status === "red" || indicator.status === "yellow")
+    .sort((a, b) => (a.status === b.status ? 0 : a.status === "red" ? -1 : 1))
+    .map(
+      (indicator) =>
+        `${indicator.status.toUpperCase()} · ${labels[indicator.indicator_id] ?? indicator.indicator_id}: ${indicator.triggered
+          .map((rule) => rule.title)
+          .join("; ")}`,
+    );
+  return [
+    `Day ${missionDay} check-up — overall ${evaluation.overall_status.toUpperCase()}.`,
+    ...lines,
+    "Telemetry attached. Please advise.",
+  ].join("\n");
 }
