@@ -120,3 +120,36 @@ select {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+/* Radiation check block in the daily check-up */
+.radiation-check {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.radiation-check-heading h3 {
+  margin: 0;
+}
+
+.radiation-check-heading p {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.radiation-flag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.symptom-pill.radiation-pill.is-selected {
+  border-color: var(--status-yellow);
+  color: var(--status-yellow);
+  background: rgba(255, 200, 87, 0.12);
+}

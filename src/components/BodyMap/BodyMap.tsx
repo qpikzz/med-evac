@@ -1,6 +1,6 @@
 // Body map: draws the Rules engine's EvaluationResult on a layered 2D figure.
 // It never decides anything about health — it only shows the worst status the engine already gave.
-import { useMemo, useState, type KeyboardEvent } from "react";
+import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
 import type { EvaluationResult, RulesFile } from "../../rules/types";
 import {
   MONITORING_TEXT,
@@ -180,6 +180,18 @@ function Hotspot({ view, ariaLabel, selected, onActivate, onHover }: HotspotProp
         </>
       ) : (
         <>
+          {(style === "yellow" || style === "red") &&
+            [0, 1, 2].map((i) => (
+              <ellipse
+                key={i}
+                className="bm-wave"
+                style={{ animationDelay: `${i * (style === "red" ? 0.4 : 0.8)}s` }}
+                cx={shape.cx}
+                cy={shape.cy}
+                rx={shape.rx}
+                ry={shape.ry}
+              />
+            ))}
           <ellipse className="bm-glow" cx={shape.cx} cy={shape.cy} rx={shape.rx} ry={shape.ry} />
           <ellipse className="bm-aura-hit" cx={shape.cx} cy={shape.cy} rx={shape.rx} ry={shape.ry} />
           <circle className="bm-core" cx={shape.cx + shape.rx * 0.707} cy={shape.cy - shape.ry * 0.707} r={16} />
@@ -216,6 +228,13 @@ function BodyMap({ result, rules, selectedZone, onSelect }: BodyMapProps) {
   const selected = selectedZone !== undefined ? selectedZone : localSelected;
 
   const views = useMemo(() => allZoneViews(result, rules), [result, rules]);
+
+  // When the parent selects a zone on another layer (e.g. from an indicator card or an alert), show that layer.
+  useEffect(() => {
+    if (!selectedZone) return;
+    const zone = ZONES.find((z) => z.id === selectedZone);
+    if (zone) setLayer(zone.layer);
+  }, [selectedZone]);
   const badges = useMemo(() => allLayerBadges(views), [views]);
 
   function select(zone: ZoneConfig): void {
@@ -296,6 +315,7 @@ function BodyMap({ result, rules, selectedZone, onSelect }: BodyMapProps) {
             {hoveredView.monitoringIds.length > 0 && (
               <p className="bm-tooltip-note">{MONITORING_TEXT}</p>
             )}
+            {hoveredView.zone.note && <p className="bm-tooltip-note">{hoveredView.zone.note}</p>}
           </div>
         )}
       </div>
@@ -316,6 +336,7 @@ function BodyMap({ result, rules, selectedZone, onSelect }: BodyMapProps) {
                 <StatusTag style={view.style} />
               </button>
               {view.style === "monitoring" && <p className="bm-zone-note">{MONITORING_TEXT}</p>}
+              {zone.note && <p className="bm-zone-note">{zone.note}</p>}
             </li>
           );
         })}

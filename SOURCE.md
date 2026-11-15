@@ -30,6 +30,8 @@
 | Package / Asset | Source Repository | License | Role |
 | :--- | :--- | :--- | :--- |
 | **lucide-react** | `1.73.0` · `https://github.com/lucide-icons/lucide` | **ISC** | Offline SVG icon set; used for the fixed header `ChevronDown`, profile-menu actions, and access-gate controls |
+| **Recharts** | `3.10.1` · `https://github.com/recharts/recharts` | **MIT** | 7-day trend sparklines in the indicator cards (`src/components/charts/TrendSparkline.tsx`) |
+| **Motion** (`motion`) | `14.9.0` · `https://github.com/motiondivision/motion` | **MIT** | Screen transitions, indicator-card entrance, animated radiation alert (`src/components/RadiationAlert/`); respects `prefers-reduced-motion` |
 | **Custom Interactive Body Map SVG** | Original work by the ORBITA project contributors | **Apache-2.0** | Interactive anatomical figure for health status visualization |
 <!-- Template for new UI packages:
 | **Library Name** | `https://github.com/...` | **MIT / Apache-2.0** | Brief role description |
