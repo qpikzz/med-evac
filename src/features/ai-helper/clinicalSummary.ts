@@ -224,6 +224,39 @@ function explanationForSummary(
   return summary.primary.triggered.explanation;
 }
 
+const FALLBACK_ACTIONS: Record<string, string> = {
+  body_temp:
+    "Rest, drink water, avoid physical exertion, and contact your Crew Medical Officer; take medication only as directed by your medical team.",
+  heart_rate:
+    "Rest quietly, recheck as directed, and contact your Crew Medical Officer if it remains unusual or symptoms occur.",
+  sleep_hours:
+    "Protect your next sleep window, keep the sleep area dark and quiet, and log sleep tomorrow.",
+  radiation_accumulated:
+    "Minimize time in unshielded areas, postpone non-essential EVA or window tasks, and review shielding protocol with your Crew Medical Officer.",
+  radiation_dose_rate:
+    "Check your personal dosimeter and move to a shielded area when instructed; recheck it as directed.",
+  bp_systolic:
+    "Rest quietly, repeat the measurement as directed, and tell your Crew Medical Officer if it remains outside your usual range or you feel unwell.",
+  bp_diastolic:
+    "Rest quietly, repeat the measurement as directed, and tell your Crew Medical Officer if it remains outside your usual range or you feel unwell.",
+  glucose:
+    "Follow your check-up protocol, repeat the measurement as directed, and contact your Crew Medical Officer if it remains unusual.",
+};
+
+function recommendedAction(summary: TriggeredMetricSummary): string {
+  const { triggered, definition } = summary.primary;
+  const actions = triggered.actions.length > 0
+    ? triggered.actions
+    : definition?.actions ?? [];
+  if (actions.length > 0) {
+    return actions.join(" ");
+  }
+  return (
+    FALLBACK_ACTIONS[summary.metricKey] ??
+    "Follow the check-up protocol for this indicator and discuss the result with your Crew Medical Officer."
+  );
+}
+
 function groupBullet(
   summary: TriggeredMetricSummary,
   rules: RulesFile,
@@ -234,7 +267,10 @@ function groupBullet(
     !baseline && observed && typeof observed.value === "number" && observed.metric
       ? ` Observed ${formatMetricValue(observed.value, observed.metric, rules)}.`
       : "";
-  return `- ${summary.label}: ${summary.primary.triggered.title}. ${explanationForSummary(summary, baseline)}${value}`;
+  return (
+    `- ${summary.label}: ${summary.primary.triggered.title}. ${explanationForSummary(summary, baseline)}${value}` +
+    `\n  Next: ${recommendedAction(summary)}`
+  );
 }
 
 export function buildDeterministicClinicalSummary(
@@ -254,5 +290,10 @@ export function buildDeterministicClinicalSummary(
       ? yellow.map((summary) => groupBullet(summary, rules))
       : ["- None."]),
   ];
+  if (evaluation.overall_status === "green" && red.length === 0 && yellow.length === 0) {
+    lines.push(
+      "Next: All indicators are within your nominal range. Keep up your current hydration, sleep, and exercise schedule.",
+    );
+  }
   return lines.join("\n");
 }

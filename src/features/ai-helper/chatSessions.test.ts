@@ -91,4 +91,58 @@ describe("SI chat sessions", () => {
       state.activeSessionId,
     );
   });
+
+  it("refreshes only the current-day generated opening briefing on restore and data updates", () => {
+    const storage = new MemoryStorage();
+    const legacyBriefing = {
+      missionDay: 40,
+      status: "yellow" as const,
+      briefing:
+        "Day 40 · Yellow\nCRITICAL / RED alerts:\n- None.\nELEVATED / YELLOW warnings:\n- Heart rate differs from your normal.",
+    };
+    const firstStore = createChatSessionStore("astro-01", legacyBriefing, { storage });
+    const currentSession = firstStore.getSnapshot().sessions[0];
+    firstStore.appendMessage(currentSession.id, "user", "What should I do?");
+    firstStore.createSession(39, "Day 39 · Yellow\nA prior mission-day briefing.");
+
+    const refreshedBriefing = {
+      missionDay: 40,
+      status: "yellow" as const,
+      briefing:
+        "Day 40 · Yellow\nCRITICAL / RED alerts:\n- None.\nELEVATED / YELLOW warnings:\n- Heart rate differs from your normal.\n  Next: Rest and recheck as directed.",
+    };
+    const restoredStore = createChatSessionStore(
+      "astro-01",
+      refreshedBriefing,
+      { storage },
+    );
+    const restoredCurrent = restoredStore.getSession(currentSession.id);
+    expect(restoredCurrent?.messages[0].content).toBe(refreshedBriefing.briefing);
+    expect(restoredCurrent?.messages.map((message) => message.role)).toEqual([
+      "assistant",
+      "user",
+    ]);
+
+    const priorSession = restoredStore
+      .getSnapshot()
+      .sessions.find((session) => session.missionDay === 39);
+    expect(priorSession?.messages[0].content).toBe(
+      "Day 39 · Yellow\nA prior mission-day briefing.",
+    );
+
+    const updatedBriefing = {
+      ...refreshedBriefing,
+      briefing: refreshedBriefing.briefing.replace(
+        "Rest and recheck as directed.",
+        "Contact your Crew Medical Officer if it persists.",
+      ),
+    };
+    restoredStore.refreshInitialBriefing(updatedBriefing);
+    expect(restoredStore.getSession(currentSession.id)?.messages[0].content).toBe(
+      updatedBriefing.briefing,
+    );
+    expect(storage.getItem(chatSessionsStorageKey("astro-01"))).toContain(
+      "Contact your Crew Medical Officer if it persists.",
+    );
+  });
 });

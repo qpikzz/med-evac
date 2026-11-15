@@ -41,6 +41,11 @@ export interface ChatSessionStore {
     role: SIChatRole,
     content: string,
   ) => ChatSession;
+  refreshInitialBriefing: (initial: {
+    missionDay: number;
+    status: Status;
+    briefing: string;
+  }) => void;
 }
 
 export interface ChatSessionStoreOptions {
@@ -168,6 +173,38 @@ function makeSession(
   };
 }
 
+function refreshGeneratedBriefings(
+  sessions: ChatSession[],
+  initial: { missionDay: number; briefing: string },
+  now: () => Date,
+): { sessions: ChatSession[]; changed: boolean } {
+  const generatedBriefingPattern =
+    /^Day \d+ · (?:Red|Yellow|Green|No Data)\r?\nCRITICAL \/ RED alerts:/;
+  let changed = false;
+  const refreshed = sessions.map((session) => {
+    const opening = session.messages[0];
+    if (
+      session.missionDay !== initial.missionDay ||
+      opening?.role !== "assistant" ||
+      !generatedBriefingPattern.test(opening.content) ||
+      opening.content === initial.briefing
+    ) {
+      return session;
+    }
+
+    changed = true;
+    return {
+      ...session,
+      updatedAt: now().toISOString(),
+      messages: [
+        { ...opening, content: initial.briefing },
+        ...session.messages.slice(1),
+      ],
+    };
+  });
+  return { sessions: refreshed, changed };
+}
+
 export function createChatSessionStore(
   profileId: string,
   initial: { missionDay: number; status: Status; briefing: string },
@@ -220,11 +257,18 @@ export function createChatSessionStore(
     shouldPersistState = true;
   }
 
+  const refreshed = refreshGeneratedBriefings(sessions, initial, now);
+  sessions = refreshed.sessions;
+  if (refreshed.changed) {
+    shouldPersistState = true;
+  }
+
   state = {
     sessions,
     activeSessionId: activeSessionId ?? sessions[0].id,
     storageError,
   };
+  let currentInitial = initial;
 
   function persist(next: ChatSessionState): ChatSessionState {
     if (!storage) {
@@ -268,7 +312,7 @@ export function createChatSessionStore(
       return state.sessions.find((session) => session.id === sessionId);
     },
     createSession(missionDay, briefing) {
-      const session = makeSession(missionDay, initial.status, briefing, now);
+      const session = makeSession(missionDay, currentInitial.status, briefing, now);
       commit({
         ...state,
         sessions: [session, ...state.sessions],
@@ -290,7 +334,7 @@ export function createChatSessionStore(
       let replacement: ChatSession | undefined;
 
       if (remaining.length === 0) {
-        replacement = makeSession(missionDay, initial.status, briefing, now);
+        replacement = makeSession(missionDay, currentInitial.status, briefing, now);
         nextSessions = [replacement];
         nextActiveId = replacement.id;
       } else if (wasActive) {
@@ -308,6 +352,17 @@ export function createChatSessionStore(
         activeSessionId: nextActiveId,
       });
       return replacement ?? activeSession;
+    },
+    refreshInitialBriefing(nextInitial) {
+      currentInitial = nextInitial;
+      const result = refreshGeneratedBriefings(
+        state.sessions,
+        nextInitial,
+        now,
+      );
+      if (result.changed) {
+        commit({ ...state, sessions: result.sessions });
+      }
     },
     appendMessage(sessionId, role, content) {
       const session = state.sessions.find((entry) => entry.id === sessionId);

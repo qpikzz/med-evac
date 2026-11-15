@@ -191,6 +191,14 @@ describe("ai helper", () => {
       "Your resting heart rate (80 bpm) is +17 bpm above your preflight baseline of 63 bpm (alert threshold: ±12 bpm).",
     );
     expect(summary).not.toContain("6.642857142857");
+    const summaryLines = summary.split("\n");
+    const alertBulletIndexes = summaryLines.flatMap((line, index) =>
+      line.startsWith("- ") && line !== "- None." ? [index] : [],
+    );
+    expect(alertBulletIndexes.length).toBeGreaterThan(0);
+    for (const index of alertBulletIndexes) {
+      expect(summaryLines[index + 1]).toMatch(/^  Next: .+/);
+    }
   });
 
   it("consolidates same-metric red threshold and baseline triggers with exact comparison", () => {
@@ -242,6 +250,9 @@ describe("ai helper", () => {
       "Your resting temperature (43.0 °C) is +6.2 °C above your 7-day baseline of 36.8 °C (alert threshold: +1.0 °C).",
     );
     expect(briefing).not.toContain("at least 1 °C above your own 7-day average");
+    expect(briefing).toContain(
+      `${temperatureBullets[0]}\n  Next: Rest and drink water. Tell your crew medical officer now. Contact the flight surgeon on Earth. Take fever medicine only on their advice.`,
+    );
 
     const context = buildMessages({
       mode: "explain_today",
@@ -261,6 +272,22 @@ describe("ai helper", () => {
       "Your resting temperature (43.0 °C) is +6.2 °C above your 7-day baseline of 36.8 °C (alert threshold: +1.0 °C).",
     );
     expect(context).not.toContain("at least 1 °C above your own 7-day average");
+  });
+
+  it("adds a positive maintenance tip when the overall status is green with no alerts", () => {
+    const { ev } = day40();
+    const evaluation = cloneEvaluation(ev);
+    evaluation.overall_status = "green";
+    evaluation.overall_escalation = rules.escalation.green;
+    for (const indicator of evaluation.indicators) {
+      indicator.status = "green";
+      indicator.escalation = rules.escalation.green;
+      indicator.triggered = [];
+    }
+
+    expect(buildDeterministicClinicalSummary(evaluation, rules, 40)).toContain(
+      "Next: All indicators are within your nominal range. Keep up your current hydration, sleep, and exercise schedule.",
+    );
   });
 
   it("criterion 1: Day-40 picture matches the heart-and-sleep combination", () => {

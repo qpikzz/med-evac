@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -33,16 +34,28 @@ import { matchCombinations } from "../features/ai-helper/combinations";
 import { buildSafetySupportCard, checkSafety } from "../features/ai-helper/safety";
 import { useAppState } from "../features/app-state/AppStateContext";
 import { useAuth } from "../features/auth/AuthContext";
+import type { EvaluationResult, RulesFile } from "../rules/types";
 
 interface LocalAIChannelProps {
   onOpenCheckup: () => void;
 }
 
-const QUICK_PROMPTS = [
-  "Why is my heart rate yellow?",
-  "Explain today's self-care steps",
-  "Analyze today's results",
-];
+export function buildLocalAIQuickPrompts(
+  evaluation: EvaluationResult,
+  rules: RulesFile,
+): string[] {
+  const topMetric = getTriggeredMetricSummaries(evaluation, rules)[0];
+  const firstPrompt = topMetric
+    ? `Why is my ${topMetric.label.toLowerCase()} ${topMetric.status}?`
+    : evaluation.overall_status === "green"
+      ? "Compare today's vitals to my 7-day baseline"
+      : "What should I know about today's health status?";
+  return [
+    firstPrompt,
+    "Build today's self-care & protection plan",
+    "Analyze today's results",
+  ];
+}
 
 function LocalAIChannel({ onOpenCheckup }: LocalAIChannelProps) {
   const { evaluation, flagsToday, clinicalNotesToday, rules, missionDay } = useAppState();
@@ -67,6 +80,13 @@ function LocalAIChannel({ onOpenCheckup }: LocalAIChannelProps) {
       }),
     [deterministicBriefing, evaluation.overall_status, missionDay, profileId],
   );
+  useLayoutEffect(() => {
+    sessionStore.refreshInitialBriefing({
+      missionDay,
+      status: evaluation.overall_status,
+      briefing: deterministicBriefing,
+    });
+  }, [deterministicBriefing, evaluation.overall_status, missionDay, sessionStore]);
   const sessionState = useSyncExternalStore(
     sessionStore.subscribe,
     sessionStore.getSnapshot,
@@ -229,6 +249,7 @@ function LocalAIChannel({ onOpenCheckup }: LocalAIChannelProps) {
   }
 
   const triggeredMetrics = getTriggeredMetricSummaries(evaluation, rules);
+  const quickPrompts = buildLocalAIQuickPrompts(evaluation, rules);
 
   return (
     <section className="local-ai-panel" aria-label="Local AI assistant">
@@ -322,7 +343,7 @@ function LocalAIChannel({ onOpenCheckup }: LocalAIChannelProps) {
         </div>
 
         <div className="quick-prompts" aria-label="Suggested questions">
-          {QUICK_PROMPTS.map((prompt) => (
+          {quickPrompts.map((prompt) => (
             <button type="button" key={prompt} onClick={() => submitText(prompt)} disabled={isThinking}>
               {prompt}
             </button>
