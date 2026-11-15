@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 import {
   DEFAULT_HELPER_SETTINGS,
   askModel,
@@ -20,7 +28,6 @@ interface LocalAIChannelProps {
 interface VisibleMessage {
   role: "user" | "assistant";
   content: string;
-  clinicalReasoning?: boolean;
 }
 
 type ConversationTurn = {
@@ -62,6 +69,7 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
   const [inputError, setInputError] = useState<string | null>(null);
   const [showSupportCard, setShowSupportCard] = useState(false);
   const requestId = useRef(0);
+  const chatStreamRef = useRef<HTMLDivElement>(null);
 
   const nonGreenKey = picture.non_green_indicators.join(",");
   const explainKey = `${evaluation.today}:${evaluation.overall_status}:${nonGreenKey}:${evaluation.indicators
@@ -109,7 +117,7 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
           } else {
             setChat((current) => [
               ...current,
-              { role: "assistant", content: result.text, clinicalReasoning: true },
+              { role: "assistant", content: result.text },
             ]);
           }
         } else {
@@ -148,6 +156,13 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
     [],
   );
 
+  useEffect(() => {
+    const stream = chatStreamRef.current;
+    if (stream) {
+      stream.scrollTop = stream.scrollHeight;
+    }
+  }, [chat, isThinking]);
+
   function submitText(text: string): void {
     if (text.length > DEFAULT_HELPER_SETTINGS.max_user_chars) {
       setInputError("Please keep it under 1000 characters.");
@@ -179,71 +194,86 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
     submitText(composer);
   }
 
-  const labels = picture.non_green_indicators
-    .map((id) => rules.indicators.find((indicator) => indicator.id === id)?.label ?? id)
-    .join(", ");
-  const triggeredRules = evaluation.indicators.flatMap((indicator) =>
-    indicator.triggered.map((rule) => ({ indicatorId: indicator.indicator_id, rule })),
+  function handleComposerKeyDown(event: ReactKeyboardEvent<HTMLTextAreaElement>): void {
+    if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+      event.preventDefault();
+      submitText(composer);
+    }
+  }
+
+  const triggeredIndicators = evaluation.indicators.filter(
+    (indicator) => indicator.triggered.length > 0,
   );
 
   return (
     <section className="local-ai-panel" aria-label="Local AI assistant">
-      <header className="local-ai-context dashboard-card">
+      <header className="local-ai-context">
         <div className="local-ai-context-main">
           <div>
-            <p className="section-eyebrow">Local Neural Network</p>
-            <h2>Day {missionDay} · {evaluation.overall_status.replace("_", " ")}</h2>
+            <span className={`comms-triage-pill triage-${evaluation.overall_status}`}>
+              Day {missionDay} · {evaluation.overall_status.replace("_", " ")}
+            </span>
           </div>
-          <span className="offline-model-badge">Offline · {DEFAULT_HELPER_SETTINGS.model}</span>
+          <span className="offline-model-badge">
+            Local Neural Engine · {DEFAULT_HELPER_SETTINGS.model}
+          </span>
         </div>
         <div className="rule-chip-list" aria-label="Triggered rules">
-          {triggeredRules.length > 0
-            ? triggeredRules.map(({ indicatorId, rule }) => (
-                <span className={`rule-context-chip status-${rule.level}`} key={`${indicatorId}-${rule.rule_id}`}>
-                  {rule.title}
+          {triggeredIndicators.length > 0
+            ? triggeredIndicators.map((indicator) => (
+                <span
+                  className={`rule-context-chip status-${indicator.status}`}
+                  key={indicator.indicator_id}
+                >
+                  {indicator.indicator_id === "heart_rate"
+                    ? "Heart rate differs from your normal"
+                    : indicator.indicator_id === "sleep_hours"
+                      ? "Not enough sleep this week"
+                      : rules.indicators.find((item) => item.id === indicator.indicator_id)?.label
+                        ?? indicator.indicator_id}
                 </span>
               ))
-            : <span className="rule-context-chip">No triggered rules today</span>}
+            : <span className="rule-context-chip">No triggered indicators today</span>}
         </div>
         {selectedContext && <p className="selected-ai-context">Opened from Main: {selectedContext}</p>}
-        <p className="ai-safety-note">
-          AI explains rules and protocols; only the deterministic health rules set status and urgency.
-        </p>
+        <details className="clinical-reasoning">
+          <summary>
+            <span>Clinical Reasoning &amp; Overall Picture</span>
+            <span className="reasoning-hint">Rules-led context · optional</span>
+          </summary>
+          <div className="clinical-reasoning-content">
+            {picture.matched.length > 0 ? (
+              <div className="combination-list">
+                {picture.matched.map(({ combination }) => (
+                  <article className="matched-combination" key={combination.id}>
+                    <h3>{combination.title}</h3>
+                    <p>Possible explanations to discuss with your crew medical officer:</p>
+                    <ul>
+                      {combination.possible_explanations.map((explanation) => (
+                        <li key={explanation}>{explanation}</li>
+                      ))}
+                    </ul>
+                    {combination.actions.length > 0 && (
+                      <ul>
+                        {combination.actions.map((action) => <li key={action}>{action}</li>)}
+                      </ul>
+                    )}
+                    <p className="combination-source">Based on: {combination.source}</p>
+                  </article>
+                ))}
+              </div>
+            ) : picture.unverified ? (
+              <p>Unverified picture: multiple indicators changed together. Discuss with your crew medical officer.</p>
+            ) : (
+              <p>No combined changes today.</p>
+            )}
+            {autoExplanation && <p className="reasoning-explanation">{autoExplanation}</p>}
+          </div>
+        </details>
       </header>
 
-      <section className="overall-picture dashboard-card" aria-labelledby="overall-picture-title">
-        <h2 id="overall-picture-title">Overall picture</h2>
-        {picture.matched.length > 0 ? (
-          <div className="combination-list">
-            {picture.matched.map(({ combination }) => (
-              <article className="matched-combination" key={combination.id}>
-                <h3>{combination.title}</h3>
-                <p>Possible explanations to discuss with your crew medical officer:</p>
-                <ul>
-                  {combination.possible_explanations.map((explanation) => (
-                    <li key={explanation}>{explanation}</li>
-                  ))}
-                </ul>
-                {combination.actions.length > 0 && (
-                  <ul>
-                    {combination.actions.map((action) => <li key={action}>{action}</li>)}
-                  </ul>
-                )}
-                <p className="combination-source">Based on: {combination.source}</p>
-              </article>
-            ))}
-          </div>
-        ) : picture.unverified ? (
-          <p>
-            Unverified picture: {labels} changed together. Discuss with your crew medical officer.
-          </p>
-        ) : (
-          <p>No combined changes today.</p>
-        )}
-      </section>
-
       {showSupportCard && supportCard && (
-        <section className="safety-support-card dashboard-card" aria-live="assertive">
+        <section className="safety-support-card" aria-live="assertive">
           <div>
             <p className="section-eyebrow">Support</p>
             <h2>{supportCard.title}</h2>
@@ -257,43 +287,27 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
         </section>
       )}
 
-      <section className="ai-chat-panel dashboard-card" aria-label="AI explanation and chat">
-        <div className="ai-disclaimer">
-          AI explanation - not a diagnosis. Colours and urgency come from the health rules.
-        </div>
-
-        {isThinking && (
-          <p className="ai-thinking" aria-live="polite">thinking…</p>
-        )}
-        {autoExplanation && (
-          <details className="ai-explanation" open>
-            <summary>Clinical Reasoning</summary>
-            <p>{autoExplanation}</p>
-          </details>
-        )}
+      <section className="ai-chat-panel" aria-label="AI explanation and chat">
         {notice && <p className="ai-fallback-notice" role="status">{notice}</p>}
 
-        {chat.length > 0 && (
-          <div className="chat-stream" aria-live="polite">
-            {chat.map((message, index) => (
-              <article className={`chat-message chat-${message.role}`} key={`${message.role}-${index}`}>
-                <span className="chat-role">{message.role === "user" ? "You" : "Local AI"}</span>
-                {message.clinicalReasoning ? (
-                  <details>
-                    <summary>Clinical Reasoning</summary>
-                    <p>{message.content}</p>
-                  </details>
-                ) : (
-                  <p>{message.content}</p>
-                )}
-              </article>
-            ))}
-          </div>
-        )}
+        <div className="chat-stream" aria-live="polite" ref={chatStreamRef}>
+          {chat.length === 0 && !isThinking && (
+            <p className="chat-empty-state">Ask a question to start a private conversation on this device.</p>
+          )}
+          {chat.map((message, index) => (
+            <article className={`chat-message chat-${message.role}`} key={`${message.role}-${index}`}>
+              <span className="chat-role">
+                {message.role === "user" ? "You" : "Onboard SI · granite3.3:8b"}
+              </span>
+              <p>{message.content}</p>
+            </article>
+          ))}
+          {isThinking && <p className="ai-thinking" aria-live="polite">Onboard SI is thinking…</p>}
+        </div>
 
         <div className="quick-prompts" aria-label="Suggested questions">
           {QUICK_PROMPTS.map((prompt) => (
-            <button type="button" key={prompt} onClick={() => submitText(prompt)}>
+            <button type="button" key={prompt} onClick={() => submitText(prompt)} disabled={isThinking}>
               {prompt}
             </button>
           ))}
@@ -303,28 +317,34 @@ function LocalAIChannel({ onOpenCheckup, selectedContext }: LocalAIChannelProps)
           <label className="visually-hidden" htmlFor="ai-composer">
             Ask the local AI assistant
           </label>
-          <textarea
-            id="ai-composer"
-            rows={3}
-            placeholder="Ask about today's results or tell me how you feel. Stays on this device."
-            value={composer}
-            onChange={(event) => {
-              setComposer(event.currentTarget.value);
-              if (inputError) {
-                setInputError(null);
-              }
-            }}
-          />
-          <div className="ai-composer-footer">
-            <span className={composer.length > DEFAULT_HELPER_SETTINGS.max_user_chars ? "text-limit-error" : ""}>
-              {composer.length}/1000
-            </span>
+          <div className="ai-composer-input">
+            <textarea
+              id="ai-composer"
+              rows={2}
+              placeholder="Ask about today's results or tell me how you feel. Stays on this device."
+              value={composer}
+              onKeyDown={handleComposerKeyDown}
+              onChange={(event) => {
+                setComposer(event.currentTarget.value);
+                if (inputError) {
+                  setInputError(null);
+                }
+              }}
+            />
             <button className="button button-primary" type="submit" disabled={!composer.trim() || isThinking}>
               Send
             </button>
           </div>
+          <div className="ai-composer-footer">
+            <span className={composer.length > DEFAULT_HELPER_SETTINGS.max_user_chars ? "text-limit-error" : ""}>
+              {composer.length}/1000
+            </span>
+          </div>
           {inputError && <p className="field-error" role="alert">{inputError}</p>}
         </form>
+        <p className="ai-caption">
+          Deterministic rules set status and urgency; AI provides clinical context only.
+        </p>
       </section>
     </section>
   );
